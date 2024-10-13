@@ -1,0 +1,22 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<Modal @ref="ModalHola">
+    <BodyTemplate>
+        <h3>Hola mundo</h3>
+    </BodyTemplate>
+</Modal>
+
+Welcome to your new app.
+<Button Class="btn btn-danger" @onclick="ModalAbrir">Hola</Button>
+@code {
+    public Modal ModalHola { get; set; } = default!;
+
+    private async Task ModalAbrir()
+    {
+        await ModalHola.ShowAsync();
+    }
+}
