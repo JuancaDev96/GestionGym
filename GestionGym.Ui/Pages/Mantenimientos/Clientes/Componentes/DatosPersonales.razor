@@ -1,0 +1,58 @@
+﻿@using GestionGym.Dto.Request.Clientes
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Nombres</label>
+            <InputText class="form-control" @bind-Value="Request.Nombre" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Apellidos</label>
+            <InputText class="form-control" @bind-Value="Request.Apellidos" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Dni</label>
+            <InputText class="form-control" @bind-Value="Request.Dni" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Celular</label>
+            <InputText class="form-control" @bind-Value="Request.Celular" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Fec. Nacimiento</label>
+            <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Correo Electronico</label>
+            <InputText class="form-control" @bind-Value="Request.Correo" />
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label>Edad: </label>
+            <input readonly class="form-control"/>
+        </div>
+    </div>
+</div>
+
+<div class="row gx-4 mt-4">
+    <div class="col">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-danger">Cancelar</button>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public DatosPersonalesRequest Request { get; set; } = default!;
+
+}

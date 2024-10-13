@@ -1,0 +1,55 @@
+﻿@page "/clientes/registro"
+@using GestionGym.Comun
+@using GestionGym.Dto.Request.Clientes
+@using GestionGym.Dto.Request.Maestros
+@using GestionGym.Dto.Response.Maestros
+@using GestionGym.Ui.Pages.Mantenimientos.Clientes.Componentes
+@using GestionGym.Ui.Proxys.Interfaces
+
+@inject IMaestroProxy Proxy;
+
+
+
+<h4>Mantenimiento de Clientes</h4>
+
+<Tabs Class="mt-5">
+    <Tab Title="Datos personales" IsActive="true" Name="tabPrincipal">
+        <Content>
+            <DatosPersonales Request="DatosPersonales"></DatosPersonales>
+        </Content>
+    </Tab>
+    <Tab Title="Control Fisico" IsActive="true" Name="tabControlFisico">
+        <Content>
+            <ControlFisico ProveedorData="GrillaParametros"></ControlFisico>
+        </Content>
+    </Tab>
+</Tabs>
+
+
+@code {
+    public DatosPersonalesRequest DatosPersonales { get; set; } = new();
+
+
+
+    #region Control Fisico
+    public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
+    public ICollection<DetalleMaestroResponse> ListaMaestroDetaller { get; set; } = new List<DetalleMaestroResponse>();
+
+    private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaParametros(GridDataProviderRequest<DetalleMaestroResponse> request)
+    {
+        RequestDetalleMaestro.codigoMaestro = CodigoMaestro.CTRL_FISICO;
+        var response = await Proxy.ListarDetalleMaestroByCodigo(RequestDetalleMaestro);
+        if (response is { Success: true })
+        {
+            ListaMaestroDetaller = response.Collection!;
+            request.ApplyTo(ListaMaestroDetaller);
+        }
+        return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+            {
+                Data = response.Collection,
+                TotalCount = response.TotalRegistros
+            });
+    }
+    #endregion
+
+}

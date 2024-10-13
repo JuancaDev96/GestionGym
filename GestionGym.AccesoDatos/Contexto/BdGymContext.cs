@@ -703,6 +703,7 @@ public partial class BdGymContext : DbContext
                 .HasColumnName("fechamodificacion");
             entity.Property(e => e.Idcaja).HasColumnName("idcaja");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
+            entity.Property(e => e.IdmedioParametro).HasColumnName("idmedio_parametro");
             entity.Property(e => e.Monto).HasColumnName("monto");
             entity.Property(e => e.Pagocon).HasColumnName("pagocon");
             entity.Property(e => e.Usuarioregistro)
@@ -722,6 +723,11 @@ public partial class BdGymContext : DbContext
                 .HasForeignKey(d => d.Idcliente)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_ingresocaja_idcliente");
+
+            entity.HasOne(d => d.IdmedioParametroNavigation).WithMany(p => p.MovimientoCajaIdmedioParametroNavigations)
+                .HasForeignKey(d => d.IdmedioParametro)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_movimientoCaja_medio");
         });
 
         modelBuilder.Entity<Permiso>(entity =>

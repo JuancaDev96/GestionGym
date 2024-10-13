@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GestionGym.Comun\GestionGym.Comun.csproj" />
+    <ProjectReference Include="..\GestionGym.Dto\GestionGym.Dto.csproj" />
     <ProjectReference Include="..\GestionGym.Repositorios\GestionGym.Repositorios.csproj" />
   </ItemGroup>
 

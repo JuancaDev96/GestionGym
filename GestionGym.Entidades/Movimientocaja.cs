@@ -14,6 +14,7 @@ public partial class Movimientocaja : EntidadBase
     public bool Esingreso { get; set; }
 
     public string Concepto { get; set; } = null!;
+    public int IdmedioParametro { get; set; }
 
     public decimal Monto { get; set; }
 
@@ -24,4 +25,5 @@ public partial class Movimientocaja : EntidadBase
     public virtual Cliente IdclienteNavigation { get; set; } = null!;
 
     public virtual ICollection<Suscripciondetalle> Suscripciondetalles { get; set; } = new List<Suscripciondetalle>();
+    public virtual Maestrodetalle IdmedioParametroNavigation { get; set; } = null!;
 }

@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace GestionGym.Repositorios.Implementaciones
 {
 
-    public class RepositoryBase<TEntity> : IBaseRepository<TEntity> where TEntity : EntidadBase
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : EntidadBase
     {
         protected readonly BdGymContext Contexto;
 
-        public RepositoryBase(BdGymContext context)
+        public BaseRepository(BdGymContext context)
         {
             Contexto = context;
         }

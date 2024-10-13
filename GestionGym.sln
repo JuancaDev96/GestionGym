@@ -21,11 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.Presentacion", "04.Prese
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.Comunes", "03.Comunes", "{B62FADE8-09F0-45C9-96ED-2E6DDA623D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionGym.Comun", "GestionGym.Comun\GestionGym.Comun.csproj", "{7A429602-7F1F-45FE-879F-0CE2BC0BD40C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionGym.Comun", "GestionGym.Comun\GestionGym.Comun.csproj", "{7A429602-7F1F-45FE-879F-0CE2BC0BD40C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionGym.Dto", "GestionGym.Dto\GestionGym.Dto.csproj", "{7C38972B-5505-4B32-83D2-120ADCFD9D36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionGym.Dto", "GestionGym.Dto\GestionGym.Dto.csproj", "{7C38972B-5505-4B32-83D2-120ADCFD9D36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionGym.Ui", "GestionGym.Ui\GestionGym.Ui.csproj", "{D3FCC079-A7C8-48B9-BB10-9490E8505B86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestionGym.Ui", "GestionGym.Ui\GestionGym.Ui.csproj", "{D3FCC079-A7C8-48B9-BB10-9490E8505B86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

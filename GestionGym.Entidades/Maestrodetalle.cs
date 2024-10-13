@@ -38,4 +38,6 @@ public partial class Maestrodetalle : EntidadBase
     public virtual ICollection<Suscripcion> SuscripcionIdestadosuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
 
     public virtual ICollection<Suscripcion> SuscripcionIdtiposuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
+
+    public virtual ICollection<Movimientocaja> MovimientoCajaIdmedioParametroNavigations { get; set; } = new List<Movimientocaja>();
 }

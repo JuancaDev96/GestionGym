@@ -1,0 +1,45 @@
+﻿@using GestionGym.Dto.Response.Maestros
+@using GestionGym.Ui.Shared
+<div class="row mt-3">
+    <div class="col-md-4">
+        <div class="btn-group">
+            <Button Class="btn btn-primary" @onclick="OnSeleccionarParametros">Seleccionar parametro</Button>
+        </div>
+    </div>
+
+</div>
+
+<div class="row gx-4 mt-4">
+    <div class="col">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-danger">Cancelar</button>
+    </div>
+</div>
+
+<Modal @ref="ModalParametrosControl" Title="Parametros de control">
+    <BodyTemplate>
+        <div class="row">
+            <div class="col-md-12">
+                <Grilla TItem="DetalleMaestroResponse" ProveedorData="ProveedorData" Titulo="" @ref="GrillaMaestroDetalle" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+                    <ColumnasAdicionales>
+                        <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                            <button class="btn btn-xs btn-primary"><i class="bi bi-check"></i></button>
+                        </GridColumn>
+                    </ColumnasAdicionales>
+                </Grilla>
+            </div>
+        </div>
+    </BodyTemplate>
+</Modal>
+
+@code {
+    [Parameter] public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
+    Modal ModalParametrosControl { get; set; } = default!;
+    Grilla<DetalleMaestroResponse> GrillaMaestroDetalle { get; set; } = default!;
+
+    private async Task OnSeleccionarParametros()
+    {
+        await ModalParametrosControl.ShowAsync();
+    }
+
+}
