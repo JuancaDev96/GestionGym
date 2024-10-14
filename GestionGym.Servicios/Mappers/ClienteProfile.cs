@@ -17,6 +17,7 @@ namespace GestionGym.Servicios.Mappers
         {
             CreateMap<ClientePaginadoResponse, ListaClientesResponse>();
             CreateMap<DatosPersonalesRequest, Cliente>();
+            CreateMap<ControlFisicoClienteResponse, ListaControlFisicoClienteResponse>();
         }
     }
 }

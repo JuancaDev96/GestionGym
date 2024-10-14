@@ -14,7 +14,7 @@
     </Tab>
     <Tab Title="Control Fisico" IsActive="true" Name="tabControlFisico">
         <Content>
-            <ControlFisico ProveedorData="GrillaParametros"></ControlFisico>
+            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse"></ControlFisico>
         </Content>
     </Tab>
 </Tabs>
@@ -39,6 +39,7 @@
             else
             {
                 ToastService.ShowSuccess($"Datos personales registrados");
+                await ListarParametrosControlFisico(resultado.Data);
             }
         }
         catch (Exception ex)
@@ -47,6 +48,23 @@
         }
     }
 
+    #endregion
+
+    #region Control Fisico
+    List<ListaControlFisicoClienteResponse> ControlFisicoClienteResponse { get; set; } = new();
+    private async Task ListarParametrosControlFisico(int idCliente)
+    {
+        var resultado = await ProxyCliente.GetControlFisicoParametros(idCliente);
+        if (resultado is { Success: false })
+        {
+            ToastService.ShowWarning($"Error al listar parametros de control fisico:{resultado.Message}");
+        }
+        else
+        {
+            if (resultado.Data != null)
+                ControlFisicoClienteResponse = resultado.Data;
+        }
+    }
     #endregion
 
     #region Control Fisico

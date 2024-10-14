@@ -18,6 +18,11 @@ namespace GestionGym.Ui.Proxys.Services
             return await SendAsync<PaginationResponse<ListaClientesResponse>>($"Paginacion?{QueryStringDto(request)}");
         }
 
+        public async Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> GetControlFisicoParametros(int idCliente)
+        {
+            return await SendAsync<BaseResponse<List<ListaControlFisicoClienteResponse>>>($"ControlFisico/{idCliente}");
+        }
+
         public async Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request)
         {
             var resultado = await SendAsync<DatosPersonalesRequest, BaseResponse<int>>(request, HttpMethod.Post, "");

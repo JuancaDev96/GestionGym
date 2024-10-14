@@ -23,6 +23,13 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpGet("ControlFisico/{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var resultado = await _service.ListarControlFisicoByIdCliente(id);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(DatosPersonalesRequest request)
         {

@@ -7,6 +7,16 @@
     </div>
 </div>
 
+<div class="row mt-2">
+    @foreach (var item in ControlFisicoClienteResponse)
+    {
+        <div class="col-md-3">
+            <label>@item.NombreControl</label>
+            <input class="form-control" @bind="item.ValorControl" />
+        </div>
+    }
+</div>
+
 <div class="row gx-4 mt-4">
     <div class="col">
         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -31,7 +41,11 @@
 </Modal>
 
 @code {
-    [Parameter] public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
+    [Parameter]
+    public List<ListaControlFisicoClienteResponse> ControlFisicoClienteResponse { get; set; } = default!;
+
+    [Parameter]
+    public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
     Modal ModalParametrosControl { get; set; } = default!;
     Grilla<DetalleMaestroResponse> GrillaMaestroDetalle { get; set; } = default!;
 

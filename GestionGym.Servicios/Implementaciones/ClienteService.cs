@@ -42,13 +42,29 @@ namespace GestionGym.Servicios.Implementaciones
             return respuesta;
         }
 
+        public async Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> ListarControlFisicoByIdCliente(int idCliente)
+        {
+            var respuesta = new BaseResponse<List<ListaControlFisicoClienteResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarControlFisicoByIdCliente(idCliente);
+                respuesta.Data = _mapper.Map<List<ListaControlFisicoClienteResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
         public async Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request)
         {
             var respuesta = new BaseResponse<int>();
             try
             {
                 var nuevo = _mapper.Map<Cliente>(request);
-                var resultado = await _repository.AddAsync(nuevo);
+                var resultado = await _repository.Registrar(nuevo);
                 respuesta.Message = "Datos personales registrados correctamente";
                 respuesta.Data = resultado.Id;
             }

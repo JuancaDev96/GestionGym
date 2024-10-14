@@ -25,6 +25,49 @@ namespace GestionGym.Repositorios.Implementaciones
             _contexto = contexto;
         }
 
+        public async Task<Cliente> Registrar(Cliente request)
+        {
+            var nuevo = await _contexto.Clientes.AddAsync(request);
+            await _contexto.SaveChangesAsync();
+
+            if (nuevo is not null)
+            {
+                var ControlFisicoParametros = await _contexto.Maestrodetalles
+                                            .Where(p => p.IdmaestroNavigation.Codigo == CodigoMaestro.CTRL_FISICO && p.Esdefault == true)
+                                            .ToListAsync();
+
+                if (ControlFisicoParametros.Any())
+                {
+                    foreach (var item in ControlFisicoParametros)
+                    {
+                        ControlfisicoCliente controlfisico = new()
+                        {
+                            Idcliente = nuevo.Entity.Id,
+                            Idparametro = item.Id
+                        };
+                        await _contexto.ControlfisicoClientes.AddAsync(controlfisico);
+                        await _contexto.SaveChangesAsync();
+                    }
+                }
+                return nuevo.Entity;
+            }
+            return new Cliente();
+        }
+
+        public async Task<List<ControlFisicoClienteResponse>> ListarControlFisicoByIdCliente(int IdCliente)
+        {
+            return await _contexto.ControlfisicoClientes
+                                .Where(p => p.Idcliente == IdCliente && p.Estado)
+                                .Select(p => new ControlFisicoClienteResponse
+                                {
+                                    IdCliente = IdCliente,
+                                    IdControlFisico = p.Id,
+                                    NombreControl = p.IdparametroNavigation.Valor,
+                                    ValorControl = p.Valor!,
+                                    DescripcionControl = p.IdparametroNavigation.Descripcion!
+                                }).ToListAsync();
+        }
+
         public async Task<(List<ClientePaginadoResponse> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request)
         {
             using (var connection = _contexto.Database.GetDbConnection())
