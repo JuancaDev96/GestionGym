@@ -9,7 +9,7 @@ namespace GestionGym.Dto.Response
     public class BaseResponse
     {
         public bool Success { get; set; } = true;
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 
     public class BaseResponse<T> : BaseResponse

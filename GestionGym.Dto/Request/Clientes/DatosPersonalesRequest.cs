@@ -13,9 +13,9 @@ namespace GestionGym.Dto.Request.Clientes
         public int Id { get; set; }
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = default!;
         [Required(ErrorMessage = Constantes.requiredMessage)]
-        public string Apellidos { get; set; }
+        public string Apellidos { get; set; } = default!;
         [Required(ErrorMessage = Constantes.requiredMessage)]
         [MinLength(8, ErrorMessage = Constantes.minLength)]
         public string? Dni { get; set; }

@@ -10,9 +10,9 @@ namespace GestionGym.Dto.Response.Maestros
     public class DetalleMaestroResponse
     {
         public int IdDetalleMaestro { get; set; }
-        public string Codigo { get; set; }
+        public string Codigo { get; set; } = default!;
         [Display(Name = "Parametro")]
-        public string Valor { get; set; }
+        public string Valor { get; set; } = default!;
         [Display(Name = "Descripción")]
         public string? Descripcion { get; set; }
         public DateTime FechaRegistro { get; set; }
