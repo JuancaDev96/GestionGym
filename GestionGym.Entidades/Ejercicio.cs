@@ -1,25 +1,28 @@
-﻿using System;
+﻿using GestionGym.Entidades;
+using System;
 using System.Collections.Generic;
 
-namespace GestionGym.Entidades;
-
-public partial class Ejercicio : EntidadBase
+namespace GestionGym.Entidades
 {
-    public int Id { get; set; }
 
-    public int IdgrupomuscularParametro { get; set; }
+    public partial class Ejercicio : EntidadBase
+    {
+        public int Id { get; set; }
 
-    public string? Nombre { get; set; }
+        public int IdgrupomuscularParametro { get; set; }
 
-    public string? Descripcion { get; set; }
+        public string? Nombre { get; set; }
 
-    public virtual ICollection<Aplicacionejercicio> Aplicacionejercicios { get; set; } = new List<Aplicacionejercicio>();
+        public string? Descripcion { get; set; }
 
-    public virtual Maestrodetalle IdgrupomuscularParametroNavigation { get; set; } = null!;
+        public virtual ICollection<Aplicacionejercicio> Aplicacionejercicios { get; set; } = new List<Aplicacionejercicio>();
 
-    public virtual ICollection<Maquinaejercicio> Maquinaejercicios { get; set; } = new List<Maquinaejercicio>();
+        public virtual Maestrodetalle IdgrupomuscularParametroNavigation { get; set; } = null!;
 
-    public virtual ICollection<Recursosejercicio> Recursosejercicios { get; set; } = new List<Recursosejercicio>();
+        public virtual ICollection<Maquinaejercicio> Maquinaejercicios { get; set; } = new List<Maquinaejercicio>();
 
-    public virtual ICollection<Rutinaejercicio> Rutinaejercicios { get; set; } = new List<Rutinaejercicio>();
+        public virtual ICollection<Recursosejercicio> Recursosejercicios { get; set; } = new List<Recursosejercicio>();
+
+        public virtual ICollection<Rutinaejercicio> Rutinaejercicios { get; set; } = new List<Rutinaejercicio>();
+    }
 }

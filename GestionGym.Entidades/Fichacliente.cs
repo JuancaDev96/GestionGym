@@ -1,23 +1,26 @@
-﻿using System;
+﻿using GestionGym.Entidades;
+using System;
 using System.Collections.Generic;
 
-namespace GestionGym.Entidades;
-
-public partial class Fichacliente : EntidadBase
+namespace GestionGym.Entidades
 {
-    public int Id { get; set; }
 
-    public int Idcliente { get; set; }
+    public partial class Fichacliente : EntidadBase
+    {
+        public int Id { get; set; }
 
-    public DateTime? Fechainicio { get; set; }
+        public int Idcliente { get; set; }
 
-    public string? Objetivo { get; set; }
+        public DateTime? Fechainicio { get; set; }
 
-    public int? Nivel { get; set; }
+        public string? Objetivo { get; set; }
 
-    public int IdestadoactualParametro { get; set; }
+        public int? Nivel { get; set; }
 
-    public virtual Cliente IdclienteNavigation { get; set; } = null!;
+        public int IdestadoactualParametro { get; set; }
 
-    public virtual Maestrodetalle IdestadoactualParametroNavigation { get; set; } = null!;
+        public virtual Cliente IdclienteNavigation { get; set; } = null!;
+
+        public virtual Maestrodetalle IdestadoactualParametroNavigation { get; set; } = null!;
+    }
 }

@@ -1,17 +1,20 @@
-﻿using System;
+﻿using GestionGym.Entidades;
+using System;
 using System.Collections.Generic;
 
-namespace GestionGym.Entidades;
-
-public partial class Colaboradorusuariopermiso : EntidadBase
+namespace GestionGym.Entidades
 {
-    public int Id { get; set; }
 
-    public int Idcolaboradorusuario { get; set; }
+    public partial class Colaboradorusuariopermiso : EntidadBase
+    {
+        public int Id { get; set; }
 
-    public int Idpermiso { get; set; }
+        public int Idcolaboradorusuario { get; set; }
 
-    public virtual Colaboradorusuario IdcolaboradorusuarioNavigation { get; set; } = null!;
+        public int Idpermiso { get; set; }
 
-    public virtual Permiso IdpermisoNavigation { get; set; } = null!;
+        public virtual Colaboradorusuario IdcolaboradorusuarioNavigation { get; set; } = null!;
+
+        public virtual Permiso IdpermisoNavigation { get; set; } = null!;
+    }
 }

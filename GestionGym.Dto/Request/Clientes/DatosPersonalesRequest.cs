@@ -11,11 +11,14 @@ namespace GestionGym.Dto.Request.Clientes
     public class DatosPersonalesRequest
     {
         public int Id { get; set; }
+        public int IdEstablecimiento { get; set; }
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
         public string Nombre { get; set; } = default!;
+
         [Required(ErrorMessage = Constantes.requiredMessage)]
         public string Apellidos { get; set; } = default!;
+
         [Required(ErrorMessage = Constantes.requiredMessage)]
         [MinLength(8, ErrorMessage = Constantes.minLength)]
         public string? Dni { get; set; }
@@ -24,6 +27,8 @@ namespace GestionGym.Dto.Request.Clientes
 
         public string? Correo { get; set; }
 
+        [Required(ErrorMessage = Constantes.requiredMessage)]
+        [Display(Name = "Fecha de nacimiento")]
         public DateOnly? Fechanacimiento { get; set; }
     }
 }

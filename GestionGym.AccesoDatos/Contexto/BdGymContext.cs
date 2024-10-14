@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using GestionGym.Entidades;
 using Microsoft.EntityFrameworkCore;
+using GestionGym.Entidades;
 
 namespace GestionGym.AccesoDatos.Contexto;
 
@@ -34,11 +34,17 @@ public partial class BdGymContext : DbContext
 
     public virtual DbSet<Ejercicio> Ejercicios { get; set; }
 
+    public virtual DbSet<Empresa> Empresas { get; set; }
+
+    public virtual DbSet<Establecimiento> Establecimientos { get; set; }
+
     public virtual DbSet<Fichacliente> Fichaclientes { get; set; }
 
     public virtual DbSet<HistorialmedicoCliente> HistorialmedicoClientes { get; set; }
 
     public virtual DbSet<Informeinstructor> Informeinstructors { get; set; }
+
+    public virtual DbSet<Ingresocaja> Ingresocajas { get; set; }
 
     public virtual DbSet<Maestro> Maestros { get; set; }
 
@@ -62,6 +68,8 @@ public partial class BdGymContext : DbContext
 
     public virtual DbSet<Rutinaejercicio> Rutinaejercicios { get; set; }
 
+    public virtual DbSet<Salidacaja> Salidacajas { get; set; }
+
     public virtual DbSet<Suscripcion> Suscripcions { get; set; }
 
     public virtual DbSet<Suscripciondetalle> Suscripciondetalles { get; set; }
@@ -80,22 +88,22 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.IdaplicacionParametro).HasColumnName("idaplicacion_parametro");
             entity.Property(e => e.Idejercicio).HasColumnName("idejercicio");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdaplicacionParametroNavigation).WithMany(p => p.Aplicacionejercicios)
                 .HasForeignKey(d => d.IdaplicacionParametro)
@@ -121,23 +129,28 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idestablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Cajas)
+                .HasForeignKey(d => d.Idestablecimiento)
+                .HasConstraintName("fk_caja_establecimiento");
         });
 
         modelBuilder.Entity<Cliente>(entity =>
@@ -145,6 +158,8 @@ public partial class BdGymContext : DbContext
             entity.HasKey(e => e.Id).HasName("cliente_pkey");
 
             entity.ToTable("cliente");
+
+            entity.HasIndex(e => e.Dni, "cliente_unique").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellidos)
@@ -159,7 +174,9 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Dni)
                 .HasMaxLength(12)
                 .HasColumnName("dni");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -168,11 +185,21 @@ public partial class BdGymContext : DbContext
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idestablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Clientes)
+                .HasForeignKey(d => d.Idestablecimiento)
+                .HasConstraintName("fk_cliente_establecimiento");
         });
 
         modelBuilder.Entity<Colaborador>(entity =>
@@ -191,24 +218,29 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idestablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Idpuesto).HasColumnName("idpuesto");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Colaboradors)
+                .HasForeignKey(d => d.Idestablecimiento)
+                .HasConstraintName("fk_colaborador_establimiento");
 
             entity.HasOne(d => d.IdpuestoNavigation).WithMany(p => p.Colaboradors)
                 .HasForeignKey(d => d.Idpuesto)
@@ -232,13 +264,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcolaborador).HasColumnName("idcolaborador");
             entity.Property(e => e.Intentosfallidos).HasColumnName("intentosfallidos");
             entity.Property(e => e.Ultimobloqueo)
@@ -247,13 +279,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Usuario)
                 .HasMaxLength(50)
                 .HasColumnName("usuario");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdcolaboradorNavigation).WithMany(p => p.Colaboradorusuarios)
                 .HasForeignKey(d => d.Idcolaborador)
@@ -271,22 +303,22 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcolaboradorusuario).HasColumnName("idcolaboradorusuario");
             entity.Property(e => e.Idpermiso).HasColumnName("idpermiso");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdcolaboradorusuarioNavigation).WithMany(p => p.Colaboradorusuariopermisos)
                 .HasForeignKey(d => d.Idcolaboradorusuario)
@@ -306,7 +338,9 @@ public partial class BdGymContext : DbContext
             entity.ToTable("controlavance_cliente");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -316,8 +350,13 @@ public partial class BdGymContext : DbContext
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.Idparametro).HasColumnName("idparametro");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
             entity.Property(e => e.Valor)
                 .HasMaxLength(30)
                 .HasColumnName("valor");
@@ -340,7 +379,9 @@ public partial class BdGymContext : DbContext
             entity.ToTable("controlfisico_cliente");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -350,8 +391,13 @@ public partial class BdGymContext : DbContext
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.Idparametro).HasColumnName("idparametro");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
             entity.Property(e => e.Valor)
                 .HasMaxLength(30)
                 .HasColumnName("valor");
@@ -380,29 +426,153 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.IdgrupomuscularParametro).HasColumnName("idgrupomuscular_parametro");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdgrupomuscularParametroNavigation).WithMany(p => p.Ejercicios)
                 .HasForeignKey(d => d.IdgrupomuscularParametro)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_aplicacionejercicio_grupomuscular");
+        });
+
+        modelBuilder.Entity<Empresa>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("empresa_pkey");
+
+            entity.ToTable("empresa");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Celular)
+                .HasMaxLength(12)
+                .HasColumnName("celular");
+            entity.Property(e => e.Contacto)
+                .HasMaxLength(50)
+                .HasColumnName("contacto");
+            entity.Property(e => e.Direccionfiscal)
+                .HasMaxLength(50)
+                .HasColumnName("direccionfiscal");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Nombrecomercial)
+                .HasMaxLength(50)
+                .HasColumnName("nombrecomercial");
+            entity.Property(e => e.Razonsocial)
+                .HasMaxLength(50)
+                .HasColumnName("razonsocial");
+            entity.Property(e => e.Representante)
+                .HasMaxLength(50)
+                .HasColumnName("representante");
+            entity.Property(e => e.Ruc)
+                .HasMaxLength(12)
+                .HasColumnName("ruc");
+            entity.Property(e => e.Rutalogo)
+                .HasMaxLength(200)
+                .HasColumnName("rutalogo");
+            entity.Property(e => e.Rutavideo)
+                .HasMaxLength(200)
+                .HasColumnName("rutavideo");
+            entity.Property(e => e.Ubigeo)
+                .HasMaxLength(200)
+                .HasColumnName("ubigeo");
+            entity.Property(e => e.Urladicional)
+                .HasMaxLength(200)
+                .HasColumnName("urladicional");
+            entity.Property(e => e.Urlfacebook)
+                .HasMaxLength(200)
+                .HasColumnName("urlfacebook");
+            entity.Property(e => e.Urlinstagram)
+                .HasMaxLength(200)
+                .HasColumnName("urlinstagram");
+            entity.Property(e => e.Urltiktok)
+                .HasMaxLength(200)
+                .HasColumnName("urltiktok");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+        });
+
+        modelBuilder.Entity<Establecimiento>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("establecimiento_pkey");
+
+            entity.ToTable("establecimiento");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Celular)
+                .HasMaxLength(12)
+                .HasColumnName("celular");
+            entity.Property(e => e.Contacto)
+                .HasMaxLength(50)
+                .HasColumnName("contacto");
+            entity.Property(e => e.Direccion)
+                .HasMaxLength(50)
+                .HasColumnName("direccion");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idempresa).HasColumnName("idempresa");
+            entity.Property(e => e.Nombrecomercial)
+                .HasMaxLength(50)
+                .HasColumnName("nombrecomercial");
+            entity.Property(e => e.Rutalogo)
+                .HasMaxLength(200)
+                .HasColumnName("rutalogo");
+            entity.Property(e => e.Rutavideo)
+                .HasMaxLength(200)
+                .HasColumnName("rutavideo");
+            entity.Property(e => e.Ubigeo)
+                .HasMaxLength(200)
+                .HasColumnName("ubigeo");
+            entity.Property(e => e.Urladicional)
+                .HasMaxLength(200)
+                .HasColumnName("urladicional");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdempresaNavigation).WithMany(p => p.Establecimientos)
+                .HasForeignKey(d => d.Idempresa)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_establecimiento_empresa");
         });
 
         modelBuilder.Entity<Fichacliente>(entity =>
@@ -415,29 +585,29 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechainicio)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechainicio");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.IdestadoactualParametro).HasColumnName("idestadoactual_parametro");
             entity.Property(e => e.Nivel).HasColumnName("nivel");
             entity.Property(e => e.Objetivo)
                 .HasMaxLength(150)
                 .HasColumnName("objetivo");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Fichaclientes)
                 .HasForeignKey(d => d.Idcliente)
@@ -463,7 +633,9 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Consideracion)
                 .HasMaxLength(100)
                 .HasColumnName("consideracion");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -476,8 +648,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Recomendacion)
                 .HasMaxLength(100)
                 .HasColumnName("recomendacion");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
             entity.Property(e => e.Valor)
                 .HasMaxLength(30)
                 .HasColumnName("valor");
@@ -506,7 +683,9 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Consideracion)
                 .HasMaxLength(300)
                 .HasColumnName("consideracion");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -517,8 +696,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.Idinstructor).HasColumnName("idinstructor");
             entity.Property(e => e.Nivel).HasColumnName("nivel");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Informeinstructors)
                 .HasForeignKey(d => d.Idcliente)
@@ -529,6 +713,52 @@ public partial class BdGymContext : DbContext
                 .HasForeignKey(d => d.Idinstructor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_informeinstructor_instructor");
+        });
+
+        modelBuilder.Entity<Ingresocaja>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ingresocaja_pkey");
+
+            entity.ToTable("ingresocaja");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idcliente).HasColumnName("idcliente");
+            entity.Property(e => e.IdmedioParametro).HasColumnName("idmedio_parametro");
+            entity.Property(e => e.Idmovimiento).HasColumnName("idmovimiento");
+            entity.Property(e => e.Monto).HasColumnName("monto");
+            entity.Property(e => e.Pagocon).HasColumnName("pagocon");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Ingresocajas)
+                .HasForeignKey(d => d.Idcliente)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_ingresocaja_idcliente");
+
+            entity.HasOne(d => d.IdmedioParametroNavigation).WithMany(p => p.Ingresocajas)
+                .HasForeignKey(d => d.IdmedioParametro)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_ingresocaja_medio");
+
+            entity.HasOne(d => d.IdmovimientoNavigation).WithMany(p => p.Ingresocajas)
+                .HasForeignKey(d => d.Idmovimiento)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_ingresocaja_movimiento");
         });
 
         modelBuilder.Entity<Maestro>(entity =>
@@ -544,7 +774,9 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(200)
                 .HasColumnName("descripcion");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -555,8 +787,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
         });
 
         modelBuilder.Entity<Maestrodetalle>(entity =>
@@ -572,7 +809,16 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Descripcion)
                 .HasMaxLength(200)
                 .HasColumnName("descripcion");
-            entity.Property(e => e.Estado).HasColumnName("estado");
+            entity.Property(e => e.Esbool)
+                .HasDefaultValue(false)
+                .HasColumnName("esbool");
+            entity.Property(e => e.Esdefault)
+                .HasDefaultValue(false)
+                .HasComment("Define si el parametro se utilizaria sin necesidad de seleccionarlo")
+                .HasColumnName("esdefault");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
@@ -581,8 +827,13 @@ public partial class BdGymContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idmaestro).HasColumnName("idmaestro");
-            entity.Property(e => e.Usuariomodificacion).HasColumnName("usuariomodificacion");
-            entity.Property(e => e.Usuarioregistro).HasColumnName("usuarioregistro");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
             entity.Property(e => e.Valor)
                 .HasMaxLength(150)
                 .HasColumnName("valor");
@@ -606,13 +857,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.IdestadomaquinaParametro).HasColumnName("idestadomaquina_parametro");
             entity.Property(e => e.IdgrupomuscularParametro).HasColumnName("idgrupomuscular_parametro");
             entity.Property(e => e.Nombre)
@@ -622,13 +873,13 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Ubicacion)
                 .HasMaxLength(100)
                 .HasColumnName("ubicacion");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdestadomaquinaParametroNavigation).WithMany(p => p.MaquinaIdestadomaquinaParametroNavigations)
                 .HasForeignKey(d => d.IdestadomaquinaParametro)
@@ -652,22 +903,22 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idejercicio).HasColumnName("idejercicio");
             entity.Property(e => e.Idmaquina).HasColumnName("idmaquina");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdejercicioNavigation).WithMany(p => p.Maquinaejercicios)
                 .HasForeignKey(d => d.Idejercicio)
@@ -680,6 +931,44 @@ public partial class BdGymContext : DbContext
                 .HasConstraintName("fk_maquinaejercicio_maquina");
         });
 
+        modelBuilder.Entity<Maquinaestablecimiento>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("maquinaestablecimiento_pkey");
+
+            entity.ToTable("maquinaestablecimiento");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idestablecimiento).HasColumnName("idestablecimiento");
+            entity.Property(e => e.Idmaquina).HasColumnName("idmaquina");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Maquinaestablecimientos)
+                .HasForeignKey(d => d.Idestablecimiento)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_maquinaestabl_establecimiento");
+
+            entity.HasOne(d => d.IdmaquinaNavigation).WithMany(p => p.Maquinaestablecimientos)
+                .HasForeignKey(d => d.Idmaquina)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_maquinaestabl_maquina");
+        });
+
         modelBuilder.Entity<Movimientocaja>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("movimientocaja_pkey");
@@ -690,44 +979,35 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Concepto)
                 .HasMaxLength(100)
                 .HasColumnName("concepto");
+            entity.Property(e => e.Correlativo)
+                .HasMaxLength(20)
+                .HasColumnName("correlativo");
             entity.Property(e => e.Esingreso).HasColumnName("esingreso");
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcaja).HasColumnName("idcaja");
-            entity.Property(e => e.Idcliente).HasColumnName("idcliente");
-            entity.Property(e => e.IdmedioParametro).HasColumnName("idmedio_parametro");
             entity.Property(e => e.Monto).HasColumnName("monto");
-            entity.Property(e => e.Pagocon).HasColumnName("pagocon");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
+            entity.Property(e => e.Numero).HasColumnName("numero");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdcajaNavigation).WithMany(p => p.Movimientocajas)
                 .HasForeignKey(d => d.Idcaja)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_ingresocaja_caja");
-
-            entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Movimientocajas)
-                .HasForeignKey(d => d.Idcliente)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_ingresocaja_idcliente");
-
-            entity.HasOne(d => d.IdmedioParametroNavigation).WithMany(p => p.MovimientoCajaIdmedioParametroNavigations)
-                .HasForeignKey(d => d.IdmedioParametro)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_movimientoCaja_medio");
+                .HasConstraintName("fk_movimientocaja_caja");
         });
 
         modelBuilder.Entity<Permiso>(entity =>
@@ -743,23 +1023,23 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
         });
 
         modelBuilder.Entity<Puesto>(entity =>
@@ -775,23 +1055,23 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
         });
 
         modelBuilder.Entity<Recursosejercicio>(entity =>
@@ -804,29 +1084,67 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idejercicio).HasColumnName("idejercicio");
             entity.Property(e => e.Ruta)
                 .HasMaxLength(200)
                 .HasColumnName("ruta");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdejercicioNavigation).WithMany(p => p.Recursosejercicios)
                 .HasForeignKey(d => d.Idejercicio)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_recursosejercicio_ejercicio");
+        });
+
+        modelBuilder.Entity<Recursosmaquina>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("recursosmaquina_pkey");
+
+            entity.ToTable("recursosmaquina");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Camporeservado)
+                .HasMaxLength(200)
+                .HasColumnName("camporeservado");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idmaquina).HasColumnName("idmaquina");
+            entity.Property(e => e.Ruta)
+                .HasMaxLength(200)
+                .HasColumnName("ruta");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdmaquinaNavigation).WithMany(p => p.Recursosmaquinas)
+                .HasForeignKey(d => d.Idmaquina)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_recursosmaquinao_maquina");
         });
 
         modelBuilder.Entity<Rutinacliente>(entity =>
@@ -843,21 +1161,21 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Rutinaclientes)
                 .HasForeignKey(d => d.Idcliente)
@@ -879,25 +1197,25 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idejercicio).HasColumnName("idejercicio");
             entity.Property(e => e.Idrutina).HasColumnName("idrutina");
             entity.Property(e => e.IdtiporutinaParametro).HasColumnName("idtiporutina_parametro");
             entity.Property(e => e.Repeticiones).HasColumnName("repeticiones");
             entity.Property(e => e.Series).HasColumnName("series");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdrutinaNavigation).WithMany(p => p.RutinaclienteDetalles)
                 .HasForeignKey(d => d.Idrutina)
@@ -923,28 +1241,67 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idejercicio).HasColumnName("idejercicio");
             entity.Property(e => e.Repeticiones).HasColumnName("repeticiones");
             entity.Property(e => e.Series).HasColumnName("series");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdejercicioNavigation).WithMany(p => p.Rutinaejercicios)
                 .HasForeignKey(d => d.Idejercicio)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_rutinaejercicio_ejercicio");
+        });
+
+        modelBuilder.Entity<Salidacaja>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("salidacaja_pkey");
+
+            entity.ToTable("salidacaja");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Estado)
+                .HasDefaultValue(true)
+                .HasColumnName("estado");
+            entity.Property(e => e.Fechamodificacion)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
+            entity.Property(e => e.IdmedioParametro).HasColumnName("idmedio_parametro");
+            entity.Property(e => e.Idmovimiento).HasColumnName("idmovimiento");
+            entity.Property(e => e.Monto).HasColumnName("monto");
+            entity.Property(e => e.Usuariomodificacion)
+                .HasMaxLength(50)
+                .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdmedioParametroNavigation).WithMany(p => p.Salidacajas)
+                .HasForeignKey(d => d.IdmedioParametro)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_salidacaja_medio");
+
+            entity.HasOne(d => d.IdmovimientoNavigation).WithMany(p => p.Salidacajas)
+                .HasForeignKey(d => d.Idmovimiento)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_salidacaja_movimiento");
         });
 
         modelBuilder.Entity<Suscripcion>(entity =>
@@ -960,23 +1317,23 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.IdestadosuscripcionParametro).HasColumnName("idestadosuscripcion_parametro");
             entity.Property(e => e.IdtiposuscripcionParametro).HasColumnName("idtiposuscripcion_parametro");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdclienteNavigation).WithMany(p => p.Suscripcions)
                 .HasForeignKey(d => d.Idcliente)
@@ -1004,33 +1361,31 @@ public partial class BdGymContext : DbContext
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
                 .HasColumnName("estado");
-            entity.Property(e => e.Fecharegistro)
-                .HasDefaultValueSql("now()")
-                .HasColumnType("timestamp without time zone")
-                .HasColumnName("Fecharegistro");
             entity.Property(e => e.Fechafijapagada)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechafijapagada");
             entity.Property(e => e.Fechamodificacion)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fechamodificacion");
+            entity.Property(e => e.Fecharegistro)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("fecharegistro");
             entity.Property(e => e.Idmovimientocaja).HasColumnName("idmovimientocaja");
             entity.Property(e => e.Idsuscripcion).HasColumnName("idsuscripcion");
-            entity.Property(e => e.Monto).HasColumnName("monto");
-            entity.Property(e => e.Pagocon).HasColumnName("pagocon");
             entity.Property(e => e.Periodofinpagado)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("periodofinpagado");
             entity.Property(e => e.Periodoiniciopagado)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("periodoiniciopagado");
-            entity.Property(e => e.Usuarioregistro)
-                .HasMaxLength(50)
-                .HasDefaultValueSql("'consola'::character varying")
-                .HasColumnName("Usuarioregistro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
+            entity.Property(e => e.Usuarioregistro)
+                .HasMaxLength(50)
+                .HasDefaultValueSql("'consola'::character varying")
+                .HasColumnName("usuarioregistro");
 
             entity.HasOne(d => d.IdmovimientocajaNavigation).WithMany(p => p.Suscripciondetalles)
                 .HasForeignKey(d => d.Idmovimientocaja)

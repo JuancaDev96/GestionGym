@@ -30,6 +30,7 @@
     {
         try
         {
+            DatosPersonales.IdEstablecimiento = Constantes.IdEstablecimientoDefault;
             var resultado = await ProxyCliente.GuardarDatosPersonales(DatosPersonales);
             if (resultado is { Success: false })
             {

@@ -1,23 +1,26 @@
-﻿using System;
+﻿using GestionGym.Entidades;
+using System;
 using System.Collections.Generic;
 
-namespace GestionGym.Entidades;
-
-public partial class Informeinstructor : EntidadBase
+namespace GestionGym.Entidades
 {
-    public int Id { get; set; }
 
-    public int Idinstructor { get; set; }
+    public partial class Informeinstructor : EntidadBase
+    {
+        public int Id { get; set; }
 
-    public int Idcliente { get; set; }
+        public int Idinstructor { get; set; }
 
-    public string? Consideracion { get; set; }
+        public int Idcliente { get; set; }
 
-    public string? Comentario { get; set; }
+        public string? Consideracion { get; set; }
 
-    public int? Nivel { get; set; }
+        public string? Comentario { get; set; }
 
-    public virtual Cliente IdclienteNavigation { get; set; } = null!;
+        public int? Nivel { get; set; }
 
-    public virtual Colaborador IdinstructorNavigation { get; set; } = null!;
+        public virtual Cliente IdclienteNavigation { get; set; } = null!;
+
+        public virtual Colaborador IdinstructorNavigation { get; set; } = null!;
+    }
 }

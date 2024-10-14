@@ -24,4 +24,8 @@
     <ProjectReference Include="..\GestionGym.Entidades\GestionGym.Entidades.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contexto\" />
+  </ItemGroup>
+
 </Project>

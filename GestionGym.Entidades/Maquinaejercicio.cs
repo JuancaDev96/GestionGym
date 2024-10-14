@@ -1,19 +1,22 @@
-﻿using System;
+﻿using GestionGym.Entidades;
+using System;
 using System.Collections.Generic;
 
-namespace GestionGym.Entidades;
-
-public partial class Maquinaejercicio : EntidadBase
+namespace GestionGym.Entidades
 {
-    public int Id { get; set; }
 
-    public int Idmaquina { get; set; }
+    public partial class Maquinaejercicio : EntidadBase
+    {
+        public int Id { get; set; }
 
-    public int Idejercicio { get; set; }
+        public int Idmaquina { get; set; }
 
-    public bool? Esmaquina { get; set; }
+        public int Idejercicio { get; set; }
 
-    public virtual Ejercicio IdejercicioNavigation { get; set; } = null!;
+        public bool? Esmaquina { get; set; }
 
-    public virtual Maquina IdmaquinaNavigation { get; set; } = null!;
+        public virtual Ejercicio IdejercicioNavigation { get; set; } = null!;
+
+        public virtual Maquina IdmaquinaNavigation { get; set; } = null!;
+    }
 }
