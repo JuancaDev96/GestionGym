@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GestionGym.Entidades.Response
+namespace GestionGym.Entidades.Response.Maestros
 {
     public class MaestroDetalleResponse
     {

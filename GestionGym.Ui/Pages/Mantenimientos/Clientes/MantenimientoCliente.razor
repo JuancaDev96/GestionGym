@@ -1,21 +1,15 @@
 ﻿@page "/clientes/registro"
-@using GestionGym.Comun
-@using GestionGym.Dto.Request.Clientes
-@using GestionGym.Dto.Request.Maestros
-@using GestionGym.Dto.Response.Maestros
-@using GestionGym.Ui.Pages.Mantenimientos.Clientes.Componentes
-@using GestionGym.Ui.Proxys.Interfaces
+@inject IMaestroProxy ProxyMaestro;
+@inject IClienteProxy ProxyCliente;
+@inject NavigationManager navegator;
+@inject IToastService ToastService;
 
-@inject IMaestroProxy Proxy;
-
-
-
-<h4>Mantenimiento de Clientes</h4>
+<h4>Mantenimiento de Cliente</h4>
 
 <Tabs Class="mt-5">
     <Tab Title="Datos personales" IsActive="true" Name="tabPrincipal">
         <Content>
-            <DatosPersonales Request="DatosPersonales"></DatosPersonales>
+            <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="GuardarDatosPersonales"></DatosPersonales>
         </Content>
     </Tab>
     <Tab Title="Control Fisico" IsActive="true" Name="tabControlFisico">
@@ -27,9 +21,32 @@
 
 
 @code {
+
+
+    #region Datos Personales
     public DatosPersonalesRequest DatosPersonales { get; set; } = new();
 
+    private async Task GuardarDatosPersonales()
+    {
+        try
+        {
+            var resultado = await ProxyCliente.GuardarDatosPersonales(DatosPersonales);
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al registrar datos personales:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Datos personales registrados");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+        }
+    }
 
+    #endregion
 
     #region Control Fisico
     public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
@@ -38,7 +55,7 @@
     private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaParametros(GridDataProviderRequest<DetalleMaestroResponse> request)
     {
         RequestDetalleMaestro.codigoMaestro = CodigoMaestro.CTRL_FISICO;
-        var response = await Proxy.ListarDetalleMaestroByCodigo(RequestDetalleMaestro);
+        var response = await ProxyMaestro.ListarDetalleMaestroByCodigo(RequestDetalleMaestro);
         if (response is { Success: true })
         {
             ListaMaestroDetaller = response.Collection!;

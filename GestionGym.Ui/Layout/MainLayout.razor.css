@@ -42,7 +42,7 @@
     flex-grow: 1;
     padding: 20px;
     transition: margin-left 0.3s ease;
-    margin-left: 290px; /* Dejar espacio para el sidebar */
+    margin-left: 240px; /* Dejar espacio para el sidebar */
     height: calc(100vh - 60px); /* Ocupar toda la altura disponible menos el navbar */
     overflow-y: auto; /* Scroll en el contenido si es necesario */
 }

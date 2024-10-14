@@ -1,58 +1,80 @@
-﻿@using GestionGym.Dto.Request.Clientes
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Nombres</label>
-            <InputText class="form-control" @bind-Value="Request.Nombre" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Apellidos</label>
-            <InputText class="form-control" @bind-Value="Request.Apellidos" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Dni</label>
-            <InputText class="form-control" @bind-Value="Request.Dni" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Celular</label>
-            <InputText class="form-control" @bind-Value="Request.Celular" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Fec. Nacimiento</label>
-            <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Correo Electronico</label>
-            <InputText class="form-control" @bind-Value="Request.Correo" />
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="form-group">
-            <label>Edad: </label>
-            <input readonly class="form-control"/>
-        </div>
-    </div>
-</div>
+﻿@inject NavigationManager navigator;
 
-<div class="row gx-4 mt-4">
-    <div class="col">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <button type="button" class="btn btn-danger">Cancelar</button>
+<EditForm Model="Request" OnValidSubmit="() => OnGuardar()">
+    <DataAnnotationsValidator />
+    <div class="row mt-3">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Nombres</label>
+                <InputText class="form-control" @bind-Value="Request.Nombre" />
+                <ValidationMessage For="() => Request.Nombre"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Apellidos</label>
+                <InputText class="form-control" @bind-Value="Request.Apellidos" />
+                <ValidationMessage For="() => Request.Apellidos"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Dni</label>
+                <InputText class="form-control" @bind-Value="Request.Dni" />
+                <ValidationMessage For="() => Request.Dni"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Celular</label>
+                <InputText class="form-control" @bind-Value="Request.Celular" />
+                <ValidationMessage For="() => Request.Celular"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Fec. Nacimiento</label>
+                <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" />
+                <ValidationMessage For="() => Request.Fechanacimiento"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Correo Electronico</label>
+                <InputText class="form-control" @bind-Value="Request.Correo" />
+                <ValidationMessage For="() => Request.Correo"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Edad: </label>
+                <input readonly class="form-control" />
+            </div>
+        </div>
     </div>
-</div>
+
+    <div class="row gx-4 mt-4">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-danger">Cancelar</button>
+        </div>
+    </div>
+</EditForm>
 @code {
 
     [Parameter]
     public DatosPersonalesRequest Request { get; set; } = default!;
 
+    [Parameter]
+    public EventCallback OnGuardarDatosPersonales { get; set; } = default!;
+
+    private async Task OnGuardar()
+    {
+        await OnGuardarDatosPersonales.InvokeAsync();
+    }
+
+    private void Cancelar()
+    {
+        navigator.NavigateTo("/Clientes");
+    }
 }

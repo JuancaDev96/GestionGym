@@ -1,5 +1,5 @@
 ﻿using GestionGym.Entidades;
-using GestionGym.Entidades.Response;
+using GestionGym.Entidades.Response.Maestros;
 using System;
 using System.Collections.Generic;
 using System.Linq;

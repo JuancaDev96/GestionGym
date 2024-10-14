@@ -1,6 +1,6 @@
 ﻿using GestionGym.AccesoDatos.Contexto;
 using GestionGym.Entidades;
-using GestionGym.Entidades.Response;
+using GestionGym.Entidades.Response.Maestros;
 using GestionGym.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;

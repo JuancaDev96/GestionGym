@@ -13,5 +13,20 @@ namespace GestionGym.Comun
             return (int)Math.Ceiling((double)TotalRegistros / Filas);
         }
 
+        public static int CalcularEdadExacta(DateTime fechaNacimiento)
+        {
+            DateTime fechaActual = DateTime.Today;
+
+            int edad = fechaActual.Year - fechaNacimiento.Year;
+
+            // Verificar si la fecha de cumpleaños de este año ya pasó, de lo contrario, restar 1 a la edad
+            if (fechaNacimiento.Date > fechaActual.AddYears(-edad))
+            {
+                edad--;
+            }
+
+            return edad;
+        }
+
     }
 }

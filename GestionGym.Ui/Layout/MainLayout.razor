@@ -1,15 +1,18 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.Toast.Configuration
+@inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
 <div class="page">
     <NavMenu />
     <div class="layout-container">
         <main class="content-container">
+            <BlazoredToasts Position="ToastPosition.BottomRight" />
             <article class="content px-4">
                 @Body
             </article>
         </main>
     </div>
 </div>
+
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

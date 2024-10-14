@@ -1,0 +1,65 @@
+﻿@page "/clientes"
+
+@inject IClienteProxy Proxy;
+@inject NavigationManager navigator;
+
+<h4>Listado de Clientes</h4>
+
+<GroupBox Titulo="Buscar cliente" Class="mt-5">
+    <Contenido>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Nombre</label>
+                <input class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label>Dni</label>
+                <input class="form-control" />
+            </div>
+            <div class="col-md-4 mt-4">
+                <div class="btn-group">
+                    <Button Class="btn btn-light"><i class="bi bi-search"></i></Button>
+                    <Button Class="btn btn-light"><i class="bi bi-arrow-repeat"></i></Button>
+                    <Button Class="btn btn-success" @onclick="OnNuevoCliente"><i class="bi bi-plus"></i> Nuevo</Button>
+                </div>
+            </div>
+        </div>
+    </Contenido>
+</GroupBox>
+<div class="row mt-3 mt-5">
+    <Grilla TItem="ListaClientesResponse" ProveedorData="ProveedorClientes" Titulo="" @ref="GrillaClientes" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+        <ColumnasAdicionales>
+            <GridColumn TItem="ListaClientesResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                <button class="btn btn-xs btn-primary"><i class="bi bi-check"></i></button>
+            </GridColumn>
+        </ColumnasAdicionales>
+    </Grilla>
+</div>
+@code {
+    public ICollection<ListaClientesResponse> ListaClientes { get; set; } = new List<ListaClientesResponse>();
+    Grilla<ListaClientesResponse> GrillaClientes { get; set; } = default!;
+    public BusquedaClientesRequest RequestBusqueda { get; set; } = new() { Pagina = 1, Filas = 10 };
+
+    private async Task<GridDataProviderResult<ListaClientesResponse>> ProveedorClientes(GridDataProviderRequest<ListaClientesResponse> request)
+    {
+        RequestBusqueda.Pagina = request.PageNumber;
+        RequestBusqueda.Filas = request.PageSize;
+        var response = await Proxy.GetClientes(RequestBusqueda);
+        if (response is { Success: true })
+        {
+            ListaClientes = response.Collection!;
+            request.ApplyTo(ListaClientes);
+        }
+        return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>()
+            {
+                Data = response.Collection,
+                TotalCount = response.TotalRegistros
+            });
+    }
+
+    private void OnNuevoCliente()
+    {
+        navigator.NavigateTo("/Clientes/registro");
+    }
+
+}

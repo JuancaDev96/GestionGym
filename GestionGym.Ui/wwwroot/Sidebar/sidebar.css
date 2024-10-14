@@ -120,8 +120,8 @@ body.dark {
 .menu_dahsboard::before {
   content: "Dashboard";
 }
-.menu_editor::before {
-  content: "Editor";
+.menu_mantenimientos::before {
+  content: "Mantenimientos";
 }
 .menu_setting::before {
   content: "Setting";
