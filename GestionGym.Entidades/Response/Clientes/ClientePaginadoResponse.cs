@@ -8,6 +8,7 @@ namespace GestionGym.Entidades.Response.Clientes
 {
     public class ClientePaginadoResponse
     {
+        public int Id { get; set; }
         public string Nombre { get; set; } = default!;
         public string Apellidos { get; set; } = default!;
         public string? Dni { get; set; }

@@ -18,7 +18,7 @@ namespace GestionGym.Entidades
 
         public string? Correo { get; set; }
 
-        public DateOnly? Fechanacimiento { get; set; }
+        public DateOnly Fechanacimiento { get; set; }
 
         public int? Idestablecimiento { get; set; }
 

@@ -29,6 +29,7 @@ namespace GestionGym.Dto.Request.Clientes
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
         [Display(Name = "Fecha de nacimiento")]
-        public DateOnly? Fechanacimiento { get; set; }
+        public DateOnly Fechanacimiento { get; set; }
+        public int Edad { get; set; }
     }
 }

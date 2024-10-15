@@ -13,6 +13,11 @@ namespace GestionGym.Ui.Proxys.Services
             base("api/Clientes", httpClient)
         { }
 
+        public async Task<BaseResponse<InformacionClienteResponse>> GetDatosPersonalesById(int id)
+        {
+            return await SendAsync<BaseResponse<InformacionClienteResponse>>($"{id}");
+        }
+
         public async Task<PaginationResponse<ListaClientesResponse>> GetClientes(BusquedaClientesRequest request)
         {
             return await SendAsync<PaginationResponse<ListaClientesResponse>>($"Paginacion?{QueryStringDto(request)}");

@@ -10,6 +10,7 @@ namespace GestionGym.Dto.Response.Clientes
 {
     public class ListaClientesResponse
     {
+        public int Id { get; set; }
         public string Nombre { get; set; } = default!;
         public string Apellidos { get; set; } = default!;
         [Display(Name = "Nombre completo")]
@@ -19,9 +20,9 @@ namespace GestionGym.Dto.Response.Clientes
         [Display(Name = "Celular")]
         public string? Celular { get; set; }
         public string? Correo { get; set; }
-        public DateTime? FechaNacimiento { get; set; }
+        public DateTime FechaNacimiento { get; set; }
         [Display(Name = "Edad")]
-        public int Edad => Utils.CalcularEdadExacta(Convert.ToDateTime(FechaNacimiento));
+        public int Edad => Utils.CalcularEdadExacta(DateOnly.FromDateTime(FechaNacimiento));
         public DateTime FechaRegistro { get; set; } = default!;
         [Display(Name = "Suscripción")]
         public string? Suscripcion { get; set; }
@@ -29,6 +30,5 @@ namespace GestionGym.Dto.Response.Clientes
         public string? EstadoSuscripcion { get; set; }
         [Display(Name = "Hoy")]
         public string? EstadoDia { get; set; }
-        public int totalRegistros { get; set; } = 0;
     }
 }

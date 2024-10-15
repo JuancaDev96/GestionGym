@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GestionGym.Comun;
 using GestionGym.Dto.Request.Clientes;
 using GestionGym.Dto.Response;
 using GestionGym.Dto.Response.Clientes;
@@ -8,6 +9,7 @@ using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,34 @@ namespace GestionGym.Servicios.Implementaciones
         {
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public async Task<BaseResponse<InformacionClienteResponse>> ObtenerById(int idCliente)
+        {
+            var respuesta = new BaseResponse<InformacionClienteResponse>();
+            try
+            {
+                var resultado = await _repository.FindOneAsync(
+                    predicado: p => p.Id == idCliente && p.Idestablecimiento == Constantes.IdEstablecimientoDefault,
+                    selector: p => new InformacionClienteResponse
+                    {
+                        Apellidos = p.Apellidos,
+                        Idestablecimiento = p.Idestablecimiento,
+                        Id = idCliente,
+                        Celular = p.Celular,
+                        Correo = p.Correo,
+                        Dni = p.Dni,
+                        Fechanacimiento = p.Fechanacimiento,
+                        Nombre = p.Nombre
+                    });
+                respuesta.Data = _mapper.Map<InformacionClienteResponse>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
         }
 
         public async Task<PaginationResponse<ListaClientesResponse>> ListarClientes(BusquedaClientesRequest request)

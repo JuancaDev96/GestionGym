@@ -1,4 +1,4 @@
-﻿
+﻿@inject NavigationManager navegador;
 <div class="row mt-3">
     <div class="col-md-4">
         <div class="btn-group">
@@ -20,7 +20,7 @@
 <div class="row gx-4 mt-4">
     <div class="col">
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <button type="button" class="btn btn-danger">Cancelar</button>
+        <button type="button" class="btn btn-danger" @onclick="OnCancelar">Cancelar</button>
     </div>
 </div>
 
@@ -54,4 +54,8 @@
         await ModalParametrosControl.ShowAsync();
     }
 
+    private void OnCancelar()
+    {
+        navegador.NavigateTo("/Clientes");
+    }
 }

@@ -16,6 +16,13 @@ namespace GestionGym.Api.Controllers
             _service = service;
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var resultado = await _service.ObtenerById(id);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpGet("Paginacion")]
         public async Task<IActionResult> Get([FromQuery] BusquedaClientesRequest request)
         {

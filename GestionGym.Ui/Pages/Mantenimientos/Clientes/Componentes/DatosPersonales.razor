@@ -34,7 +34,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Fec. Nacimiento</label>
-                <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" />
+                <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" @bind-Value:format="yyyy-MM-dd" />
                 <ValidationMessage For="() => Request.Fechanacimiento"></ValidationMessage><br />
             </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Edad: </label>
-                <input readonly class="form-control" />
+                <input readonly class="form-control" @bind="Request.Edad"/>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
     <div class="row gx-4 mt-4">
         <div class="col">
             <button type="submit" class="btn btn-primary">Guardar</button>
-            <button type="button" class="btn btn-danger">Cancelar</button>
+            <button type="button" class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
         </div>
     </div>
 </EditForm>

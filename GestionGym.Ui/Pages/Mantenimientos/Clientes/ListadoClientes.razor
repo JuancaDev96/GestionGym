@@ -31,7 +31,7 @@
         <ColumnasAdicionales>
             <GridColumn TItem="ListaClientesResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
                 <button class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></button>
-                <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-primary" @onclick="() => OnEditarCliente(context)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
             </GridColumn>
         </ColumnasAdicionales>
@@ -74,5 +74,11 @@
     {
         navigator.NavigateTo("/Clientes/registro");
     }
+
+    private void OnEditarCliente(ListaClientesResponse item)
+    {
+        navigator.NavigateTo($"/Clientes/editar/{item.Id}");
+    }
+
 
 }

@@ -72,10 +72,11 @@ namespace GestionGym.Repositorios.Implementaciones
         {
             using (var connection = _contexto.Database.GetDbConnection())
             {
-                var sql = "SELECT * FROM sp_get_clientes_paginados(@_nombre, @_dni, @_pagenumber, @_pagesize)";
+                var sql = "SELECT * FROM sp_get_clientes_paginados(@_idestablecimiento, @_nombre, @_dni, @_pagenumber, @_pagesize)";
 
                 var parameters = new DynamicParameters();
                 // Parámetros de entrada
+                parameters.Add("_idestablecimiento", Constantes.IdEstablecimientoDefault, DbType.Int32, ParameterDirection.Input);
                 parameters.Add("_nombre", request.Nombre, DbType.String, ParameterDirection.Input);
                 parameters.Add("_dni", request.Dni, DbType.String, ParameterDirection.Input);
                 parameters.Add("_pagenumber", request.Pagina, DbType.Int32, ParameterDirection.Input);
