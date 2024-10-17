@@ -15,5 +15,7 @@ namespace GestionGym.Servicios.Interfaces
         Task<PaginationResponse<ListaClientesResponse>> ListarClientes(BusquedaClientesRequest request);
         Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> ListarControlFisicoByIdCliente(int idCliente);
         Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request);
+        Task<BaseResponse> ActualizarDatosPersonales(DatosPersonalesRequest request);
+        Task<BaseResponse> RegistrarParametroControlFisico(ParametroClienteRequest request);
     }
 }

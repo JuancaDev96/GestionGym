@@ -37,10 +37,24 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpPost("ControlFisico/Parametro/Registrar")]
+        public async Task<IActionResult> Get(ParametroClienteRequest request)
+        {
+            var resultado = await _service.RegistrarParametroControlFisico(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(DatosPersonalesRequest request)
         {
             var resultado = await _service.GuardarDatosPersonales(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(DatosPersonalesRequest request)
+        {
+            var resultado = await _service.ActualizarDatosPersonales(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
     }

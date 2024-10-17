@@ -16,5 +16,6 @@ namespace GestionGym.Dto.Response.Maestros
         [Display(Name = "Descripción")]
         public string? Descripcion { get; set; }
         public DateTime FechaRegistro { get; set; }
+        public bool EsExistente { get; set; } = false;
     }
 }

@@ -9,12 +9,12 @@
 <Tabs Class="mt-5">
     <Tab Title="Datos personales" IsActive="true" Name="tabPrincipal">
         <Content>
-            <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="GuardarDatosPersonales"></DatosPersonales>
+            <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="ActualizarDatosPersonales"></DatosPersonales>
         </Content>
     </Tab>
     <Tab Title="Control Fisico" IsActive="true" Name="tabControlFisico">
         <Content>
-            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse"></ControlFisico>
+            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" OnAgregarParametro="AgregarControlFisico" @ref="tabControlFisico" />
         </Content>
     </Tab>
 </Tabs>
@@ -24,6 +24,10 @@
     [Parameter]
     public int idCliente { get; set; } = 0;
 
+    #region Componentes
+    public ControlFisico tabControlFisico { get; set; } = new ControlFisico();
+    #endregion
+
     protected override async Task OnInitializedAsync()
     {
         if (idCliente != 0)
@@ -32,7 +36,7 @@
             await ListarParametrosControlFisico();
         }
     }
-  
+
 
     #region Datos Personales
     public DatosPersonalesRequest DatosPersonales { get; set; } = new();
@@ -55,10 +59,35 @@
         }
     }
 
+
+    private async Task ActualizarDatosPersonales()
+    {
+        try
+        {
+            DatosPersonales.IdEstablecimiento = Constantes.IdEstablecimientoDefault;
+            var resultado = await ProxyCliente.ActualizarDatosPersonales(DatosPersonales);
+
+            if (resultado is { Success: false })
+                ToastService.ShowWarning($"Error al actualizar datos personales:{resultado.Message}");
+            else
+            {
+                await ObtenerDatosById();
+                ToastService.ShowSuccess($"Datos personales actualizados");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al actualizar datos personales:{ex.Message}");
+        }
+    }
+
     #endregion
 
     #region Control Fisico
     List<ListaControlFisicoClienteResponse> ControlFisicoClienteResponse { get; set; } = new();
+    public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
+    public ICollection<DetalleMaestroResponse> ListaMaestroDetalle { get; set; } = new List<DetalleMaestroResponse>();
+
     private async Task ListarParametrosControlFisico()
     {
         try
@@ -80,11 +109,8 @@
         }
 
     }
-    #endregion
 
-    #region Control Fisico
-    public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
-    public ICollection<DetalleMaestroResponse> ListaMaestroDetaller { get; set; } = new List<DetalleMaestroResponse>();
+
 
     private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaParametros(GridDataProviderRequest<DetalleMaestroResponse> request)
     {
@@ -94,11 +120,25 @@
             var response = await ProxyMaestro.ListarDetalleMaestroByCodigo(RequestDetalleMaestro);
             if (response is { Success: true })
             {
-                return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
-                    {
-                        Data = response.Collection,
-                        TotalCount = response.TotalRegistros
-                    });
+                if (response.Collection != null)
+                {
+                    ListaMaestroDetalle = response.Collection;
+
+                    ListaMaestroDetalle
+                        .Where(p => ControlFisicoClienteResponse.Select(e => e.IdParametro).Contains(p.IdDetalleMaestro))
+                        .ToList()
+                        .ForEach(p => p.EsExistente = true);
+
+                    request.ApplyTo(ListaMaestroDetalle);
+
+                    return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+                        {
+                            Data = response.Collection,
+                            TotalCount = response.TotalRegistros
+                        });
+                }
+                else return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+
             }
         }
         catch (Exception ex)
@@ -107,6 +147,32 @@
         }
         return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
     }
+
+    private async Task AgregarControlFisico(DetalleMaestroResponse parametro)
+    {
+        try
+        {
+            var parametroNuevo = new ParametroClienteRequest() { Idcliente = idCliente, Idparametro = parametro.IdDetalleMaestro };
+
+            var resultado = await ProxyCliente.GuardarParametroControlFisico(parametroNuevo);
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al guardar parametro de control fisico:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Nuevo control fisico agregado.");
+                await tabControlFisico.ModalParametrosControl.HideAsync();
+                await ListarParametrosControlFisico();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al guardar parametro de control fisico: {ex.Message}");
+        }
+
+    }
+
     #endregion
 
 }

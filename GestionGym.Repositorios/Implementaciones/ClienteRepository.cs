@@ -25,6 +25,7 @@ namespace GestionGym.Repositorios.Implementaciones
             _contexto = contexto;
         }
 
+        #region Datos personales
         public async Task<Cliente> Registrar(Cliente request)
         {
             var nuevo = await _contexto.Clientes.AddAsync(request);
@@ -53,6 +54,9 @@ namespace GestionGym.Repositorios.Implementaciones
             }
             return new Cliente();
         }
+        #endregion
+
+        #region Control Fisico
 
         public async Task<List<ControlFisicoClienteResponse>> ListarControlFisicoByIdCliente(int IdCliente)
         {
@@ -62,12 +66,27 @@ namespace GestionGym.Repositorios.Implementaciones
                                 {
                                     IdCliente = IdCliente,
                                     IdControlFisico = p.Id,
+                                    IdParametro = p.Idparametro,
                                     NombreControl = p.IdparametroNavigation.Valor,
                                     ValorControl = p.Valor!,
                                     DescripcionControl = p.IdparametroNavigation.Descripcion!
                                 }).ToListAsync();
         }
 
+        public async Task<ControlfisicoCliente?> VerificarExistenciaControlFisico(int IdCliente, int IdParametro)
+        {
+            return await _contexto.ControlfisicoClientes.Where(p => p.Idcliente == IdCliente && p.Idparametro == IdParametro && !p.Estado).FirstOrDefaultAsync();
+        }
+
+        public async Task RegistrarParametroControlFisico(ControlfisicoCliente request)
+        {
+            await _contexto.ControlfisicoClientes.AddAsync(request);
+            await _contexto.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Listado Clientes
         public async Task<(List<ClientePaginadoResponse> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request)
         {
             using (var connection = _contexto.Database.GetDbConnection())
@@ -94,6 +113,9 @@ namespace GestionGym.Repositorios.Implementaciones
                 return (resultados.ToList(), totalRegistros, Utils.CalcularPaginacion(request.Filas, totalRegistros));
             }
         }
+        #endregion
+
+
 
     }
 }

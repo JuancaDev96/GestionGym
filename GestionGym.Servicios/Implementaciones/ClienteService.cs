@@ -26,6 +26,7 @@ namespace GestionGym.Servicios.Implementaciones
             _mapper = mapper;
         }
 
+        #region Datos personales
         public async Task<BaseResponse<InformacionClienteResponse>> ObtenerById(int idCliente)
         {
             var respuesta = new BaseResponse<InformacionClienteResponse>();
@@ -54,40 +55,6 @@ namespace GestionGym.Servicios.Implementaciones
             return respuesta;
         }
 
-        public async Task<PaginationResponse<ListaClientesResponse>> ListarClientes(BusquedaClientesRequest request)
-        {
-            var respuesta = new PaginationResponse<ListaClientesResponse>();
-            try
-            {
-                var resultado = await _repository.ListarClientes(request);
-                respuesta.Collection = _mapper.Map<List<ListaClientesResponse>>(resultado.coleccion);
-                respuesta.TotalRegistros = resultado.totalRegistros;
-                respuesta.TotalPaginas = resultado.totalPaginas;
-            }
-            catch (Exception ex)
-            {
-                respuesta.Success = false;
-                respuesta.Message = ex.Message;
-            }
-            return respuesta;
-        }
-
-        public async Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> ListarControlFisicoByIdCliente(int idCliente)
-        {
-            var respuesta = new BaseResponse<List<ListaControlFisicoClienteResponse>>();
-            try
-            {
-                var resultado = await _repository.ListarControlFisicoByIdCliente(idCliente);
-                respuesta.Data = _mapper.Map<List<ListaControlFisicoClienteResponse>>(resultado);
-            }
-            catch (Exception ex)
-            {
-                respuesta.Success = false;
-                respuesta.Message = ex.Message;
-            }
-            return respuesta;
-        }
-
         public async Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request)
         {
             var respuesta = new BaseResponse<int>();
@@ -105,5 +72,97 @@ namespace GestionGym.Servicios.Implementaciones
             }
             return respuesta;
         }
+
+        public async Task<BaseResponse> ActualizarDatosPersonales(DatosPersonalesRequest request)
+        {
+            var respuesta = new BaseResponse<int>();
+            try
+            {
+                var cliente = await _repository.FindByIdAsync(request.Id);
+                if (cliente is not null)
+                {
+                    _mapper.Map(request, cliente);
+                    await _repository.UpdateAsync();
+                    respuesta.Message = "Datos personales actualizados correctamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al actualizar datos personales: {ex.Message}";
+            }
+            return respuesta;
+        }
+        #endregion
+
+
+        #region Listado Clientes
+        public async Task<PaginationResponse<ListaClientesResponse>> ListarClientes(BusquedaClientesRequest request)
+        {
+            var respuesta = new PaginationResponse<ListaClientesResponse>();
+            try
+            {
+                var resultado = await _repository.ListarClientes(request);
+                respuesta.Collection = _mapper.Map<List<ListaClientesResponse>>(resultado.coleccion);
+                respuesta.TotalRegistros = resultado.totalRegistros;
+                respuesta.TotalPaginas = resultado.totalPaginas;
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+        #endregion
+
+
+        #region Control fisico
+        public async Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> ListarControlFisicoByIdCliente(int idCliente)
+        {
+            var respuesta = new BaseResponse<List<ListaControlFisicoClienteResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarControlFisicoByIdCliente(idCliente);
+                respuesta.Data = _mapper.Map<List<ListaControlFisicoClienteResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> RegistrarParametroControlFisico(ParametroClienteRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var parametro = _mapper.Map<ControlfisicoCliente>(request);
+                var existencia = await _repository.VerificarExistenciaControlFisico(request.Idcliente, request.Idparametro);
+                if (existencia is null)
+                {
+                    await _repository.RegistrarParametroControlFisico(parametro);
+                    respuesta.Message = "Nuevo control fisico agregado";
+                }
+                else
+                {
+                    existencia.Estado = true;
+                    await _repository.UpdateAsync();
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
+        #endregion
+
+
     }
 }

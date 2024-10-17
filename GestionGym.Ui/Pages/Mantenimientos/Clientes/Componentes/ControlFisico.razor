@@ -1,11 +1,16 @@
 ﻿@inject NavigationManager navegador;
-<div class="row mt-3">
-    <div class="col-md-4">
-        <div class="btn-group">
-            <Button Class="btn btn-sm btn-primary" @onclick="OnSeleccionarParametros">Seleccionar parametro</Button>
+
+@if (!NuevoCliente)
+{
+    <div class="row mt-3 mb-3">
+        <div class="col-md-4">
+            <div class="btn-group">
+                <Button Class="btn btn-sm btn-primary" @onclick="OnSeleccionarParametros">Agregar nuevo control</Button>
+            </div>
         </div>
     </div>
-</div>
+}
+
 
 <div class="row mt-2">
     @foreach (var item in ControlFisicoClienteResponse)
@@ -24,14 +29,21 @@
     </div>
 </div>
 
-<Modal @ref="ModalParametrosControl" Title="Parametros de control">
+<Modal @ref="ModalParametrosControl" Title="Parametros de control" Size="ModalSize.Large">
     <BodyTemplate>
         <div class="row">
             <div class="col-md-12">
                 <Grilla TItem="DetalleMaestroResponse" ProveedorData="ProveedorData" Titulo="" @ref="GrillaMaestroDetalle" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
                     <ColumnasAdicionales>
-                        <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                            <button class="btn btn-xs btn-primary"><i class="bi bi-check"></i></button>
+                        <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acción" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                            @if (!context.EsExistente)
+                            {
+                                <button class="btn btn-xs btn-success" title="Agregar" @onclick="() => AgregarParametro(context)"><i class="bi bi-plus"></i></button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-xs btn-danger" title="Quitar"><i class="bi bi-dash-circle"></i></button>
+                            }
                         </GridColumn>
                     </ColumnasAdicionales>
                 </Grilla>
@@ -41,13 +53,22 @@
 </Modal>
 
 @code {
+
+    [Parameter]
+    public bool NuevoCliente { get; set; }
+
     [Parameter]
     public List<ListaControlFisicoClienteResponse> ControlFisicoClienteResponse { get; set; } = default!;
 
     [Parameter]
     public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
-    Modal ModalParametrosControl { get; set; } = default!;
-    Grilla<DetalleMaestroResponse> GrillaMaestroDetalle { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<DetalleMaestroResponse> OnAgregarParametro { get; set; } = default!;
+
+    public Grilla<DetalleMaestroResponse> GrillaMaestroDetalle { get; set; } = default!;
+
+    public Modal ModalParametrosControl { get; set; } = default!;
 
     private async Task OnSeleccionarParametros()
     {
@@ -57,5 +78,10 @@
     private void OnCancelar()
     {
         navegador.NavigateTo("/Clientes");
+    }
+
+    private async Task AgregarParametro(DetalleMaestroResponse parametro)
+    {
+        await OnAgregarParametro.InvokeAsync(parametro);
     }
 }
