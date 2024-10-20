@@ -21,5 +21,19 @@ namespace GestionGym.Api.Controllers
             var resultado = await _service.ObtenerDetalleMaestroByCodigo(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] BusquedaMaestroRequest request)
+        {
+            var resultado = await _service.ListarMaestros(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(MaestroRequest request)
+        {
+            var resultado = await _service.Registrar(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
     }
 }

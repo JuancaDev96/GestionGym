@@ -9,7 +9,13 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("Servicios:UrlBackend")!) });
+#if DEBUG
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("Servicios:UrlBackend_Dev")!) });
+#else
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("Servicios:UrlBackend_Prod")!) });
+#endif
+
+
 builder.Services.AddBlazoredToast();
 builder.Services.AddBlazorBootstrap();
 builder.Services.Scan(selector => selector

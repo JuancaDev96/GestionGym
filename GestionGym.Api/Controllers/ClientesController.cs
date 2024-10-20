@@ -24,23 +24,30 @@ namespace GestionGym.Api.Controllers
         }
 
         [HttpGet("Paginacion")]
-        public async Task<IActionResult> Get([FromQuery] BusquedaClientesRequest request)
+        public async Task<IActionResult> GetPaginacion([FromQuery] BusquedaClientesRequest request)
         {
             var resultado = await _service.ListarClientes(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
         [HttpGet("ControlFisico/{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetControlFisico(int id)
         {
             var resultado = await _service.ListarControlFisicoByIdCliente(id);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
         [HttpPost("ControlFisico/Parametro/Registrar")]
-        public async Task<IActionResult> Get(ParametroClienteRequest request)
+        public async Task<IActionResult> PostControlFisico(ParametroClienteRequest request)
         {
             var resultado = await _service.RegistrarParametroControlFisico(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut("ControlFisico/actualizar")]
+        public async Task<IActionResult> PutControlFisico(List<ControlFisicoClienteRequest> request)
+        {
+            var resultado = await _service.ActualizarControlFisicoCliente(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 

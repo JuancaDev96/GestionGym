@@ -14,7 +14,7 @@
     </Tab>
     <Tab Title="Control Fisico" IsActive="true" Name="tabControlFisico">
         <Content>
-            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" OnAgregarParametro="AgregarControlFisico" @ref="tabControlFisico" />
+            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" OnAgregarParametro="AgregarControlFisico" OnGuardarControlFisico="OnGuardarControlFisico" @ref="tabControlFisico" />
         </Content>
     </Tab>
 </Tabs>
@@ -171,6 +171,44 @@
             ToastService.ShowError($"Error al guardar parametro de control fisico: {ex.Message}");
         }
 
+    }
+
+    private async Task OnGuardarControlFisico(List<ListaControlFisicoClienteResponse> request)
+    {
+        try
+        {
+            var controlFisico = new List<ControlFisicoClienteRequest>();
+            if (request is not null)
+            {
+                foreach (var item in request)
+                {
+                    controlFisico.Add(new()
+                        {
+                            Id = item.IdControlFisico,
+                            Valor = item.ValorControl
+                        });
+                }
+
+                var resultado = await ProxyCliente.ActualizarControlFisico(controlFisico);
+
+                if (resultado is { Success: false })
+                {
+                    ToastService.ShowWarning($"Error al actualizar control fisico:{resultado.Message}");
+                }
+                else
+                {
+                    ToastService.ShowSuccess($"Control fisico actualizado.");
+                    await tabControlFisico.ModalParametrosControl.HideAsync();
+                    await ListarParametrosControlFisico();
+                }
+            }
+
+            
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al actualizar control fisico: {ex.Message}");
+        }
     }
 
     #endregion

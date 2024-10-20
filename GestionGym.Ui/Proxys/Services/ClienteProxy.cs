@@ -34,6 +34,12 @@ namespace GestionGym.Ui.Proxys.Services
             return resultado is not null ? resultado : new BaseResponse();
         }
 
+        public async Task<BaseResponse> ActualizarControlFisico(List<ControlFisicoClienteRequest> request)
+        {
+            var resultado = await SendAsync<List<ControlFisicoClienteRequest>, BaseResponse>(request, HttpMethod.Put, "ControlFisico/actualizar");
+            return resultado is not null ? resultado : new BaseResponse();
+        }
+
         public async Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request)
         {
             var resultado = await SendAsync<DatosPersonalesRequest, BaseResponse<int>>(request, HttpMethod.Post, "");

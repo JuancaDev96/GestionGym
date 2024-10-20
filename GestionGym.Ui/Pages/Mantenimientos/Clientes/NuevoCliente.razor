@@ -39,7 +39,7 @@
             else
             {
                 ToastService.ShowSuccess($"Datos personales registrados");
-                await ListarParametrosControlFisico(resultado.Data);
+                navegator.NavigateTo($"/clientes/editar/{resultado.Data}");
             }
         }
         catch (Exception ex)

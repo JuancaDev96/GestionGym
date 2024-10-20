@@ -3,6 +3,7 @@ using GestionGym.Comun;
 using GestionGym.Dto.Request.Maestros;
 using GestionGym.Dto.Response;
 using GestionGym.Dto.Response.Maestros;
+using GestionGym.Entidades;
 using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
 using System;
@@ -37,6 +38,55 @@ namespace GestionGym.Servicios.Implementaciones
             {
                 respuesta.Success = false;
                 respuesta.Message = $"Hubo un error al listar el detalle del maestro {request.codigoMaestro}: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<PaginationResponse<ListaMaestrosResponse>> ListarMaestros(BusquedaMaestroRequest request)
+        {
+            var respuesta = new PaginationResponse<ListaMaestrosResponse>();
+            try
+            {
+                var resultado = await _repository.ListAsync(
+
+                    predicado: p => p.Estado,
+                    selector: p => new ListaMaestrosResponse
+                    {
+                        Codigo = p.Codigo,
+                        Descripcion = p.Descripcion,
+                        Id = p.Id,
+                        Nombre = p.Nombre
+                    },
+                    pagina: request.Pagina,
+                    filas: request.Filas,
+                    orderBy: p => p.Nombre
+                );
+                respuesta.Collection = resultado.Coleccion;
+                respuesta.TotalRegistros = resultado.TotalRegistros;
+                respuesta.TotalPaginas = Utils.CalcularPaginacion(resultado.TotalRegistros, request.Filas);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al listar los maestros: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse<MaestroResponse>> Registrar(MaestroRequest request)
+        {
+            var respuesta = new BaseResponse<MaestroResponse>();
+            try
+            {
+                var maestro = _mapper.Map<Maestro>(request);    
+                var resultado = await _repository.AddAsync(maestro);
+                respuesta.Data = _mapper.Map< MaestroResponse>(resultado);
+                respuesta.Message = "Catalogo registrado correctamente";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al registrar catalogo: {ex.Message}";
             }
             return respuesta;
         }

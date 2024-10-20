@@ -78,6 +78,17 @@ namespace GestionGym.Repositorios.Implementaciones
             return await _contexto.ControlfisicoClientes.Where(p => p.Idcliente == IdCliente && p.Idparametro == IdParametro && !p.Estado).FirstOrDefaultAsync();
         }
 
+        public async Task ActualizarControlFisicoValor(List<ControlfisicoCliente> request)
+        {
+            foreach(var item in request)
+            {
+                await _contexto.ControlfisicoClientes
+                       .Where(c => c.Id == item.Id)
+                       .ExecuteUpdateAsync(c => c.SetProperty(x => x.Valor, item.Valor));
+            }
+           
+        }
+
         public async Task RegistrarParametroControlFisico(ControlfisicoCliente request)
         {
             await _contexto.ControlfisicoClientes.AddAsync(request);

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using GestionGym.Dto.Request.Maestros;
 using GestionGym.Dto.Response.Maestros;
+using GestionGym.Entidades;
 using GestionGym.Entidades.Response.Maestros;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,9 @@ namespace GestionGym.Servicios.Mappers
         public MaestroProfile()
         {
             CreateMap<MaestroDetalleResponse, DetalleMaestroResponse>();
+            CreateMap<Maestro, ListaMaestrosResponse>();
+            CreateMap<MaestroRequest, Maestro>();
+            CreateMap<Maestro, MaestroResponse>();
         }
     }
 }

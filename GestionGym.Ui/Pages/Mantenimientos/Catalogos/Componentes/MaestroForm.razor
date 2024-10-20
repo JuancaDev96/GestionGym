@@ -1,0 +1,58 @@
+﻿@inject NavigationManager navigator
+
+<EditForm Model="Request" OnValidSubmit="() => OnGuardar()">
+    <DataAnnotationsValidator />
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Codigo</label>
+                <InputText class="form-control" @bind-Value="Request.Codigo" />
+                <ValidationMessage For="() => Request.Codigo"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nombre</label>
+                <InputText class="form-control" @bind-Value="Request.Nombre" />
+                <ValidationMessage For="() => Request.Nombre"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Descripción</label>
+                <InputText class="form-control" @bind-Value="Request.Descripcion" />
+                <ValidationMessage For="() => Request.Descripcion"></ValidationMessage><br />
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="row gx-4 mt-4">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public MaestroRequest Request { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnGuardarMaestro { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnCancelar { get; set; } = default!;
+
+    private async Task OnGuardar()
+    {
+        await OnGuardarMaestro.InvokeAsync();
+    }
+
+    private async Task Cancelar()
+    {
+        await OnCancelar.InvokeAsync();
+    }
+
+}

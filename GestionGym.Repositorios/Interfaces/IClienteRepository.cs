@@ -17,5 +17,6 @@ namespace GestionGym.Repositorios.Interfaces
         Task<(List<ClientePaginadoResponse> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request);
         Task RegistrarParametroControlFisico(ControlfisicoCliente request);
         Task<ControlfisicoCliente?> VerificarExistenciaControlFisico(int IdCliente, int IdParametro);
+        Task ActualizarControlFisicoValor(List<ControlfisicoCliente> request);
     }
 }

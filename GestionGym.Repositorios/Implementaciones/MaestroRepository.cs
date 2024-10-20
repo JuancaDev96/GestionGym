@@ -43,5 +43,6 @@ namespace GestionGym.Repositorios.Implementaciones
             return (coleccion, total);
         }
 
+
     }
 }

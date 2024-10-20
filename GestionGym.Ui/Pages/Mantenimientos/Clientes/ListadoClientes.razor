@@ -49,14 +49,13 @@
         var response = await Proxy.GetClientes(RequestBusqueda);
         if (response is { Success: true })
         {
-            ListaClientes = response.Collection!;
-            request.ApplyTo(ListaClientes);
-        }
-        return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>()
+            return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>()
             {
                 Data = response.Collection,
                 TotalCount = response.TotalRegistros
             });
+        }
+        return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>());
     }
 
     private async Task OnBuscar()

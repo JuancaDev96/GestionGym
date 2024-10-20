@@ -17,5 +17,6 @@ namespace GestionGym.Servicios.Interfaces
         Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request);
         Task<BaseResponse> ActualizarDatosPersonales(DatosPersonalesRequest request);
         Task<BaseResponse> RegistrarParametroControlFisico(ParametroClienteRequest request);
+        Task<BaseResponse> ActualizarControlFisicoCliente(List<ControlFisicoClienteRequest> request);
     }
 }

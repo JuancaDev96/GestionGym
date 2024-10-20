@@ -20,6 +20,7 @@ namespace GestionGym.Servicios.Mappers
             CreateMap<ControlFisicoClienteResponse, ListaControlFisicoClienteResponse>();
             CreateMap<Cliente, InformacionClienteResponse>();
             CreateMap<ParametroClienteRequest, ControlfisicoCliente>();
+            CreateMap<ControlFisicoClienteRequest, ControlfisicoCliente>();
         }
     }
 }

@@ -51,5 +51,6 @@ namespace GestionGym.Entidades
         public virtual ICollection<Suscripcion> SuscripcionIdestadosuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
 
         public virtual ICollection<Suscripcion> SuscripcionIdtiposuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
+        public virtual ICollection<Preciossuscripcion> Preciossuscripcions { get; set; } = new List<Preciossuscripcion>();
     }
 }

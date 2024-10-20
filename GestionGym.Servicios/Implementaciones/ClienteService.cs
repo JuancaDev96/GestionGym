@@ -161,6 +161,23 @@ namespace GestionGym.Servicios.Implementaciones
             return respuesta;
         }
 
+        public async Task<BaseResponse> ActualizarControlFisicoCliente(List<ControlFisicoClienteRequest> request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var parametros = _mapper.Map<List<ControlfisicoCliente>>(request);
+                await _repository.ActualizarControlFisicoValor(parametros);
+                respuesta.Message = "Control fisico actualizado";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
         #endregion
 
 
