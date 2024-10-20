@@ -14,7 +14,9 @@ namespace GestionGym.Entidades
         public string Nombre { get; set; } = null!;
 
         public string? Descripcion { get; set; }
+        public int? Idestablecimiento { get; set; }
 
+        public virtual Establecimiento? IdestablecimientoNavigation { get; set; }
         public virtual ICollection<Maestrodetalle> Maestrodetalles { get; set; } = new List<Maestrodetalle>();
     }
 }

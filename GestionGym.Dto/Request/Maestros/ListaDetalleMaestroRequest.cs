@@ -8,6 +8,8 @@ namespace GestionGym.Dto.Request.Maestros
 {
     public class ListaDetalleMaestroRequest : PaginationRequest
     {
-        public string codigoMaestro { get; set; } = default!;
+        public int idMaestro { get; set; }
+        public string? codigoMaestro { get; set; }
+        public string? Nombre { get; set; }
     }
 }

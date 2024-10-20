@@ -22,6 +22,20 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpGet("ById")]
+        public async Task<IActionResult> GetById([FromQuery] ListaDetalleMaestroRequest request)
+        {
+            var resultado = await _service.ObtenerDetalleMaestroById(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpGet("{idMaestro:int}")]
+        public async Task<IActionResult> GetById(int idMaestro)
+        {
+            var resultado = await _service.BuscarPorId(idMaestro);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] BusquedaMaestroRequest request)
         {
@@ -33,6 +47,13 @@ namespace GestionGym.Api.Controllers
         public async Task<IActionResult> Post(MaestroRequest request)
         {
             var resultado = await _service.Registrar(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(MaestroRequest request)
+        {
+            var resultado = await _service.Actualizar(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
     }

@@ -17,6 +17,11 @@ namespace GestionGym.Ui.Proxys.Services
             return await SendAsync<PaginationResponse<DetalleMaestroResponse>>($"ByCodigo?{QueryStringDto(request)}");
         }
 
+        public async Task<PaginationResponse<DetalleMaestroResponse>> ListarDetalleMaestroByID(ListaDetalleMaestroRequest request)
+        {
+            return await SendAsync<PaginationResponse<DetalleMaestroResponse>>($"ById?{QueryStringDto(request)}");
+        }
+
         public async Task<PaginationResponse<ListaMaestrosResponse>> ListarMaestros(BusquedaMaestroRequest request)
         {
             return await SendAsync<PaginationResponse<ListaMaestrosResponse>>($"?{QueryStringDto(request)}");
@@ -26,6 +31,17 @@ namespace GestionGym.Ui.Proxys.Services
         {
             var resultado = await SendAsync<MaestroRequest, BaseResponse<MaestroResponse>>(request, HttpMethod.Post, "");
             return resultado is not null ? resultado : new BaseResponse<MaestroResponse>();
+        }
+
+        public async Task<BaseResponse<MaestroResponse>> BuscarCatalogoPorId(int idMaestro)
+        {
+            return await SendAsync<BaseResponse<MaestroResponse>>($"{idMaestro}");
+        }
+
+        public async Task<BaseResponse> ActualizarCatalogo(MaestroRequest request)
+        {
+            var resultado = await SendAsync<MaestroRequest, BaseResponse>(request, HttpMethod.Put, "");
+            return resultado is not null ? resultado : new BaseResponse();
         }
     }
 }

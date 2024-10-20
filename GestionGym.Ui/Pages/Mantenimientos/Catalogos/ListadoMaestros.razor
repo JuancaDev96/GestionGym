@@ -1,10 +1,5 @@
 ﻿@page "/catalogos"
 @using GestionGym.Ui.Pages.Mantenimientos.Catalogos.Componentes
-
-@inject IMaestroProxy Proxy;
-@inject NavigationManager navigator;
-@inject IToastService ToastService;
-
 <h4>Listado de Catalogos</h4>
 
 <GroupBox Titulo="Buscar Catalogo" Class="mt-5">
@@ -32,13 +27,15 @@
     <Grilla TItem="ListaMaestrosResponse" ProveedorData="ProveedorMaestros" Titulo="" @ref="GrillaMaestros" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
         <ColumnasAdicionales>
             <GridColumn TItem="ListaMaestrosResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                <button class="btn btn-sm btn-primary" title="Configuraciones"><i class="bi bi-list"></i></button>
+                <button class="btn btn-sm btn-primary" title="Configuraciones" @onclick="() => OnVerElementos(context)"><i class="bi bi-list"></i></button>
                 <button class="btn btn-sm btn-primary" title="Editar" @onclick="() => OnEditarMaestro(context)"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger" title="Desactivar"><i class="bi bi-trash"></i></button>
             </GridColumn>
         </ColumnasAdicionales>
     </Grilla>
 </div>
+
+<Loading isLoading="isLoading" />
 
 <Modal @ref="ModalCatalogoForm" Title="Control de catalogos" Size="ModalSize.Small" UseStaticBackdrop="true">
     <BodyTemplate>
@@ -49,80 +46,3 @@
         </div>
     </BodyTemplate>
 </Modal>
-
-@code {
-    public ICollection<ListaMaestrosResponse> ListaMaestros { get; set; } = new List<ListaMaestrosResponse>();
-    Grilla<ListaMaestrosResponse> GrillaMaestros { get; set; } = default!;
-    public BusquedaMaestroRequest RequestBusqueda { get; set; } = new() { Pagina = 1, Filas = 10 };
-
-    public Modal ModalCatalogoForm { get; set; } = default!;
-    public MaestroRequest RequestCatalogo { get; set; } = new();
-
-    private async Task<GridDataProviderResult<ListaMaestrosResponse>> ProveedorMaestros(GridDataProviderRequest<ListaMaestrosResponse> request)
-    {
-        RequestBusqueda.Pagina = request.PageNumber;
-        RequestBusqueda.Filas = request.PageSize;
-        var response = await Proxy.ListarMaestros(RequestBusqueda);
-        if (response is { Success: true })
-        {
-            return await Task.FromResult(new GridDataProviderResult<ListaMaestrosResponse>()
-                {
-                    Data = response.Collection,
-                    TotalCount = response.TotalRegistros
-                });
-        }
-        return await Task.FromResult(new GridDataProviderResult<ListaMaestrosResponse>());
-    }
-
-    private async Task OnBuscar()
-    {
-        await GrillaMaestros.ActualizarGrid();
-    }
-
-    private async Task OnRefrescar()
-    {
-        RequestBusqueda = new() { Pagina = 1, Filas = 10 };
-        await GrillaMaestros.ActualizarGrid();
-    }
-
-    private async Task OnNuevoMaestro()
-    {
-        await ModalCatalogoForm.ShowAsync();
-    }
-
-    private async Task GuardarCatalogo()
-    {
-        try
-        {
-            // DatosPersonales.IdEstablecimiento = Constantes.IdEstablecimientoDefault;
-            var resultado = await Proxy.GuardarCatalogo(RequestCatalogo);
-            if (resultado is { Success: false })
-            {
-                ToastService.ShowWarning($"Error al registrar catalogo:{resultado.Message}");
-            }
-            else
-            {
-                ToastService.ShowSuccess($"Catalogo registrado");
-                await GrillaMaestros.ActualizarGrid();
-                await OnCancelar();
-            }
-        }
-        catch (Exception ex)
-        {
-            ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
-        }
-    }
-
-    private async Task OnCancelar()
-    {
-        RequestCatalogo = new();
-        await ModalCatalogoForm.HideAsync();
-    }
-
-    private void OnEditarMaestro(ListaMaestrosResponse item)
-    {
-        // navigator.NavigateTo($"/Maestros/editar/{item.Id}");
-    }
-
-
-}

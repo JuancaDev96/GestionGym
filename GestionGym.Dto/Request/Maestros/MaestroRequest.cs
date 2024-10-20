@@ -10,6 +10,7 @@ namespace GestionGym.Dto.Request.Maestros
 {
     public class MaestroRequest
     {
+        public int IdEstablecimiento { get; set; }
         public int Id { get; set; }
 
         [Required(ErrorMessage = Constantes.requiredMessage)]

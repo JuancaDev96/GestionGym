@@ -1,0 +1,13 @@
+﻿@if (isLoading)
+{
+    <div class="loading-spinner">
+        <img src="/images/loading.gif" alt="Loading..." />
+        <p>Cargando...</p>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public bool isLoading { get; set; }
+}

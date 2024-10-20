@@ -11,5 +11,6 @@ namespace GestionGym.Repositorios.Interfaces
     public interface IMaestroRepository : IBaseRepository<Maestro>
     {
         Task<(List<MaestroDetalleResponse> collection, int total)> ObtenerDetalleMaestroByCodigo(string codigoMaestro, int pagina, int filas);
+        Task<(List<MaestroDetalleResponse> collection, int total)> ObtenerDetalleMaestroByIdMaestro(int idMaestro, int pagina, int filas);
     }
 }

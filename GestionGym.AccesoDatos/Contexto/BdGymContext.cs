@@ -826,6 +826,7 @@ public partial class BdGymContext : DbContext
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
+            entity.Property(e => e.Idestablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
@@ -836,6 +837,10 @@ public partial class BdGymContext : DbContext
                 .HasMaxLength(50)
                 .HasDefaultValueSql("'consola'::character varying")
                 .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Maestros)
+                .HasForeignKey(d => d.Idestablecimiento)
+                .HasConstraintName("fk_maestro_establecimiento");
         });
 
         modelBuilder.Entity<Maestrodetalle>(entity =>

@@ -1,0 +1,137 @@
+﻿@page "/catalogos/detalles/{idMaestro:int}"
+@using GestionGym.Ui.Pages.Mantenimientos.Catalogos.Componentes
+
+@inject IMaestroProxy Proxy
+@inject NavigationManager navigator
+@inject IToastService ToastService
+
+<h4>Parametros de @RequestCatalogo.Nombre</h4>
+
+<GroupBox Titulo="Buscar elemento" Class="mt-5">
+    <Contenido>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Codigo:</label>
+                <input class="form-control" @bind="RequestDetalleMaestro.codigoMaestro" />
+            </div>
+            <div class="col-md-2">
+                <label>Catalogo: </label>
+                <input class="form-control" @bind="RequestDetalleMaestro.Nombre" />
+            </div>
+            <div class="col-md-4 mt-4 mb-3">
+                <div class="btn-group">
+                    <Button Class="btn btn-light" @onclick="OnBuscar"><i class="bi bi-search"></i></Button>
+                    <Button Class="btn btn-light" @onclick="OnRefrescar"><i class="bi bi-arrow-repeat"></i></Button>
+                    <Button Class="btn btn-success" @onclick="OnNuevoMaestro"><i class="bi bi-plus"></i> Nuevo</Button>
+                    <Button Class="btn btn-warning" @onclick="OnVolver"><i class="bi bi-arrow-90deg-left"></i> Volver</Button>
+                </div>
+            </div>
+        </div>
+    </Contenido>
+</GroupBox>
+<div class="row mt-3 mt-5 mb-5">
+    <Grilla TItem="DetalleMaestroResponse" ProveedorData="ProveedorDetalle"  Titulo="" @ref="GrillaMaestros" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+        <ColumnasAdicionales>
+            <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </GridColumn>
+        </ColumnasAdicionales>
+    </Grilla>
+</div>
+
+<Loading isLoading="isLoading" />
+
+@code {
+    [Parameter]
+    public int idMaestro { get; set; } = 0;
+
+    public bool isLoading { get; set; } = false;
+
+    Grilla<DetalleMaestroResponse> GrillaMaestros { get; set; } = default!;
+    public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
+
+    public Modal ModalCatalogoForm { get; set; } = default!;
+    public MaestroRequest RequestCatalogo { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await OnCargarDatosMaestro();
+    }
+
+    private async Task OnCargarDatosMaestro()
+    {
+        try
+        {
+            var resultado = await Proxy.BuscarCatalogoPorId(idMaestro);
+
+            if (resultado is not null && resultado.Data is not null)
+            {
+                Utils.Map(resultado.Data, RequestCatalogo);
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+        }
+
+    }
+
+    private async Task<GridDataProviderResult<DetalleMaestroResponse>> ProveedorDetalle(GridDataProviderRequest<DetalleMaestroResponse> request)
+    {
+        isLoading = true;
+        try
+        {
+            RequestDetalleMaestro.Pagina = request.PageNumber;
+            RequestDetalleMaestro.Filas = request.PageSize;
+            RequestDetalleMaestro.idMaestro = idMaestro;
+
+            var response = await Proxy.ListarDetalleMaestroByID(RequestDetalleMaestro);
+            if (response is { Success: true })
+            {
+                if (response.Collection != null)
+                {
+                    return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+                        {
+                            Data = response.Collection,
+                            TotalCount = response.TotalRegistros
+                        });
+                }
+                else return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al listar los parametros: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+
+        return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+    }
+
+    private async Task OnBuscar()
+    {
+        await GrillaMaestros.ActualizarGrid();
+    }
+
+    private async Task OnRefrescar()
+    {
+        RequestDetalleMaestro = new() { Pagina = 1, Filas = 10 };
+        await GrillaMaestros.ActualizarGrid();
+    }
+
+    private async Task OnNuevoMaestro()
+    {
+        await ModalCatalogoForm.ShowAsync();
+    }
+
+    private void OnVolver()
+    {
+        navigator.NavigateTo("/catalogos");
+    }
+
+}

@@ -29,7 +29,25 @@ namespace GestionGym.Servicios.Implementaciones
             var respuesta = new PaginationResponse<DetalleMaestroResponse>();
             try
             {
-                var resultado = await _repository.ObtenerDetalleMaestroByCodigo(request.codigoMaestro, request.Pagina, request.Filas);
+                var resultado = await _repository.ObtenerDetalleMaestroByCodigo(request.codigoMaestro!, request.Pagina, request.Filas);
+                respuesta.Collection = _mapper.Map<List<DetalleMaestroResponse>>(resultado.collection);
+                respuesta.TotalRegistros = resultado.total;
+                respuesta.TotalPaginas = Utils.CalcularPaginacion(resultado.total, request.Filas);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Hubo un error al listar el detalle del maestro {request.codigoMaestro}: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<PaginationResponse<DetalleMaestroResponse>> ObtenerDetalleMaestroById(ListaDetalleMaestroRequest request)
+        {
+            var respuesta = new PaginationResponse<DetalleMaestroResponse>();
+            try
+            {
+                var resultado = await _repository.ObtenerDetalleMaestroByIdMaestro(request.idMaestro, request.Pagina, request.Filas);
                 respuesta.Collection = _mapper.Map<List<DetalleMaestroResponse>>(resultado.collection);
                 respuesta.TotalRegistros = resultado.total;
                 respuesta.TotalPaginas = Utils.CalcularPaginacion(resultado.total, request.Filas);
@@ -69,6 +87,43 @@ namespace GestionGym.Servicios.Implementaciones
             {
                 respuesta.Success = false;
                 respuesta.Message = $"Error al listar los maestros: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse<MaestroResponse>> BuscarPorId(int idMaestro)
+        {
+            var respuesta = new BaseResponse<MaestroResponse>();
+            try
+            {
+                var resultado = await _repository.FindByIdAsync(idMaestro);
+                respuesta.Data = _mapper.Map<MaestroResponse>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al buscar catalogo: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> Actualizar(MaestroRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var entidad = await _repository.FindByIdAsync(request.Id);
+                if(entidad is not null)
+                {
+                    _mapper.Map(request, entidad);
+                    await _repository.UpdateAsync();
+                    respuesta.Message = "Catalogo actualizado correctamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al actualizar catalogo: {ex.Message}";
             }
             return respuesta;
         }

@@ -1,0 +1,48 @@
+﻿.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffd940; /* Usa el color de fondo amarillo del GIF */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+    .loading-spinner img {
+        width: 150px; /* Ajuste por defecto para pantallas pequeñas */
+        height: auto;
+    }
+
+    .loading-spinner p {
+        margin-top: 20px;
+        font-size: 1.5rem;
+        color: #000; /* Color del texto negro */
+        font-weight: bold;
+        text-align: center;
+    }
+
+/* Estilos para pantallas medianas */
+@media (min-width: 768px) {
+    .loading-spinner img {
+        width: 200px; /* Aumenta el tamaño del GIF en pantallas medianas */
+    }
+
+    .loading-spinner p {
+        font-size: 1.8rem; /* Aumenta el tamaño del texto en pantallas medianas */
+    }
+}
+
+/* Estilos para pantallas grandes */
+@media (min-width: 1200px) {
+    .loading-spinner img {
+        width: 250px; /* Aumenta el tamaño del GIF en pantallas grandes */
+    }
+
+    .loading-spinner p {
+        font-size: 2rem; /* Aumenta el tamaño del texto en pantallas grandes */
+    }
+}

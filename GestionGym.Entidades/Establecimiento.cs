@@ -35,5 +35,6 @@ namespace GestionGym.Entidades
 
         public virtual Empresa IdempresaNavigation { get; set; } = null!;
         public virtual ICollection<Maquinaestablecimiento> Maquinaestablecimientos { get; set; } = new List<Maquinaestablecimiento>();
+        public virtual ICollection<Maestro> Maestros { get; set; } = new List<Maestro>();
     }
 }
