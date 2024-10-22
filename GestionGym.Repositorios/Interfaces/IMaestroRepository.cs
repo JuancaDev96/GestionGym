@@ -1,4 +1,5 @@
-﻿using GestionGym.Entidades;
+﻿using GestionGym.Dto.Request.Maestros;
+using GestionGym.Entidades;
 using GestionGym.Entidades.Response.Maestros;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,9 @@ namespace GestionGym.Repositorios.Interfaces
 {
     public interface IMaestroRepository : IBaseRepository<Maestro>
     {
-        Task<(List<MaestroDetalleResponse> collection, int total)> ObtenerDetalleMaestroByCodigo(string codigoMaestro, int pagina, int filas);
-        Task<(List<MaestroDetalleResponse> collection, int total)> ObtenerDetalleMaestroByIdMaestro(int idMaestro, int pagina, int filas);
+        Task<(List<MaestroDetalleInfo> collection, int total)> ObtenerDetalleMaestroByCodigo(string codigoMaestro, int pagina, int filas);
+        Task<(List<MaestroDetalleInfo> collection, int total)> ObtenerDetalleMaestroByIdMaestro(ListaDetalleMaestroRequest request);
+        Task<Maestrodetalle> RegistrarDetalleMaestro(Maestrodetalle request);
+        Task<Maestrodetalle?> BuscarDetalleMaestroById(int IdMaestroDetalle);
     }
 }

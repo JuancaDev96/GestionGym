@@ -2,6 +2,7 @@
 
 @inject IClienteProxy Proxy;
 @inject NavigationManager navigator;
+@inject IToastService ToastService;
 
 <h4>Listado de Clientes</h4>
 
@@ -37,13 +38,21 @@
         </ColumnasAdicionales>
     </Grilla>
 </div>
+
+<Loading isLoading="isLoading" />
+
 @code {
     public ICollection<ListaClientesResponse> ListaClientes { get; set; } = new List<ListaClientesResponse>();
     Grilla<ListaClientesResponse> GrillaClientes { get; set; } = default!;
     public BusquedaClientesRequest RequestBusqueda { get; set; } = new() { Pagina = 1, Filas = 10 };
 
+    public bool isLoading { get; set; } = false;
+
     private async Task<GridDataProviderResult<ListaClientesResponse>> ProveedorClientes(GridDataProviderRequest<ListaClientesResponse> request)
     {
+        isLoading = true;
+        try
+        {
         RequestBusqueda.Pagina = request.PageNumber;
         RequestBusqueda.Filas = request.PageSize;
         var response = await Proxy.GetClientes(RequestBusqueda);
@@ -54,6 +63,16 @@
                 Data = response.Collection,
                 TotalCount = response.TotalRegistros
             });
+        }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
         }
         return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>());
     }

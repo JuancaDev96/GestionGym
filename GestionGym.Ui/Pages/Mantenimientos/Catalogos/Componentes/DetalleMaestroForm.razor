@@ -1,0 +1,76 @@
+﻿@inject NavigationManager navigator
+
+<EditForm Model="Request" OnValidSubmit="() => OnGuardar()">
+    <DataAnnotationsValidator />
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Codigo</label>
+                @if (Request.Id != 0)
+                {
+                    <input class="form-control" readonly value="@Request.Codigo" />
+                }
+                else
+                {
+                    <input class="form-control" @bind="Request.Codigo" />
+                }
+                <ValidationMessage For="() => Request.Codigo"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Valor</label>
+                <InputText class="form-control" @bind-Value="Request.Valor" />
+                <ValidationMessage For="() => Request.Valor"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Descripción</label>
+                <InputText class="form-control" @bind-Value="Request.Descripcion" />
+                <ValidationMessage For="() => Request.Descripcion"></ValidationMessage><br />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Es Default</label>
+                <input type="checkbox" @bind="Request.Esdefault" class="form-check-input" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Es Bool</label>
+                <input type="checkbox" @bind="Request.Esbool" class="form-check-input" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row gx-4 mt-4">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public MaestroDetalleRequest Request { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnGuardarDetalle { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback OnCancelar { get; set; } = default!;
+
+    private async Task OnGuardar()
+    {
+        await OnGuardarDetalle.InvokeAsync();
+    }
+
+    private async Task Cancelar()
+    {
+        await OnCancelar.InvokeAsync();
+    }
+
+}

@@ -58,11 +58,11 @@ namespace GestionGym.Repositorios.Implementaciones
 
         #region Control Fisico
 
-        public async Task<List<ControlFisicoClienteResponse>> ListarControlFisicoByIdCliente(int IdCliente)
+        public async Task<List<ControlFisicoClienteInfo>> ListarControlFisicoByIdCliente(int IdCliente)
         {
             return await _contexto.ControlfisicoClientes
                                 .Where(p => p.Idcliente == IdCliente && p.Estado)
-                                .Select(p => new ControlFisicoClienteResponse
+                                .Select(p => new ControlFisicoClienteInfo
                                 {
                                     IdCliente = IdCliente,
                                     IdControlFisico = p.Id,
@@ -98,7 +98,7 @@ namespace GestionGym.Repositorios.Implementaciones
         #endregion
 
         #region Listado Clientes
-        public async Task<(List<ClientePaginadoResponse> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request)
+        public async Task<(List<ClientePaginadoInfo> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request)
         {
             using (var connection = _contexto.Database.GetDbConnection())
             {
@@ -113,7 +113,7 @@ namespace GestionGym.Repositorios.Implementaciones
                 parameters.Add("_pagesize", request.Filas, DbType.Int32, ParameterDirection.Input);
 
                 // Ejecutar la consulta SQL dinámica
-                var resultados = await connection.QueryAsync<ClientePaginadoResponse>(sql, parameters);
+                var resultados = await connection.QueryAsync<ClientePaginadoInfo>(sql, parameters);
 
                 // Obtener el total de registros del primer elemento
                 var totalRegistros = resultados.Any() ? resultados.First().totalRegistros : 0;

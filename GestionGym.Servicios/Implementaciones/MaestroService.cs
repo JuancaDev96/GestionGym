@@ -42,13 +42,13 @@ namespace GestionGym.Servicios.Implementaciones
             return respuesta;
         }
 
-        public async Task<PaginationResponse<DetalleMaestroResponse>> ObtenerDetalleMaestroById(ListaDetalleMaestroRequest request)
+        public async Task<PaginationResponse<ListaMaestroDetalleResponse>> ObtenerDetalleMaestroById(ListaDetalleMaestroRequest request)
         {
-            var respuesta = new PaginationResponse<DetalleMaestroResponse>();
+            var respuesta = new PaginationResponse<ListaMaestroDetalleResponse>();
             try
             {
-                var resultado = await _repository.ObtenerDetalleMaestroByIdMaestro(request.idMaestro, request.Pagina, request.Filas);
-                respuesta.Collection = _mapper.Map<List<DetalleMaestroResponse>>(resultado.collection);
+                var resultado = await _repository.ObtenerDetalleMaestroByIdMaestro(request);
+                respuesta.Collection = _mapper.Map<List<ListaMaestroDetalleResponse>>(resultado.collection);
                 respuesta.TotalRegistros = resultado.total;
                 respuesta.TotalPaginas = Utils.CalcularPaginacion(resultado.total, request.Filas);
             }
@@ -67,7 +67,16 @@ namespace GestionGym.Servicios.Implementaciones
             {
                 var resultado = await _repository.ListAsync(
 
-                    predicado: p => p.Estado,
+                    predicado: p => p.Estado &&
+                    (
+                        string.IsNullOrEmpty(request.Codigo) || 
+                        p.Codigo.ToUpper().Contains(request.Codigo.ToUpper())
+                    ) &&
+                    (
+                        string.IsNullOrEmpty(request.Nombre) || 
+                        p.Nombre.ToUpper().Contains(request.Nombre.ToUpper()) || 
+                        p.Descripcion!.ToUpper().Contains(request.Nombre.ToUpper())
+                    ),
                     selector: p => new ListaMaestrosResponse
                     {
                         Codigo = p.Codigo,
@@ -145,5 +154,62 @@ namespace GestionGym.Servicios.Implementaciones
             }
             return respuesta;
         }
+
+        public async Task<BaseResponse<MaestroDetalleResponse>> RegistrarDetalle(MaestroDetalleRequest request)
+        {
+            var respuesta = new BaseResponse<MaestroDetalleResponse>();
+            try
+            {
+                var detalle = _mapper.Map<Maestrodetalle>(request);
+                var resultado = await _repository.RegistrarDetalleMaestro(detalle);
+                respuesta.Data = _mapper.Map<MaestroDetalleResponse>(resultado);
+                respuesta.Message = "Parametro de catalogo registrado.";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al registrar parametro: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> ActualizarDetalle(MaestroDetalleRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var entidad = await _repository.BuscarDetalleMaestroById(request.Id);
+                if (entidad is not null)
+                {
+                    _mapper.Map(request, entidad);
+                    await _repository.UpdateAsync();
+                    respuesta.Message = "Parametro actualizado correctamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al actualizar Parametro: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse<MaestroDetalleResponse>> BuscarDetallePorId(int IdMaestroDetalle)
+        {
+            var respuesta = new BaseResponse<MaestroDetalleResponse>();
+            try
+            {
+                var resultado = await _repository.BuscarDetalleMaestroById(IdMaestroDetalle);
+                respuesta.Data = _mapper.Map<MaestroDetalleResponse>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al buscar parametro: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+
     }
 }

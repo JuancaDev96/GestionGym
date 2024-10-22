@@ -15,10 +15,13 @@ namespace GestionGym.Servicios.Mappers
     {
         public MaestroProfile()
         {
-            CreateMap<MaestroDetalleResponse, DetalleMaestroResponse>();
+            CreateMap<MaestroDetalleInfo, DetalleMaestroResponse>();
             CreateMap<Maestro, ListaMaestrosResponse>();
             CreateMap<MaestroRequest, Maestro>();
             CreateMap<Maestro, MaestroResponse>();
+            CreateMap<MaestroDetalleRequest, Maestrodetalle>();
+            CreateMap<Maestrodetalle, MaestroDetalleResponse>();
+            CreateMap<MaestroDetalleInfo, ListaMaestroDetalleResponse>();
         }
     }
 }

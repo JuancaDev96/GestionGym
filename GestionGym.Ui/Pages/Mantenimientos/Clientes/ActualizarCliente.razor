@@ -19,10 +19,13 @@
     </Tab>
 </Tabs>
 
+<Loading isLoading="isLoading" />
 
 @code {
     [Parameter]
     public int idCliente { get; set; } = 0;
+
+    public bool isLoading { get; set; } = false;
 
     #region Componentes
     public ControlFisico tabControlFisico { get; set; } = new ControlFisico();
@@ -62,6 +65,7 @@
 
     private async Task ActualizarDatosPersonales()
     {
+        isLoading = true;
         try
         {
             DatosPersonales.IdEstablecimiento = Constantes.IdEstablecimientoDefault;
@@ -78,6 +82,11 @@
         catch (Exception ex)
         {
             ToastService.ShowWarning($"Error al actualizar datos personales:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -114,6 +123,7 @@
 
     private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaParametros(GridDataProviderRequest<DetalleMaestroResponse> request)
     {
+        isLoading = true;
         try
         {
             RequestDetalleMaestro.codigoMaestro = CodigoMaestro.CTRL_FISICO;
@@ -145,11 +155,17 @@
         {
             ToastService.ShowError($"Error al listar los parametros: {ex.Message}");
         }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
         return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
     }
 
     private async Task AgregarControlFisico(DetalleMaestroResponse parametro)
     {
+        isLoading = true;
         try
         {
             var parametroNuevo = new ParametroClienteRequest() { Idcliente = idCliente, Idparametro = parametro.IdDetalleMaestro };
@@ -170,11 +186,16 @@
         {
             ToastService.ShowError($"Error al guardar parametro de control fisico: {ex.Message}");
         }
-
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
     }
 
     private async Task OnGuardarControlFisico(List<ListaControlFisicoClienteResponse> request)
     {
+        isLoading = true;
         try
         {
             var controlFisico = new List<ControlFisicoClienteRequest>();
@@ -208,6 +229,11 @@
         catch (Exception ex)
         {
             ToastService.ShowError($"Error al actualizar control fisico: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
         }
     }
 

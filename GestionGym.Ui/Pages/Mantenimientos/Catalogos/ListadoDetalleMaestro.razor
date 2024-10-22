@@ -30,15 +30,25 @@
     </Contenido>
 </GroupBox>
 <div class="row mt-3 mt-5 mb-5">
-    <Grilla TItem="DetalleMaestroResponse" ProveedorData="ProveedorDetalle"  Titulo="" @ref="GrillaMaestros" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+    <Grilla TItem="ListaMaestroDetalleResponse" ProveedorData="ProveedorDetalle" Titulo="" @ref="GrillaCatalogos" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
         <ColumnasAdicionales>
-            <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+            <GridColumn TItem="ListaMaestroDetalleResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
                 <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
             </GridColumn>
         </ColumnasAdicionales>
     </Grilla>
 </div>
+
+<Modal @ref="ModalParametrosCatalogo" Title="Control de parametros" Size="ModalSize.Small" UseStaticBackdrop="true">
+    <BodyTemplate>
+        <div class="row">
+            <div class="col-md-12">
+                <DetalleMaestroForm Request="RequestParametroCatalogo" OnCancelar="OnCancelar" OnGuardarDetalle="GuardarParametroParametro" />
+            </div>
+        </div>
+    </BodyTemplate>
+</Modal>
 
 <Loading isLoading="isLoading" />
 
@@ -48,11 +58,11 @@
 
     public bool isLoading { get; set; } = false;
 
-    Grilla<DetalleMaestroResponse> GrillaMaestros { get; set; } = default!;
+    Grilla<ListaMaestroDetalleResponse> GrillaCatalogos { get; set; } = default!;
     public ListaDetalleMaestroRequest RequestDetalleMaestro { get; set; } = new() { Pagina = 1, Filas = 10 };
-
-    public Modal ModalCatalogoForm { get; set; } = default!;
+    public Modal ModalParametrosCatalogo { get; set; } = default!;
     public MaestroRequest RequestCatalogo { get; set; } = new();
+    public MaestroDetalleRequest RequestParametroCatalogo { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,7 +87,7 @@
 
     }
 
-    private async Task<GridDataProviderResult<DetalleMaestroResponse>> ProveedorDetalle(GridDataProviderRequest<DetalleMaestroResponse> request)
+    private async Task<GridDataProviderResult<ListaMaestroDetalleResponse>> ProveedorDetalle(GridDataProviderRequest<ListaMaestroDetalleResponse> request)
     {
         isLoading = true;
         try
@@ -91,13 +101,13 @@
             {
                 if (response.Collection != null)
                 {
-                    return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+                    return await Task.FromResult(new GridDataProviderResult<ListaMaestroDetalleResponse>()
                         {
                             Data = response.Collection,
                             TotalCount = response.TotalRegistros
                         });
                 }
-                else return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+                else return await Task.FromResult(new GridDataProviderResult<ListaMaestroDetalleResponse>());
             }
         }
         catch (Exception ex)
@@ -110,28 +120,62 @@
             StateHasChanged();
         }
 
-        return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+        return await Task.FromResult(new GridDataProviderResult<ListaMaestroDetalleResponse>());
     }
+
+    private async Task GuardarParametroParametro()
+    {
+        isLoading = true;
+        try
+        {
+            RequestParametroCatalogo.Idmaestro = idMaestro;
+            var resultado = await Proxy.GuardarParametroCatalogo(RequestParametroCatalogo);
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al registrar parametro:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Catalogo registrado");
+                await GrillaCatalogos.ActualizarGrid();
+                await OnCancelar();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar parametro:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
 
     private async Task OnBuscar()
     {
-        await GrillaMaestros.ActualizarGrid();
+        await GrillaCatalogos.ActualizarGrid();
     }
 
     private async Task OnRefrescar()
     {
         RequestDetalleMaestro = new() { Pagina = 1, Filas = 10 };
-        await GrillaMaestros.ActualizarGrid();
+        await GrillaCatalogos.ActualizarGrid();
     }
 
     private async Task OnNuevoMaestro()
     {
-        await ModalCatalogoForm.ShowAsync();
+        await ModalParametrosCatalogo.ShowAsync();
     }
 
     private void OnVolver()
     {
         navigator.NavigateTo("/catalogos");
+    }
+
+    private async Task OnCancelar()
+    {
+        await ModalParametrosCatalogo.HideAsync();
     }
 
 }

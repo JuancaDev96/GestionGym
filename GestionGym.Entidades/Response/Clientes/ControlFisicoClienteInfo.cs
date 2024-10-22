@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GestionGym.Entidades.Response.Clientes
 {
-    public class ControlFisicoClienteResponse
+    public class ControlFisicoClienteInfo
     {
         public int IdControlFisico { get; set; }
         public int IdParametro { get; set; }

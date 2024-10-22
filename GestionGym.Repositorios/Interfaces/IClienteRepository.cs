@@ -13,8 +13,8 @@ namespace GestionGym.Repositorios.Interfaces
     public interface IClienteRepository : IBaseRepository<Cliente>
     {
         Task<Cliente> Registrar(Cliente request);
-        Task<List<ControlFisicoClienteResponse>> ListarControlFisicoByIdCliente(int IdCliente);
-        Task<(List<ClientePaginadoResponse> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request);
+        Task<List<ControlFisicoClienteInfo>> ListarControlFisicoByIdCliente(int IdCliente);
+        Task<(List<ClientePaginadoInfo> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request);
         Task RegistrarParametroControlFisico(ControlfisicoCliente request);
         Task<ControlfisicoCliente?> VerificarExistenciaControlFisico(int IdCliente, int IdParametro);
         Task ActualizarControlFisicoValor(List<ControlfisicoCliente> request);

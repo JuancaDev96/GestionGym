@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GestionGym.Entidades.Response.Clientes
 {
-    public class ClientePaginadoResponse
+    public class ClientePaginadoInfo
     {
         public int Id { get; set; }
         public string Nombre { get; set; } = default!;

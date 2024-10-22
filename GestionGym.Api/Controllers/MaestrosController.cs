@@ -56,5 +56,26 @@ namespace GestionGym.Api.Controllers
             var resultado = await _service.Actualizar(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
+
+        [HttpGet("Detalle/{idMaestroDetalle:int}")]
+        public async Task<IActionResult> GetDetalleById(int idMaestroDetalle)
+        {
+            var resultado = await _service.BuscarDetallePorId(idMaestroDetalle);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPost("Detalle/Registrar")]
+        public async Task<IActionResult> PostDetalle(MaestroDetalleRequest request)
+        {
+            var resultado = await _service.RegistrarDetalle(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut("Detalle/Actualizar")]
+        public async Task<IActionResult> PutDetalle(MaestroDetalleRequest request)
+        {
+            var resultado = await _service.ActualizarDetalle(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
     }
 }

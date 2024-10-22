@@ -42,7 +42,7 @@ namespace GestionGym.Ui.Pages.Mantenimientos.Catalogos
             }
             catch (Exception ex)
             {
-                ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+                ToastService.ShowWarning($"Error al obtener lista de catalogos:{ex.Message}");
             }
             finally
             {
@@ -109,7 +109,7 @@ namespace GestionGym.Ui.Pages.Mantenimientos.Catalogos
             }
             catch (Exception ex)
             {
-                ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+                ToastService.ShowWarning($"Error al registrar catalogo:{ex.Message}");
             }
             finally
             {
@@ -137,7 +137,7 @@ namespace GestionGym.Ui.Pages.Mantenimientos.Catalogos
             }
             catch (Exception ex)
             {
-                ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+                ToastService.ShowWarning($"Error al obtener datos del catalogo:{ex.Message}");
             }
             
         }
