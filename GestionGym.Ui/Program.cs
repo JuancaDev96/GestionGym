@@ -1,3 +1,4 @@
+#define DEV
 using Blazored.Toast;
 using GestionGym.Ui;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,9 +10,10 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-#if DEBUG
+#if DEV
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("Servicios:UrlBackend_Dev")!) });
-#else
+#endif
+#if RED
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration.GetValue<string>("Servicios:UrlBackend_Prod")!) });
 #endif
 

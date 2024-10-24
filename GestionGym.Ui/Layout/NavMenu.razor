@@ -1,73 +1,86 @@
-﻿
-
-<!-- navbar -->
-<nav class="navbar">
+﻿<nav class="navbar">
     <div class="logo_item">
         <i class="bx bx-menu" id="sidebarOpen"></i>
         <img src="images/logo.png" alt=""><i></i>Mega Star Gym
     </div>
 
-   @*  <div class="search_bar">
-        <input type="text" placeholder="Search" />
-    </div>
- *@
     <div class="navbar_content">
         <i class="bi bi-grid"></i>
         <i class='bx bx-sun' id="darkLight"></i>
         <i class='bx bx-bell'></i>
-        <img src="images/profile.jpg" alt="" class="profile" />
+        <img src="images/logo.png" alt="" class="profile" />
     </div>
 </nav>
 
-<!-- sidebar -->
 <nav class="sidebar">
     <div class="menu_content">
         <ul class="menu_items">
             <div class="menu_title menu_dahsboard"></div>
-            <!-- duplicate or remove this li tag if you want to add or remove navlink with submenu -->
-            <!-- start -->
+
             <li class="item">
+                <a href="#" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-dashboard'></i>
+                    </span>
+                    <span class="navlink">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="#" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-flag-alt'></i>
+                    </span>
+                    <span class="navlink">Asistencias</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="/suscripciones" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bx-book-bookmark'></i>
+                    </span>
+                    <span class="navlink">Suscripciones</span>
+                </a>
+            </li>
+
+           @*  <li class="item">
                 <div href="#" class="nav_link submenu_item">
                     <span class="navlink_icon">
                         <i class="bx bx-home-alt"></i>
                     </span>
-                    <span class="navlink">Home</span>
+                    <span class="navlink">Controles</span>
                     <i class="bx bx-chevron-right arrow-left"></i>
                 </div>
 
                 <ul class="menu_items submenu">
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                    
+                    
+                   
                     <a href="#" class="nav_link sublink">Nav Sub Link</a>
                 </ul>
-            </li>
-            <!-- end -->
-            <!-- duplicate this li tag if you want to add or remove  navlink with submenu -->
-            <!-- start -->
+            </li> *@
+           
             <li class="item">
                 <div href="#" class="nav_link submenu_item">
                     <span class="navlink_icon">
                         <i class="bx bx-grid-alt"></i>
                     </span>
-                    <span class="navlink">Overview</span>
+                    <span class="navlink">Atenciones</span>
                     <i class="bx bx-chevron-right arrow-left"></i>
                 </div>
 
                 <ul class="menu_items submenu">
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
-                    <a href="#" class="nav_link sublink">Nav Sub Link</a>
+                    <a href="#" class="nav_link sublink">Ventas</a>
+                    <a href="#" class="nav_link sublink">Almacen</a>
+                    <a href="#" class="nav_link sublink">Caja</a>
                 </ul>
             </li>
-            <!-- end -->
         </ul>
 
         <ul class="menu_items">
             <div class="menu_title menu_mantenimientos"></div>
-            <!-- duplicate these li tag if you want to add or remove navlink only -->
-            <!-- Start -->
+
             <li class="item">
                 <a href="/clientes" class="nav_link">
                     <span class="navlink_icon">
@@ -76,12 +89,90 @@
                     <span class="navlink">Clientes</span>
                 </a>
             </li>
-            <!-- End -->
 
+            <li class="item">
+                <a href="/clientes" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-hot'></i>
+                    </span>
+                    <span class="navlink">Ejercicios</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="/clientes" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bx-rocket'></i>
+                    </span>
+                    <span class="navlink">Maquinas</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="#" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bx-injection'></i>
+                    </span>
+                    <span class="navlink">Productos</span>
+                </a>
+            </li>
+           
+        </ul>
+
+        <ul class="menu_items">
+            <div class="menu_title menu_reportes"></div>
+
+            <li class="item">
+                <a href="/clientes" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-file'></i>
+                    </span>
+                    <span class="navlink">Clientes</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="/clientes" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-file'></i>
+                    </span>
+                    <span class="navlink">Caja</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="/clientes" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-file'></i>
+                    </span>
+                    <span class="navlink">Almacen</span>
+                </a>
+            </li>
+
+            <li class="item">
+                <a href="#" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-file'></i>
+                    </span>
+                    <span class="navlink">Suscripciones</span>
+                </a>
+            </li>
+            <li class="item">
+                <a href="#" class="nav_link">
+                    <span class="navlink_icon">
+                        <i class='bx bxs-file'></i>
+                    </span>
+                    <span class="navlink">Asistencias</span>
+                </a>
+            </li>
+        </ul>
+      
+        <ul class="menu_items">
+            <div class="menu_title menu_setting"></div>
             <li class="item">
                 <a href="/catalogos" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-extension"></i>
+                        <i class="bx bx-cog"></i>
                     </span>
                     <span class="navlink">Catalogos</span>
                 </a>
@@ -89,64 +180,52 @@
             <li class="item">
                 <a href="#" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-filter"></i>
+                        <i class='bx bxs-user'></i>
                     </span>
-                    <span class="navlink">Filter</span>
+                    <span class="navlink">Colaboradores</span>
                 </a>
             </li>
             <li class="item">
                 <a href="#" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-cloud-upload"></i>
+                        <i class='bx bx-extension'></i>
                     </span>
-                    <span class="navlink">Upload new</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="menu_items">
-            <div class="menu_title menu_setting"></div>
-            <li class="item">
-                <a href="#" class="nav_link">
-                    <span class="navlink_icon">
-                        <i class="bx bx-flag"></i>
-                    </span>
-                    <span class="navlink">Notice board</span>
+                    <span class="navlink">Permisos</span>
                 </a>
             </li>
             <li class="item">
                 <a href="#" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-medal"></i>
+                        <i class='bx bx-building-house'></i>
                     </span>
-                    <span class="navlink">Award</span>
+                    <span class="navlink">Empresa</span>
                 </a>
             </li>
             <li class="item">
                 <a href="#" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-cog"></i>
+                        <i class='bx bx-store-alt'></i>
                     </span>
-                    <span class="navlink">Setting</span>
+                    <span class="navlink">Establecimientos</span>
                 </a>
             </li>
             <li class="item">
                 <a href="#" class="nav_link">
                     <span class="navlink_icon">
-                        <i class="bx bx-layer"></i>
+                        <i class='bx bx-user-pin'></i>
                     </span>
-                    <span class="navlink">Features</span>
+                    <span class="navlink">Mi Perfil</span>
                 </a>
             </li>
         </ul>
 
-        <!-- Sidebar Open / Close -->
         <div class="bottom_content">
             <div class="bottom expand_sidebar">
-                <span> Expand</span>
+                <span> Abrir</span>
                 <i class='bx bx-log-in'></i>
             </div>
             <div class="bottom collapse_sidebar">
-                <span> Collapse</span>
+                <span> Cerrar</span>
                 <i class='bx bx-log-out'></i>
             </div>
         </div>

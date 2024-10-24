@@ -118,13 +118,16 @@ body.dark {
   white-space: nowrap;
 }
 .menu_dahsboard::before {
-  content: "Dashboard";
+  content: "Principal";
 }
 .menu_mantenimientos::before {
   content: "Mantenimientos";
 }
+.menu_reportes::before {
+    content: "Reportes";
+}
 .menu_setting::before {
-  content: "Setting";
+  content: "Configuraciones";
 }
 .sidebar.close .menu_title::before {
   content: "";
