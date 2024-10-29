@@ -28,29 +28,41 @@ namespace GestionGym.Repositorios.Implementaciones
         #region Datos personales
         public async Task<Cliente> Registrar(Cliente request)
         {
-            var nuevo = await _contexto.Clientes.AddAsync(request);
-            await _contexto.SaveChangesAsync();
-
-            if (nuevo is not null)
+            await using (var trx = await _contexto.Database.BeginTransactionAsync())
             {
-                var ControlFisicoParametros = await _contexto.Maestrodetalles
-                                            .Where(p => p.IdmaestroNavigation.Codigo == CodigoMaestro.CTRL_FISICO && p.Esdefault == true)
-                                            .ToListAsync();
-
-                if (ControlFisicoParametros.Any())
+                try
                 {
-                    foreach (var item in ControlFisicoParametros)
+                    var nuevo = await _contexto.Clientes.AddAsync(request);
+                    await _contexto.SaveChangesAsync();
+
+                    if (nuevo is not null)
                     {
-                        ControlfisicoCliente controlfisico = new()
+                        var ControlFisicoParametros = await _contexto.Maestrodetalles
+                                                    .Where(p => p.IdmaestroNavigation.Codigo == CodigoMaestro.CTRL_FISICO && p.Esdefault == true)
+                                                    .ToListAsync();
+
+                        if (ControlFisicoParametros.Any())
                         {
-                            Idcliente = nuevo.Entity.Id,
-                            Idparametro = item.Id
-                        };
-                        await _contexto.ControlfisicoClientes.AddAsync(controlfisico);
-                        await _contexto.SaveChangesAsync();
+                            foreach (var item in ControlFisicoParametros)
+                            {
+                                ControlfisicoCliente controlfisico = new()
+                                {
+                                    Idcliente = nuevo.Entity.Id,
+                                    Idparametro = item.Id
+                                };
+                                await _contexto.ControlfisicoClientes.AddAsync(controlfisico);
+                                await _contexto.SaveChangesAsync();
+                            }
+                        }
+                        return nuevo.Entity;
                     }
+                    await trx.CommitAsync();
                 }
-                return nuevo.Entity;
+                catch (Exception)
+                {
+                    await trx.RollbackAsync();
+                    throw;
+                }
             }
             return new Cliente();
         }
@@ -80,13 +92,13 @@ namespace GestionGym.Repositorios.Implementaciones
 
         public async Task ActualizarControlFisicoValor(List<ControlfisicoCliente> request)
         {
-            foreach(var item in request)
+            foreach (var item in request)
             {
                 await _contexto.ControlfisicoClientes
                        .Where(c => c.Id == item.Id)
                        .ExecuteUpdateAsync(c => c.SetProperty(x => x.Valor, item.Valor));
             }
-           
+
         }
 
         public async Task RegistrarParametroControlFisico(ControlfisicoCliente request)

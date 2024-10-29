@@ -9,5 +9,6 @@ namespace GestionGym.Comun
     public static class CodigoMaestro
     {
         public const string CTRL_FISICO = "CTRL_FISICO";
+        public const string ESUSC_ACTIVO = "ESUSC_ACTIVO";
     }
 }

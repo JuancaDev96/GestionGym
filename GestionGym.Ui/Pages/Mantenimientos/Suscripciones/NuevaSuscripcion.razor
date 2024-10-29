@@ -1,5 +1,119 @@
-﻿<h3>NuevaSuscripcion</h3>
+﻿@using GestionGym.Dto.Request.Suscripciones
+@attribute [Route(Routes.SuscripcionRegistrar)]
+
+<div class="d-flex justify-content-center">
+    <div class="card p-4 formulario-container">
+        <h3>Registro de Suscripción</h3>
+
+        <EditForm Model="@Request" OnValidSubmit="OnGuardar">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <GroupBox Titulo="Datos del cliente" Class="mt-5">
+                <Contenido>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nombres: </label>
+                                <InputText class="form-control" @bind-Value="Request.Nombres" />
+                                <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Apellidos: </label>
+                                <InputText class="form-control" @bind-Value="Request.Apellidos" />
+                                <ValidationMessage For="() => Request.Apellidos"></ValidationMessage><br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Correo Electronico: </label>
+                                <InputText class="form-control" @bind-Value="Request.Correo" />
+                                <ValidationMessage For="() => Request.Correo"></ValidationMessage><br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Celular: </label>
+                                <InputText class="form-control" @bind-Value="Request.Celular" />
+                                <ValidationMessage For="() => Request.Celular"></ValidationMessage><br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Dni: </label>
+                                <InputText class="form-control" @bind-Value="Request.Dni" />
+                                <ValidationMessage For="() => Request.Dni"></ValidationMessage><br />
+                            </div>
+                        </div>
+                    </div>
+
+                </Contenido>
+            </GroupBox>
+
+            <GroupBox Titulo="Datos de Suscripción" Class="mt-5">
+                <Contenido>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tipo: </label>
+                                <select class="form-select">
+                                    <option>Socio Mensual</option>
+                                    <option>Socio Libre</option>
+                                </select>
+                                <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Precio: </label>
+                                <input class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Comentarios: </label>
+                                <InputText class="form-control" @bind-Value="Request.Descripcion" />
+                                <ValidationMessage For="() => Request.Descripcion"></ValidationMessage><br />
+                            </div>
+                        </div>
+                    </div>
+
+                </Contenido>
+            </GroupBox>
+
+
+        </EditForm>
+    </div>
+</div>
+
+
+<style>
+    /* CSS para centrar el formulario */
+    .formulario-container {
+        width: 50%; /* Ancho para pantallas grandes */
+    }
+
+
+    /* Responsividad para dispositivos más pequeños */
+    @@media (max-width: 992px) {
+        .formulario-container {
+            width: 90%; /* Ancho para pantallas medianas y pequeñas */
+        }
+    }
+</style>
+
 
 @code {
+    public SuscripcionRequest Request { get; set; } = new();
+
+    private void OnGuardar() { }
 
 }

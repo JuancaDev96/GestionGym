@@ -28,7 +28,7 @@
     </Contenido>
 </GroupBox>
 <div class="row mt-3 mt-5 mb-5">
-    <Grilla TItem="ListaClientesResponse" ProveedorData="ProveedorClientes" Titulo="" @ref="GrillaClientes" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+    <Grilla TItem="ListaClientesResponse" ProveedorData="DataProvider" Titulo="" @ref="GrillaClientes" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
         <ColumnasAdicionales>
             <GridColumn TItem="ListaClientesResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
                 <button class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></button>
@@ -48,7 +48,7 @@
 
     public bool isLoading { get; set; } = false;
 
-    private async Task<GridDataProviderResult<ListaClientesResponse>> ProveedorClientes(GridDataProviderRequest<ListaClientesResponse> request)
+    private async Task<GridDataProviderResult<ListaClientesResponse>> DataProvider(GridDataProviderRequest<ListaClientesResponse> request)
     {
         isLoading = true;
         try
@@ -90,7 +90,7 @@
 
     private void OnNuevoCliente()
     {
-        navigator.NavigateTo("/Clientes/registro");
+        navigator.NavigateTo(Routes.ClienteRegistrar);
     }
 
     private void OnEditarCliente(ListaClientesResponse item)

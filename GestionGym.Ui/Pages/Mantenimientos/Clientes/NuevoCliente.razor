@@ -1,4 +1,4 @@
-﻿@page "/clientes/registro/"
+﻿@attribute [Route(Routes.ClienteRegistrar)]
 @inject IMaestroProxy ProxyMaestro;
 @inject IClienteProxy ProxyCliente;
 @inject NavigationManager navegator;
@@ -12,7 +12,7 @@
             <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="GuardarDatosPersonales"></DatosPersonales>
         </Content>
     </Tab>
-    <Tab Title="Control Fisico" Active="true" Name="tabControlFisico">
+    <Tab Title="Control Fisico" Name="tabControlFisico">
         <Content>
             <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" NuevoCliente="true"></ControlFisico>
         </Content>

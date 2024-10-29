@@ -638,7 +638,6 @@ public partial class BdGymContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
-            entity.Property(e => e.IdestadoactualParametro).HasColumnName("idestadoactual_parametro");
             entity.Property(e => e.Nivel).HasColumnName("nivel");
             entity.Property(e => e.Objetivo)
                 .HasMaxLength(150)
@@ -656,10 +655,6 @@ public partial class BdGymContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_fichacliente_cliente");
 
-            entity.HasOne(d => d.IdestadoactualParametroNavigation).WithMany(p => p.Fichaclientes)
-                .HasForeignKey(d => d.IdestadoactualParametro)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_aplicacionejercicio_estadoactual");
         });
 
         modelBuilder.Entity<HistorialmedicoCliente>(entity =>

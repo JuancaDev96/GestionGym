@@ -17,8 +17,6 @@ namespace GestionGym.Entidades
 
         public int? Nivel { get; set; }
 
-        public int IdestadoactualParametro { get; set; }
-
         public virtual Cliente IdclienteNavigation { get; set; } = null!;
 
         public virtual Maestrodetalle IdestadoactualParametroNavigation { get; set; } = null!;
