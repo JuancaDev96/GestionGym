@@ -19,7 +19,6 @@ namespace GestionGym.Dto.Request.Clientes
         [Required(ErrorMessage = Constantes.requiredMessage)]
         public string Apellidos { get; set; } = default!;
 
-        [Required(ErrorMessage = Constantes.requiredMessage)]
         [MinLength(8, ErrorMessage = Constantes.minLength)]
         public string? Dni { get; set; }
 

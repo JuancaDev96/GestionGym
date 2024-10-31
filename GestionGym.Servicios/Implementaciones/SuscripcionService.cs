@@ -34,15 +34,8 @@ namespace GestionGym.Servicios.Implementaciones
             try
             {
                 var nuevo = _mapper.Map<Suscripcion>(request);
-                var cliente = new Cliente
-                {
-                    Nombre = request.Nombres,
-                    Apellidos = request.Apellidos,
-                    Celular = request.Celular,
-                    Dni = request.Dni,
-                    Correo = request.Correo
-                };
-
+                var cliente = _mapper.Map<Cliente>(request);
+               
                 var resultado = await _repository.Registrar(nuevo, cliente, request.FechaInicio, request.IdObjetivo, request.IdNivel);
                 respuesta.Message = "Suscripción registrada correctamente";
                 respuesta.Data = resultado.Id;

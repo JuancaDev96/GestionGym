@@ -32,7 +32,7 @@
     <Grilla TItem="ListaSuscripcionResponse" ProveedorData="DataProvider" Titulo="" @ref="GrillaSuscripciones" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
         <ColumnasAdicionales>
             <GridColumn TItem="ListaSuscripcionResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
-                <button class="btn btn-sm btn-primary"><i class="bi bi-eye"></i></button>
+                <button class="btn btn-sm btn-primary" @onclick="OnVerDetalle"><i class="bi bi-eye"></i></button>
             </GridColumn>
         </ColumnasAdicionales>
     </Grilla>
@@ -90,6 +90,11 @@
     private void OnNueva()
     {
         navigator.NavigateTo(Routes.SuscripcionRegistrar);
+    }
+
+    private void OnVerDetalle()
+    {
+        navigator.NavigateTo($"{Routes.DetalleSuscripcionNav}/1");
     }
 
 

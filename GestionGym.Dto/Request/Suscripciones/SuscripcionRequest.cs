@@ -13,7 +13,7 @@ namespace GestionGym.Dto.Request.Suscripciones
         public int Id { get; set; }
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
-        public string Nombres { get; set; } = default!;
+        public string Nombre { get; set; } = default!;
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
         public string Apellidos { get; set; } = default!;
@@ -32,7 +32,7 @@ namespace GestionGym.Dto.Request.Suscripciones
 
         [DeniedValues(0, ErrorMessage = Constantes.requiredMessage)]
         [Display(Name = "Género")]
-        public int IdGeneroParametro { get; set; }
+        public int IdGenero { get; set; }
 
         [Required(ErrorMessage = Constantes.requiredMessage)]
         [Display(Name = "Descripción")]
@@ -48,5 +48,9 @@ namespace GestionGym.Dto.Request.Suscripciones
         [DeniedValues(0, ErrorMessage = Constantes.requiredMessage)]
         [Display(Name = "Nivel")]
         public int IdNivel { get; set; }
+
+        [Required(ErrorMessage = Constantes.requiredMessage)]
+        [Display(Name = "Fecha de nacimiento")]
+        public DateOnly Fechanacimiento { get; set; } = new DateOnly(2000,01,01);
     }
 }

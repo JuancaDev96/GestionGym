@@ -2,6 +2,7 @@
 @using GestionGym.Dto.Response.Suscripciones
 @inject IMaestroProxy MaestroProxy;
 @inject ISuscripcionProxy SuscripProxy;
+@inject IToastService ToastService;
 @inject NavigationManager navigator;
 @attribute [Route(Routes.SuscripcionRegistrar)]
 
@@ -16,8 +17,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Nombres: </label>
-                        <InputText class="form-control" @bind-Value="Request.Nombres" />
-                        <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
+                        <InputText class="form-control" @bind-Value="Request.Nombre" />
+                        <ValidationMessage For="() => Request.Nombre"></ValidationMessage><br />
                     </div>
                 </div>
 
@@ -48,22 +49,30 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>Genero: </label>
-                        <InputSelect class="form-select" @bind-Value="Request.IdGeneroParametro">
+                        <InputSelect class="form-select" @bind-Value="Request.IdGenero">
                             <option value="0" selected>-Seleccione Genero-</option>
                             @foreach (var item in ListaGeneros)
                             {
                                 <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="() => Request.IdGeneroParametro"></ValidationMessage><br />
+                        <ValidationMessage For="() => Request.IdGenero"></ValidationMessage><br />
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>Correo Electronico: </label>
                         <InputText class="form-control" @bind-Value="Request.Correo" />
                         <ValidationMessage For="() => Request.Correo"></ValidationMessage><br />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Fecha Nacimiento</label>
+                        <InputDate class="form-control" @bind-Value="Request.Fechanacimiento" @bind-Value:format="yyyy-MM-dd" />
+                        <ValidationMessage For="() => Request.Fechanacimiento"></ValidationMessage><br />
                     </div>
                 </div>
             </div>
@@ -164,6 +173,9 @@
 
 </EditForm>
 
+
+<Loading isLoading="isLoading" />
+
 @code {
     public SuscripcionRequest Request { get; set; } = new();
     public List<DetalleMaestroResponse> ListaTipoSuscripcion { get; set; } = new();
@@ -172,7 +184,11 @@
     public List<DetalleMaestroResponse> ListaNivel { get; set; } = new();
     public List<ListaPreciosTipoSuscripcionResponse> ListaPreciosTipoSuscripcion { get; set; } = new();
 
+    #region Variables Privadas
     private string Precio { get; set; }
+    private bool isLoading { get; set; }
+    #endregion
+    
 
     protected override async Task OnInitializedAsync()
     {
@@ -249,7 +265,32 @@
 
     }
 
-    private void OnGuardar() { }
+    private async Task OnGuardar()
+    {
+        isLoading = true;
+        try
+        {
+            var resultado = await SuscripProxy.GuardarSuscripcion(Request);
+
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error la suscripción:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Suscripción creada correctamente");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar la suscripción:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
 
     private void OnCancelar()
     {

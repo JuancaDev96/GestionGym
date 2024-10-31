@@ -38,21 +38,42 @@ namespace GestionGym.Repositorios.Implementaciones
             {
                 try
                 {
+                    cliente.Idestablecimiento = 1;
                     var EstadoActivo = await _contexto.Maestrodetalles.FirstOrDefaultAsync(p => p.Codigo == CodigoMaestro.ESUSC_ACTIVO);
 
                     if (EstadoActivo is not null)
-                        request.IdestadosuscripcionParametro = EstadoActivo.Id;
+                        request.Idestadosuscripcion = EstadoActivo.Id;
 
-                    var suscripcion = await _contexto.Suscripcions.AddAsync(request);
+                    #region Creacion del Cliente, Control Fisico y Ficha del cliente
+
+                    var nuevoCliente = await _contexto.Clientes.AddAsync(cliente);
                     await _contexto.SaveChangesAsync();
-
-                    var nuevoCliente = await _clienteRepositorio.Registrar(cliente);
 
                     if (nuevoCliente is not null)
                     {
+                        var ControlFisicoParametros = await _contexto.Maestrodetalles
+                                                    .Where(p => p.IdmaestroNavigation.Codigo == CodigoMaestro.CTRL_FISICO && p.Esdefault == true)
+                                                    .ToListAsync();
+
+                        if (ControlFisicoParametros.Any())
+                        {
+                            foreach (var item in ControlFisicoParametros)
+                            {
+                                ControlfisicoCliente controlfisico = new()
+                                {
+                                    Idcliente = nuevoCliente.Entity.Id,
+                                    Idparametro = item.Id
+                                };
+                                await _contexto.ControlfisicoClientes.AddAsync(controlfisico);
+                                await _contexto.SaveChangesAsync();
+                            }
+                        }
+
+                        request.Idcliente = nuevoCliente.Entity.Id;
+
                         var ficha = new Fichacliente
                         {
-                            Idcliente = nuevoCliente.Id,
+                            Idcliente = nuevoCliente.Entity.Id,
                             Fechainicio = FechaInicio,
                             IdobjetivoParametro = IdObjetivo,
                             IdnivelParametro = IdNivel
@@ -65,6 +86,12 @@ namespace GestionGym.Repositorios.Implementaciones
                     {
                         await trx.RollbackAsync();
                     }
+
+                    #endregion
+                    var suscripcion = await _contexto.Suscripcions.AddAsync(request);
+                    await _contexto.SaveChangesAsync();
+
+
 
                     await trx.CommitAsync();
 

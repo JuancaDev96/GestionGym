@@ -21,7 +21,7 @@ namespace GestionGym.Entidades
         public DateOnly Fechanacimiento { get; set; }
 
         public int? Idestablecimiento { get; set; }
-        public int? IdgeneroParametro { get; set; }
+        public int? Idgenero { get; set; }
 
         public virtual ICollection<ControlavanceCliente> ControlavanceClientes { get; set; } = new List<ControlavanceCliente>();
 

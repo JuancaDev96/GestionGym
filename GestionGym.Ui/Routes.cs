@@ -7,5 +7,10 @@
         public const string SuscripcionRegistrar = "/suscripcion/registro";
 
         public const string Suscripciones = "/suscripciones";
+
+        public const string DetalleSuscripcion = "/suscripciones/detalle/{idCliente:int}";
+
+        public const string DetalleSuscripcionNav = "/suscripciones/detalle";
     }
+
 }

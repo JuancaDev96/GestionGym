@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GestionGym.Dto.Request.Suscripciones;
 using GestionGym.Dto.Response.Suscripciones;
 using GestionGym.Entidades;
 using System;
@@ -14,6 +15,8 @@ namespace GestionGym.Servicios.Mappers
         public SuscripcionProfile()
         {
             CreateMap<Preciossuscripcion, ListaPreciosTipoSuscripcionResponse>();
+            CreateMap<SuscripcionRequest, Suscripcion>();
+            CreateMap<SuscripcionRequest, Cliente>();
         }
     }
 }

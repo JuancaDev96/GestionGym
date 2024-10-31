@@ -13,9 +13,9 @@ namespace GestionGym.Entidades
 
         public string Descripcion { get; set; } = null!;
 
-        public int IdtiposuscripcionParametro { get; set; }
+        public int Idtiposuscripcion { get; set; }
 
-        public int IdestadosuscripcionParametro { get; set; }
+        public int Idestadosuscripcion { get; set; }
 
         public int? Idpreciosuscripcion { get; set; }
 
