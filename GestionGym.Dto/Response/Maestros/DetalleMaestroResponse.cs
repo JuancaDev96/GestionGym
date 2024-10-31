@@ -10,6 +10,7 @@ namespace GestionGym.Dto.Response.Maestros
     public class DetalleMaestroResponse
     {
         public int IdDetalleMaestro { get; set; }
+        public string CodigoPadre { get; set; }
         public string Codigo { get; set; } = default!;
         [Display(Name = "Parametro")]
         public string Valor { get; set; } = default!;

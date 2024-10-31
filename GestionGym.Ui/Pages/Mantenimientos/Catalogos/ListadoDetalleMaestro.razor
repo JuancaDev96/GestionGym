@@ -96,7 +96,7 @@
             RequestDetalleMaestro.Filas = request.PageSize;
             RequestDetalleMaestro.idMaestro = idMaestro;
 
-            var response = await Proxy.ListarDetalleMaestroByID(RequestDetalleMaestro);
+            var response = await Proxy.ListaPaginadaDetalleMaestroByID(RequestDetalleMaestro);
             if (response is { Success: true })
             {
                 if (response.Collection != null)

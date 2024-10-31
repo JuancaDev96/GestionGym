@@ -27,7 +27,12 @@ namespace GestionGym.Repositorios.Implementaciones
             _clienteRepositorio = clienteRepositorio;
         }
 
-        public async Task<Suscripcion> Registrar(Suscripcion request, Cliente cliente, DateTime FechaInicio, string Objetivo, int Nivel)
+        public async Task<List<Preciossuscripcion>> ListarPreciosTipoSuscripcion(int idTipoSuscripcion)
+        {
+            return await _contexto.Preciossuscripcions.Where(p => p.IdtiposuscripcionParametro == idTipoSuscripcion && p.Estado).ToListAsync();
+        }
+
+        public async Task<Suscripcion> Registrar(Suscripcion request, Cliente cliente, DateTime FechaInicio, int IdObjetivo, int IdNivel)
         {
             await using (var trx = await _contexto.Database.BeginTransactionAsync())
             {
@@ -45,14 +50,12 @@ namespace GestionGym.Repositorios.Implementaciones
 
                     if (nuevoCliente is not null)
                     {
-
-
                         var ficha = new Fichacliente
                         {
                             Idcliente = nuevoCliente.Id,
                             Fechainicio = FechaInicio,
-                            Objetivo = Objetivo,
-                            Nivel = Nivel
+                            IdobjetivoParametro = IdObjetivo,
+                            IdnivelParametro = IdNivel
                         };
 
                         await _contexto.Fichaclientes.AddAsync(ficha);

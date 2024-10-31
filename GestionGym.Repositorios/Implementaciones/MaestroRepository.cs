@@ -47,7 +47,7 @@ namespace GestionGym.Repositorios.Implementaciones
         public async Task<(List<MaestroDetalleInfo> collection, int total)> ObtenerDetalleMaestroByIdMaestro(ListaDetalleMaestroRequest request)
         {
             var coleccion = await _contexto.Maestrodetalles
-                                 .Where(p => p.Idmaestro == request.idMaestro && 
+                                 .Where(p => p.Idmaestro == request.idMaestro &&
                                     p.Estado &&
                                     (
                                         string.IsNullOrEmpty(request.codigoMaestro) ||
@@ -89,6 +89,41 @@ namespace GestionGym.Repositorios.Implementaciones
         public async Task<Maestrodetalle?> BuscarDetalleMaestroById(int IdMaestroDetalle)
         {
             return await _contexto.Maestrodetalles.FindAsync(IdMaestroDetalle);
+        }
+
+        public async Task<List<MaestroDetalleInfo>> ListarDetalleMaestroByCodigo(string codigoMaestro)
+        {
+            return await _contexto.Maestrodetalles
+                                 .Where(p => p.IdmaestroNavigation.Codigo == codigoMaestro && p.Estado)
+                                 .AsNoTracking()
+                                 .OrderBy(p => p.Descripcion)
+                                 .Select(p => new MaestroDetalleInfo
+                                 {
+                                     IdDetalleMaestro = p.Id,
+                                     Codigo = p.Codigo,
+                                     Valor = p.Valor,
+                                     Descripcion = p.Descripcion,
+                                     FechaRegistro = p.Fecharegistro
+                                 }).ToListAsync();
+
+        }
+
+        public async Task<List<MaestroDetalleInfo>> ListarDetalleMaestroByListCodigos(List<string> listCodigos)
+        {
+            return await _contexto.Maestrodetalles
+                                 .Where(p => listCodigos.Contains(p.IdmaestroNavigation.Codigo) && p.Estado)
+                                 .AsNoTracking()
+                                 .OrderBy(p => p.Descripcion)
+                                 .Select(p => new MaestroDetalleInfo
+                                 {
+                                     IdDetalleMaestro = p.Id,
+                                     Codigo = p.Codigo,
+                                     Valor = p.Valor,
+                                     Descripcion = p.Descripcion,
+                                     FechaRegistro = p.Fecharegistro,
+                                     CodigoPadre = p.IdmaestroNavigation.Codigo
+                                 }).ToListAsync();
+
         }
 
     }

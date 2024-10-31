@@ -24,6 +24,13 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpGet("ListaPrecios/{idTipoSuscripcion:int}")]
+        public async Task<IActionResult> GetPrecios(int idTipoSuscripcion)
+        {
+            var resultado = await _service.ListaPreciosTipoSuscripcion(idTipoSuscripcion);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(SuscripcionRequest request)
         {

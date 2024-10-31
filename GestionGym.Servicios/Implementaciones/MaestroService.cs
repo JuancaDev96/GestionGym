@@ -210,6 +210,36 @@ namespace GestionGym.Servicios.Implementaciones
             return respuesta;
         }
 
+        public async Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request)
+        {
+            var respuesta = new BaseResponse<List<DetalleMaestroResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarDetalleMaestroByCodigo(request.codigoMaestro!);
+                respuesta.Data = _mapper.Map<List<DetalleMaestroResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Hubo un error al listar el detalle del maestro {request.codigoMaestro}: {ex.Message}";
+            }
+            return respuesta;
+        }
 
+        public async Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByListCodigos(List<string> listCodigos)
+        {
+            var respuesta = new BaseResponse<List<DetalleMaestroResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarDetalleMaestroByListCodigos(listCodigos);
+                respuesta.Data = _mapper.Map<List<DetalleMaestroResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Hubo un error al listar el detalle de los maestros: {ex.Message}";
+            }
+            return respuesta;
+        }
     }
 }

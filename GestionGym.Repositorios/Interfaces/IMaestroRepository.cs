@@ -15,5 +15,7 @@ namespace GestionGym.Repositorios.Interfaces
         Task<(List<MaestroDetalleInfo> collection, int total)> ObtenerDetalleMaestroByIdMaestro(ListaDetalleMaestroRequest request);
         Task<Maestrodetalle> RegistrarDetalleMaestro(Maestrodetalle request);
         Task<Maestrodetalle?> BuscarDetalleMaestroById(int IdMaestroDetalle);
+        Task<List<MaestroDetalleInfo>> ListarDetalleMaestroByCodigo(string codigoMaestro);
+        Task<List<MaestroDetalleInfo>> ListarDetalleMaestroByListCodigos(List<string> listCodigos);
     }
 }

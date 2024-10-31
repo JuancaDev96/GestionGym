@@ -1,119 +1,258 @@
 ﻿@using GestionGym.Dto.Request.Suscripciones
+@using GestionGym.Dto.Response.Suscripciones
+@inject IMaestroProxy MaestroProxy;
+@inject ISuscripcionProxy SuscripProxy;
+@inject NavigationManager navigator;
 @attribute [Route(Routes.SuscripcionRegistrar)]
 
-<div class="d-flex justify-content-center">
-    <div class="card p-4 formulario-container">
-        <h3>Registro de Suscripción</h3>
+<h4>Registro de Suscripción</h4>
 
-        <EditForm Model="@Request" OnValidSubmit="OnGuardar">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<EditForm Model="@Request" OnValidSubmit="OnGuardar">
+    <DataAnnotationsValidator />
 
-            <GroupBox Titulo="Datos del cliente" Class="mt-5">
-                <Contenido>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nombres: </label>
-                                <InputText class="form-control" @bind-Value="Request.Nombres" />
-                                <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Apellidos: </label>
-                                <InputText class="form-control" @bind-Value="Request.Apellidos" />
-                                <ValidationMessage For="() => Request.Apellidos"></ValidationMessage><br />
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Correo Electronico: </label>
-                                <InputText class="form-control" @bind-Value="Request.Correo" />
-                                <ValidationMessage For="() => Request.Correo"></ValidationMessage><br />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Celular: </label>
-                                <InputText class="form-control" @bind-Value="Request.Celular" />
-                                <ValidationMessage For="() => Request.Celular"></ValidationMessage><br />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Dni: </label>
-                                <InputText class="form-control" @bind-Value="Request.Dni" />
-                                <ValidationMessage For="() => Request.Dni"></ValidationMessage><br />
-                            </div>
-                        </div>
+    <GroupBox Titulo="Datos del cliente" Class="mt-5">
+        <Contenido>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Nombres: </label>
+                        <InputText class="form-control" @bind-Value="Request.Nombres" />
+                        <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
                     </div>
+                </div>
 
-                </Contenido>
-            </GroupBox>
-
-            <GroupBox Titulo="Datos de Suscripción" Class="mt-5">
-                <Contenido>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Tipo: </label>
-                                <select class="form-select">
-                                    <option>Socio Mensual</option>
-                                    <option>Socio Libre</option>
-                                </select>
-                                <ValidationMessage For="() => Request.Nombres"></ValidationMessage><br />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Precio: </label>
-                                <input class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Comentarios: </label>
-                                <InputText class="form-control" @bind-Value="Request.Descripcion" />
-                                <ValidationMessage For="() => Request.Descripcion"></ValidationMessage><br />
-                            </div>
-                        </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Apellidos: </label>
+                        <InputText class="form-control" @bind-Value="Request.Apellidos" />
+                        <ValidationMessage For="() => Request.Apellidos"></ValidationMessage><br />
                     </div>
+                </div>
 
-                </Contenido>
-            </GroupBox>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Celular: </label>
+                        <InputText class="form-control" @bind-Value="Request.Celular" />
+                        <ValidationMessage For="() => Request.Celular"></ValidationMessage><br />
+                    </div>
+                </div>
 
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Dni: </label>
+                        <InputText class="form-control" @bind-Value="Request.Dni" />
+                        <ValidationMessage For="() => Request.Dni"></ValidationMessage><br />
+                    </div>
+                </div>
 
-        </EditForm>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Genero: </label>
+                        <InputSelect class="form-select" @bind-Value="Request.IdGeneroParametro">
+                            <option value="0" selected>-Seleccione Genero-</option>
+                            @foreach (var item in ListaGeneros)
+                            {
+                                <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Request.IdGeneroParametro"></ValidationMessage><br />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Correo Electronico: </label>
+                        <InputText class="form-control" @bind-Value="Request.Correo" />
+                        <ValidationMessage For="() => Request.Correo"></ValidationMessage><br />
+                    </div>
+                </div>
+            </div>
+
+        </Contenido>
+    </GroupBox>
+
+    <GroupBox Titulo="Datos de Suscripción" Class="mt-5">
+        <Contenido>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Tipo: </label>
+                        <InputSelect class="form-select" @bind-Value="Request.IdTipoSuscripcion" @oninput="OnListarPrecios">
+                            <option value="0" selected>-Seleccione tipo suscripción-</option>
+                            @foreach (var item in ListaTipoSuscripcion)
+                            {
+                                <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Request.IdTipoSuscripcion"></ValidationMessage><br />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Lista de precios: </label>
+                        <InputSelect class="form-select" @bind-Value="Request.IdPrecioSuscripcion" @oninput="OnObtenerPrecio">
+                            <option value="0" selected>-Seleccione precio-</option>
+                            @foreach (var item in ListaPreciosTipoSuscripcion)
+                            {
+                                <option value="@item.Id" title="@item.Precio">@item.Descripcion</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Request.IdPrecioSuscripcion"></ValidationMessage><br />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Precio: </label>
+                        <input class="form-control" readonly @bind="Precio" />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Fecha Inicio: </label>
+                        <InputDate class="form-control" @bind-Value="Request.FechaInicio" />
+                        <ValidationMessage For="() => Request.FechaInicio"></ValidationMessage><br />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Objetivo: </label>
+                        <InputSelect class="form-select" @bind-Value="Request.IdObjetivo">
+                            <option value="0" selected>-Seleccione Objetivo-</option>
+                            @foreach (var item in ListaObjetivos)
+                            {
+                                <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Request.IdObjetivo"></ValidationMessage><br />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Nivel: </label>
+                        <InputSelect class="form-select" @bind-Value="Request.IdNivel">
+                            <option value="0" selected>-Seleccione Nivel-</option>
+                            @foreach (var item in ListaNivel)
+                            {
+                                <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => Request.IdNivel"></ValidationMessage><br />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Comentarios: </label>
+                        <InputTextArea class="form-control" @bind-Value="Request.Descripcion" />
+                        <ValidationMessage For="() => Request.Descripcion"></ValidationMessage><br />
+                    </div>
+                </div>
+            </div>
+
+        </Contenido>
+    </GroupBox>
+
+    <div class="row gx-4 mt-4">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="button" class="btn btn-danger" @onclick="OnCancelar">Cancelar</button>
+        </div>
     </div>
-</div>
 
-
-<style>
-    /* CSS para centrar el formulario */
-    .formulario-container {
-        width: 50%; /* Ancho para pantallas grandes */
-    }
-
-
-    /* Responsividad para dispositivos más pequeños */
-    @@media (max-width: 992px) {
-        .formulario-container {
-            width: 90%; /* Ancho para pantallas medianas y pequeñas */
-        }
-    }
-</style>
-
+</EditForm>
 
 @code {
     public SuscripcionRequest Request { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaTipoSuscripcion { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaGeneros { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaObjetivos { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaNivel { get; set; } = new();
+    public List<ListaPreciosTipoSuscripcionResponse> ListaPreciosTipoSuscripcion { get; set; } = new();
+
+    private string Precio { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarCatalogos();
+    }
+
+
+    private async Task ListarCatalogos()
+    {
+        try
+        {
+            List<string> request = new(){
+              CodigoMaestro.OBJETIVO,
+              CodigoMaestro.TIP_SUSCRIPCION,
+              CodigoMaestro.GENERO,
+              CodigoMaestro.NIVEL
+            };
+            var resultado = await MaestroProxy.ListarDetalleMaestroByListCodigos(request);
+            if (resultado is not null && resultado.Data is not null)
+            {
+                var coleccion = resultado.Data;
+                ListaTipoSuscripcion = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.TIP_SUSCRIPCION).ToList();
+                ListaGeneros = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.GENERO).ToList();
+                ListaObjetivos = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.OBJETIVO).ToList();
+                ListaNivel = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.NIVEL).ToList();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+
+    private async Task OnListarPrecios(ChangeEventArgs e)
+    {
+        try
+        {
+            var IdTipoSuscripcion = Convert.ToInt32(e.Value);
+            var resultado = await SuscripProxy.ListarPreciosTipoSuscripcion(IdTipoSuscripcion);
+            if (resultado is not null && resultado.Data is not null)
+            {
+                ListaPreciosTipoSuscripcion = resultado.Data;
+                Request.IdPrecioSuscripcion = 0;
+                Precio = "0";
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
+
+    private void OnObtenerPrecio(ChangeEventArgs e)
+    {
+        try
+        {
+            var IdPrecio = Convert.ToInt32(e.Value);
+            Precio = "0";
+            if (IdPrecio != 0)
+            {
+                var resPrecio = ListaPreciosTipoSuscripcion.First(p => p.Id == IdPrecio);
+                Precio = resPrecio.Precio.ToString("#.##");
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+
+    }
 
     private void OnGuardar() { }
 
+    private void OnCancelar()
+    {
+        navigator.NavigateTo(Routes.Suscripciones);
+    }
 }

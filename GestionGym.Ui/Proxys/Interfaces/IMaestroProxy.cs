@@ -6,9 +6,11 @@ namespace GestionGym.Ui.Proxys.Interfaces
 {
     public interface IMaestroProxy
     {
-        Task<PaginationResponse<DetalleMaestroResponse>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request);
-        Task<PaginationResponse<ListaMaestroDetalleResponse>> ListarDetalleMaestroByID(ListaDetalleMaestroRequest request);
-        Task<PaginationResponse<ListaMaestrosResponse>> ListarMaestros(BusquedaMaestroRequest request);
+        Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request);
+        Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByListCodigos(List<string> listCodigos);
+        Task<PaginationResponse<DetalleMaestroResponse>> ListaPaginadaDetalleMaestroByCodigo(ListaDetalleMaestroRequest request);
+        Task<PaginationResponse<ListaMaestroDetalleResponse>> ListaPaginadaDetalleMaestroByID(ListaDetalleMaestroRequest request);
+        Task<PaginationResponse<ListaMaestrosResponse>> ListaPaginadaMaestros(BusquedaMaestroRequest request);
         Task<BaseResponse<MaestroResponse>> GuardarCatalogo(MaestroRequest request);
         Task<BaseResponse<MaestroResponse>> BuscarCatalogoPorId(int idMaestro);
         Task<BaseResponse> ActualizarCatalogo(MaestroRequest request);

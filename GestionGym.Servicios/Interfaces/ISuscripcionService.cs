@@ -15,5 +15,6 @@ namespace GestionGym.Servicios.Interfaces
     {
         Task<PaginationResponse<ListaSuscripcionResponse>> ListarSuscripciones(BusquedaSuscripcionRequest request);
         Task<BaseResponse<int>> GuardarSuscripcion(SuscripcionRequest request);
+        Task<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>> ListaPreciosTipoSuscripcion(int idTipoSuscripcion);
     }
 }

@@ -17,9 +17,13 @@ namespace GestionGym.Entidades
 
         public int IdestadosuscripcionParametro { get; set; }
 
+        public int? Idpreciosuscripcion { get; set; }
+
         public virtual Cliente IdclienteNavigation { get; set; } = null!;
 
         public virtual Maestrodetalle IdestadosuscripcionParametroNavigation { get; set; } = null!;
+
+        public virtual Preciossuscripcion? IdpreciosuscripcionNavigation { get; set; }
 
         public virtual Maestrodetalle IdtiposuscripcionParametroNavigation { get; set; } = null!;
 

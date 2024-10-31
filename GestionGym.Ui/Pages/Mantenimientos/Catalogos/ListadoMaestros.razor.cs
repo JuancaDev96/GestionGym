@@ -30,7 +30,7 @@ namespace GestionGym.Ui.Pages.Mantenimientos.Catalogos
             {
                 RequestBusqueda.Pagina = request.PageNumber;
                 RequestBusqueda.Filas = request.PageSize;
-                var response = await Proxy.ListarMaestros(RequestBusqueda);
+                var response = await Proxy.ListaPaginadaMaestros(RequestBusqueda);
                 if (response is { Success: true })
                 {
                     return await Task.FromResult(new GridDataProviderResult<ListaMaestrosResponse>()

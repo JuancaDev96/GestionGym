@@ -20,7 +20,11 @@ namespace GestionGym.Ui.Proxys.Services
             return await SendAsync<PaginationResponse<ListaSuscripcionResponse>>($"Paginacion?{QueryStringDto(request)}");
         }
 
-       
+        public async Task<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>> ListarPreciosTipoSuscripcion(int idTipoSuscripcion)
+        {
+            return await SendAsync<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>>($"ListaPrecios/{idTipoSuscripcion}");
+        }
+
         public async Task<BaseResponse<int>> GuardarSuscripcion(SuscripcionRequest request)
         {
             var resultado = await SendAsync<SuscripcionRequest, BaseResponse<int>>(request, HttpMethod.Post, "");

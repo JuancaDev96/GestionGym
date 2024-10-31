@@ -43,7 +43,7 @@ namespace GestionGym.Servicios.Implementaciones
                     Correo = request.Correo
                 };
 
-                var resultado = await _repository.Registrar(nuevo, cliente, request.FechaInicio, request.Objetivo, request.Nivel);
+                var resultado = await _repository.Registrar(nuevo, cliente, request.FechaInicio, request.IdObjetivo, request.IdNivel);
                 respuesta.Message = "Suscripción registrada correctamente";
                 respuesta.Data = resultado.Id;
             }
@@ -51,6 +51,22 @@ namespace GestionGym.Servicios.Implementaciones
             {
                 respuesta.Success = false;
                 respuesta.Message = $"Error al guardar suscripción: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>> ListaPreciosTipoSuscripcion(int idTipoSuscripcion)
+        {
+            var respuesta = new BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarPreciosTipoSuscripcion(idTipoSuscripcion);
+                respuesta.Data = _mapper.Map<List<ListaPreciosTipoSuscripcionResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
             }
             return respuesta;
         }

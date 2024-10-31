@@ -242,6 +242,9 @@ public partial class BdGymContext : DbContext
             entity.HasOne(d => d.IdestablecimientoNavigation).WithMany(p => p.Clientes)
                 .HasForeignKey(d => d.Idestablecimiento)
                 .HasConstraintName("fk_cliente_establecimiento");
+            entity.HasOne(d => d.IdgeneroParametroNavigation).WithMany(p => p.Clientes)
+               .HasForeignKey(d => d.IdgeneroParametro)
+               .HasConstraintName("fk_cliente_genero");
         });
 
         modelBuilder.Entity<Colaborador>(entity =>
@@ -638,10 +641,8 @@ public partial class BdGymContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
-            entity.Property(e => e.Nivel).HasColumnName("nivel");
-            entity.Property(e => e.Objetivo)
-                .HasMaxLength(150)
-                .HasColumnName("objetivo");
+            entity.Property(e => e.IdnivelParametro).HasColumnName("idnivel_parametro");
+            entity.Property(e => e.IdobjetivoParametro).HasColumnName("idobjetivo_parametro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
                 .HasColumnName("usuariomodificacion");
@@ -655,6 +656,13 @@ public partial class BdGymContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_fichacliente_cliente");
 
+            entity.HasOne(d => d.IdnivelParametroNavigation).WithMany(p => p.FichaclienteIdnivelParametroNavigations)
+                .HasForeignKey(d => d.IdnivelParametro)
+                .HasConstraintName("fk_fichacliente_nivel_parametro");
+
+            entity.HasOne(d => d.IdobjetivoParametroNavigation).WithMany(p => p.FichaclienteIdobjetivoParametroNavigations)
+                .HasForeignKey(d => d.IdobjetivoParametro)
+                .HasConstraintName("fk_ficha_objetivo_parametro");
         });
 
         modelBuilder.Entity<HistorialmedicoCliente>(entity =>
@@ -1368,6 +1376,7 @@ public partial class BdGymContext : DbContext
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.Idcliente).HasColumnName("idcliente");
             entity.Property(e => e.IdestadosuscripcionParametro).HasColumnName("idestadosuscripcion_parametro");
+            entity.Property(e => e.Idpreciosuscripcion).HasColumnName("idpreciosuscripcion");
             entity.Property(e => e.IdtiposuscripcionParametro).HasColumnName("idtiposuscripcion_parametro");
             entity.Property(e => e.Usuariomodificacion)
                 .HasMaxLength(50)
@@ -1386,6 +1395,10 @@ public partial class BdGymContext : DbContext
                 .HasForeignKey(d => d.IdestadosuscripcionParametro)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_suscripcion_estadosuscripcion");
+
+            entity.HasOne(d => d.IdpreciosuscripcionNavigation).WithMany(p => p.Suscripcions)
+                .HasForeignKey(d => d.Idpreciosuscripcion)
+                .HasConstraintName("fk_suscripcion_precio");
 
             entity.HasOne(d => d.IdtiposuscripcionParametroNavigation).WithMany(p => p.SuscripcionIdtiposuscripcionParametroNavigations)
                 .HasForeignKey(d => d.IdtiposuscripcionParametro)

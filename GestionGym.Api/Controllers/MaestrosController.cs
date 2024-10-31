@@ -15,14 +15,28 @@ namespace GestionGym.Api.Controllers
             _service = service;
         }
 
-        [HttpGet("ByCodigo")]
+        [HttpGet("Lista/ByCodigo")]
+        public async Task<IActionResult> ListaByCodigo([FromQuery] ListaDetalleMaestroRequest request)
+        {
+            var resultado = await _service.ListarDetalleMaestroByCodigo(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpGet("Lista/ByListCodigos")]
+        public async Task<IActionResult> ListaByListCodigos([FromQuery] List<string> request)
+        {
+            var resultado = await _service.ListarDetalleMaestroByListCodigos(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpGet("Paginacion/ByCodigo")]
         public async Task<IActionResult> GetByCodigo([FromQuery] ListaDetalleMaestroRequest request)
         {
             var resultado = await _service.ObtenerDetalleMaestroByCodigo(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
-        [HttpGet("ById")]
+        [HttpGet("Paginacion/ById")]
         public async Task<IActionResult> GetById([FromQuery] ListaDetalleMaestroRequest request)
         {
             var resultado = await _service.ObtenerDetalleMaestroById(request);

@@ -9,6 +9,7 @@ namespace GestionGym.Entidades.Response.Maestros
     public class MaestroDetalleInfo
     {
         public int IdDetalleMaestro { get; set; }
+        public string CodigoPadre { get; set; } = default!;
         public string Codigo { get; set; } = default!;
         public string Valor { get; set; } = default!;
         public string? Descripcion { get; set; }

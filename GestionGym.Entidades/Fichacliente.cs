@@ -13,12 +13,14 @@ namespace GestionGym.Entidades
 
         public DateTime? Fechainicio { get; set; }
 
-        public string? Objetivo { get; set; }
+        public int? IdobjetivoParametro { get; set; }
 
-        public int? Nivel { get; set; }
+        public int? IdnivelParametro { get; set; }
 
         public virtual Cliente IdclienteNavigation { get; set; } = null!;
 
-        public virtual Maestrodetalle IdestadoactualParametroNavigation { get; set; } = null!;
+        public virtual Maestrodetalle? IdnivelParametroNavigation { get; set; }
+
+        public virtual Maestrodetalle? IdobjetivoParametroNavigation { get; set; }
     }
 }

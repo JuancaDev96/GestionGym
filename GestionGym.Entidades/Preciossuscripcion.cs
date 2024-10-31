@@ -14,4 +14,5 @@ public partial class Preciossuscripcion : EntidadBase
     public decimal Precio { get; set; }
 
     public virtual Maestrodetalle IdtiposuscripcionParametroNavigation { get; set; } = null!;
+    public virtual ICollection<Suscripcion> Suscripcions { get; set; } = new List<Suscripcion>();
 }

@@ -10,5 +10,9 @@ namespace GestionGym.Comun
     {
         public const string CTRL_FISICO = "CTRL_FISICO";
         public const string ESUSC_ACTIVO = "ESUSC_ACTIVO";
+        public const string TIP_SUSCRIPCION = "TIP_SUSCRIPCION";
+        public const string GENERO = "GENERO";
+        public const string OBJETIVO = "OBJETIVO";
+        public const string NIVEL = "NIVEL";
     }
 }

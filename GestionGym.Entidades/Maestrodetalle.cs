@@ -32,7 +32,9 @@ namespace GestionGym.Entidades
 
         public virtual ICollection<Ejercicio> Ejercicios { get; set; } = new List<Ejercicio>();
 
-        public virtual ICollection<Fichacliente> Fichaclientes { get; set; } = new List<Fichacliente>();
+        public virtual ICollection<Fichacliente> FichaclienteIdnivelParametroNavigations { get; set; } = new List<Fichacliente>();
+
+        public virtual ICollection<Fichacliente> FichaclienteIdobjetivoParametroNavigations { get; set; } = new List<Fichacliente>();
 
         public virtual ICollection<HistorialmedicoCliente> HistorialmedicoClientes { get; set; } = new List<HistorialmedicoCliente>();
 
@@ -52,5 +54,6 @@ namespace GestionGym.Entidades
 
         public virtual ICollection<Suscripcion> SuscripcionIdtiposuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
         public virtual ICollection<Preciossuscripcion> Preciossuscripcions { get; set; } = new List<Preciossuscripcion>();
+        public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
     }
 }

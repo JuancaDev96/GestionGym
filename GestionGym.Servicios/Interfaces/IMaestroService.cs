@@ -20,5 +20,7 @@ namespace GestionGym.Servicios.Interfaces
         Task<BaseResponse<MaestroDetalleResponse>> RegistrarDetalle(MaestroDetalleRequest request);
         Task<BaseResponse> ActualizarDetalle(MaestroDetalleRequest request);
         Task<BaseResponse<MaestroDetalleResponse>> BuscarDetallePorId(int IdMaestroDetalle);
+        Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request);
+        Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByListCodigos(List<string> listCodigos);
     }
 }

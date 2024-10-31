@@ -127,7 +127,7 @@
         try
         {
             RequestDetalleMaestro.codigoMaestro = CodigoMaestro.CTRL_FISICO;
-            var response = await ProxyMaestro.ListarDetalleMaestroByCodigo(RequestDetalleMaestro);
+            var response = await ProxyMaestro.ListaPaginadaDetalleMaestroByCodigo(RequestDetalleMaestro);
             if (response is { Success: true })
             {
                 if (response.Collection != null)

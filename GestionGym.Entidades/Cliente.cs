@@ -21,6 +21,7 @@ namespace GestionGym.Entidades
         public DateOnly Fechanacimiento { get; set; }
 
         public int? Idestablecimiento { get; set; }
+        public int? IdgeneroParametro { get; set; }
 
         public virtual ICollection<ControlavanceCliente> ControlavanceClientes { get; set; } = new List<ControlavanceCliente>();
 
@@ -39,6 +40,7 @@ namespace GestionGym.Entidades
         public virtual ICollection<Rutinacliente> Rutinaclientes { get; set; } = new List<Rutinacliente>();
 
         public virtual ICollection<Suscripcion> Suscripcions { get; set; } = new List<Suscripcion>();
+        public virtual Maestrodetalle? IdgeneroParametroNavigation { get; set; }
     }
 
 }

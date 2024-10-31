@@ -12,17 +12,27 @@ namespace GestionGym.Ui.Proxys.Services
             base("api/Maestros", httpClient)
         { }
 
-        public async Task<PaginationResponse<DetalleMaestroResponse>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request)
+        public async Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request)
         {
-            return await SendAsync<PaginationResponse<DetalleMaestroResponse>>($"ByCodigo?{QueryStringDto(request)}");
+            return await SendAsync<BaseResponse<List<DetalleMaestroResponse>>>($"Lista/ByCodigo?{QueryStringDto(request)}");
         }
 
-        public async Task<PaginationResponse<ListaMaestroDetalleResponse>> ListarDetalleMaestroByID(ListaDetalleMaestroRequest request)
+        public async Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByListCodigos(List<string> listCodigos)
         {
-            return await SendAsync<PaginationResponse<ListaMaestroDetalleResponse>>($"ById?{QueryStringDto(request)}");
+            return await SendAsync<BaseResponse<List<DetalleMaestroResponse>>>($"Lista/ByListCodigos?{QueryStringCollection("request", listCodigos)}");
         }
 
-        public async Task<PaginationResponse<ListaMaestrosResponse>> ListarMaestros(BusquedaMaestroRequest request)
+        public async Task<PaginationResponse<DetalleMaestroResponse>> ListaPaginadaDetalleMaestroByCodigo(ListaDetalleMaestroRequest request)
+        {
+            return await SendAsync<PaginationResponse<DetalleMaestroResponse>>($"Paginacion/ByCodigo?{QueryStringDto(request)}");
+        }
+
+        public async Task<PaginationResponse<ListaMaestroDetalleResponse>> ListaPaginadaDetalleMaestroByID(ListaDetalleMaestroRequest request)
+        {
+            return await SendAsync<PaginationResponse<ListaMaestroDetalleResponse>>($"Paginacion/ById?{QueryStringDto(request)}");
+        }
+
+        public async Task<PaginationResponse<ListaMaestrosResponse>> ListaPaginadaMaestros(BusquedaMaestroRequest request)
         {
             return await SendAsync<PaginationResponse<ListaMaestrosResponse>>($"?{QueryStringDto(request)}");
         }
