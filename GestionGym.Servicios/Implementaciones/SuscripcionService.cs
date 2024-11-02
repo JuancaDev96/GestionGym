@@ -7,6 +7,7 @@ using GestionGym.Dto.Response.Clientes;
 using GestionGym.Dto.Response.Suscripciones;
 using GestionGym.Entidades;
 using GestionGym.Entidades.Response.Clientes;
+using GestionGym.Entidades.Response.Suscripcion;
 using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
 using System;
@@ -44,6 +45,22 @@ namespace GestionGym.Servicios.Implementaciones
             {
                 respuesta.Success = false;
                 respuesta.Message = $"Error al guardar suscripción: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse<DetalleSuscripcionResponse>> ObtenerInformacionSuscripcion(int idSuscripcion)
+        {
+            var respuesta = new BaseResponse<DetalleSuscripcionResponse>();
+            try
+            {
+                var resultado = await _repository.ObtenerInformacionSuscripcion(idSuscripcion);
+                respuesta.Data = _mapper.Map<DetalleSuscripcionResponse>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
             }
             return respuesta;
         }

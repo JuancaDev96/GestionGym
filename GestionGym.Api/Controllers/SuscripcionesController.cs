@@ -24,6 +24,13 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpGet("ObtenerDetalle/{idSuscripcion:int}")]
+        public async Task<IActionResult> GetPaginacion(int idSuscripcion)
+        {
+            var resultado = await _service.ObtenerInformacionSuscripcion(idSuscripcion);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpGet("ListaPrecios/{idTipoSuscripcion:int}")]
         public async Task<IActionResult> GetPrecios(int idTipoSuscripcion)
         {
@@ -37,6 +44,6 @@ namespace GestionGym.Api.Controllers
             var resultado = await _service.GuardarSuscripcion(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
-       
+
     }
 }

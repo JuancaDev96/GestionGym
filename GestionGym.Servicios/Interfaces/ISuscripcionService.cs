@@ -14,6 +14,7 @@ namespace GestionGym.Servicios.Interfaces
     public interface ISuscripcionService
     {
         Task<PaginationResponse<ListaSuscripcionResponse>> ListarSuscripciones(BusquedaSuscripcionRequest request);
+        Task<BaseResponse<DetalleSuscripcionResponse>> ObtenerInformacionSuscripcion(int idSuscripcion);
         Task<BaseResponse<int>> GuardarSuscripcion(SuscripcionRequest request);
         Task<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>> ListaPreciosTipoSuscripcion(int idTipoSuscripcion);
     }

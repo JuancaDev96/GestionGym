@@ -15,6 +15,11 @@ namespace GestionGym.Ui.Proxys.Services
             base("api/Suscripciones", httpClient)
         { }
 
+        public async Task<BaseResponse<DetalleSuscripcionResponse>> GetDetalleById(int idSuscripcion)
+        {
+            return await SendAsync<BaseResponse<DetalleSuscripcionResponse>>($"ObtenerDetalle/{idSuscripcion}");
+        }
+
         public async Task<PaginationResponse<ListaSuscripcionResponse>> GetSuscripciones(BusquedaSuscripcionRequest request)
         {
             return await SendAsync<PaginationResponse<ListaSuscripcionResponse>>($"Paginacion?{QueryStringDto(request)}");

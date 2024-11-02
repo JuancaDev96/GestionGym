@@ -4,6 +4,7 @@ using GestionGym.Comun;
 using GestionGym.Dto.Request.Clientes;
 using GestionGym.Entidades;
 using GestionGym.Entidades.Response.Clientes;
+using GestionGym.Entidades.Response.Suscripcion;
 using GestionGym.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -30,6 +31,56 @@ namespace GestionGym.Repositorios.Implementaciones
         public async Task<List<Preciossuscripcion>> ListarPreciosTipoSuscripcion(int idTipoSuscripcion)
         {
             return await _contexto.Preciossuscripcions.Where(p => p.IdtiposuscripcionParametro == idTipoSuscripcion && p.Estado).ToListAsync();
+        }
+
+        public async Task<DetalleSuscripcionInfo> ObtenerInformacionSuscripcion(int idSuscripcion)
+        {
+            var suscripcion = await _contexto.Suscripcions
+                                    .Where(p => p.Id == idSuscripcion && p.Estado)
+                                    .Select(p => new DetalleSuscripcionInfo
+                                    {
+                                        Id = p.Id,
+                                        IdCliente = p.Idcliente,
+                                        Descripcion = p.Descripcion,
+                                        TipoSuscripcion = p.IdtiposuscripcionParametroNavigation.Valor,
+                                        DescripcionTipo = p.IdtiposuscripcionParametroNavigation.Descripcion!,
+                                        IdTipoSuscripcion = p.Idtiposuscripcion,
+                                        IdEstadoSuscripcion = p.Idestadosuscripcion,
+                                        EstadoSuscripcion = p.IdestadosuscripcionParametroNavigation.Valor,
+                                        IdPrecioSuscripcion = p.Idpreciosuscripcion,
+                                        DescripcionPrecio = p.IdpreciosuscripcionNavigation!.Descripcion,
+                                        Precio = p.IdpreciosuscripcionNavigation.Precio
+                                    }).FirstAsync();
+
+
+            var cliente = await _contexto.Clientes
+                          .Where(p => p.Id == suscripcion.IdCliente)
+                          .Select(p => new ClienteInfo
+                          {
+                              Nombre = p.Nombre,
+                              Apellidos = p.Apellidos,
+                              Correo = p.Correo,
+                              Dni = p.Dni,
+                              Celular = p.Celular,
+                              Fechanacimiento = p.Fechanacimiento,
+                              Genero = p.IdgeneroParametroNavigation!.Valor
+                          })
+                          .FirstAsync();
+
+            var ficha = await _contexto.Fichaclientes
+                          .Where(p => p.Idcliente == suscripcion.IdCliente)
+                          .Select(p => new FichaClienteInfo
+                          {
+                              FechaInicio = p.Fechainicio,
+                              Nivel = p.IdnivelParametroNavigation!.Valor,
+                              Objetivo = p.IdobjetivoParametroNavigation!.Valor
+                          })
+                          .FirstAsync();
+
+            suscripcion.Cliente = cliente;
+            suscripcion.Ficha = ficha;
+
+            return suscripcion;
         }
 
         public async Task<Suscripcion> Registrar(Suscripcion request, Cliente cliente, DateTime FechaInicio, int IdObjetivo, int IdNivel)
@@ -88,6 +139,7 @@ namespace GestionGym.Repositorios.Implementaciones
                     }
 
                     #endregion
+
                     var suscripcion = await _contexto.Suscripcions.AddAsync(request);
                     await _contexto.SaveChangesAsync();
 

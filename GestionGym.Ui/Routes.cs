@@ -8,9 +8,11 @@
 
         public const string Suscripciones = "/suscripciones";
 
-        public const string DetalleSuscripcion = "/suscripciones/detalle/{idCliente:int}";
-
+        public const string DetalleSuscripcion = "/suscripciones/detalle/{idSuscripcion:int}";
         public const string DetalleSuscripcionNav = "/suscripciones/detalle";
+
+        public const string ClienteEditarNav = "/clientes/editar/{idCliente:int}";
+        public const string ClienteEditar = "/clientes/editar";
     }
 
 }

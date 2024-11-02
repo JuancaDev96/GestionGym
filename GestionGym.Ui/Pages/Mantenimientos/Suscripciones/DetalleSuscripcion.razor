@@ -1,7 +1,143 @@
 ﻿@attribute [Route(Routes.DetalleSuscripcion)];
+@using GestionGym.Dto.Response.Suscripciones
+@inject ISuscripcionProxy Proxy;
+@inject NavigationManager navigator;
+@inject IToastService ToastService;
 
+<h4>Ficha de Suscripción</h4>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <GroupBox Titulo="Información del cliente" Class="mt-5">
+            <Contenido>
+                <div class="col-12 text-center">
+                    <div class="profile-image">
+                        <img src="images/logo.png" alt="Imagen del cliente">
+                    </div>
+                    <h2 style="cursor:pointer;" @onclick="() => OnEditarCliente(Response.IdCliente)">@Response.Cliente.Nombre @Response.Cliente.Apellidos</h2>
+                    <span class="nivel">Nivel: @Response.Ficha.Nivel</span>
+                </div>
+                <hr />
+
+                <div class="col-md-12">
+                    <p><strong>Correo:</strong> @Response.Cliente.Correo</p>
+                </div>
+                <div class="col-md-12">
+                    <p><strong>Teléfono:</strong> @Response.Cliente.Celular</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Edad:</strong> @Utils.CalcularEdadExacta(Response.Cliente.Fechanacimiento) años</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Genero:</strong> @Response.Cliente.Genero</p>
+                </div>
+                <div class="col-md-4">
+                    <p><strong>Objetivo:</strong> @Response.Ficha.Objetivo</p>
+                </div>
+                <div class="col-md-12">
+                    <p><strong>Inicio:</strong> @Response.Ficha.FechaInicio.ToShortDateString()</p>
+                </div>
+            </Contenido>
+        </GroupBox>
+    </div>
+    <div class="col-md-4">
+        <GroupBox Titulo="Información de Suscripción" Class="mt-5">
+            <Contenido>
+                <div class="col-12 text-center">
+                    <h2>@Response.TipoSuscripcion</h2>
+                    <span class="nivel">Estado: @Response.EstadoSuscripcion</span>
+                </div>
+                <hr />
+                <div class="col-md-12">
+                    <p><strong>Comentarios:</strong> @Response.Descripcion</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Mensualidad:</strong> @Response.DescripcionPrecio</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>S/ :</strong> @Response.Precio</p>
+                </div>
+                <hr />
+                <h5 class="text-center">Pagos</h5>
+                <div class="row">
+                    <div class="col-md-4 text-center p-2 bg-success-subtle border border-primary-subtle rounded-3">
+                        <h6>AL DIA</h6>
+                    </div>
+                    <div class="col-md-4 text-center p-2 bg-primary-subtle border border-primary-subtle rounded-3">
+                        <h6>ÚILTIMO<br /> 31-10-2024</h6>
+                    </div>
+                    <div class="col-md-4 text-center p-2 bg-info-subtle border border-primary-subtle rounded-3">
+                        <h6>PROXIMO<br /> 31-01-2024</h6>
+                    </div>
+                </div>
+            </Contenido>
+        </GroupBox>
+    </div>
+    <div class="col-md-4">
+        <GroupBox Titulo="Asistencias" Class="mt-5">
+            <Contenido>
+                <div class="row">
+                    <div class="col-md-12 mt-3 text-center p-2 bg-success-subtle border border-primary-subtle rounded-3">
+                        <h3>ULTIMA ASISTENCIA: HOY</h3>
+                    </div>
+
+                    <div class="col-md-12 mt-3 text-center p-2 bg-primary-subtle border border-primary-subtle rounded-3">
+                        <h3>ULTIMA RUTINA: BICEPS Y TRICEPS</h3>
+                    </div>
+
+                    <div class="col-md-12 mt-3 text-center p-2 bg-success-subtle border border-primary-subtle rounded-3">
+                        <h3>PROMEDIO DE ASISTENCIA: DIARIO</h3>
+                    </div>
+
+                    <div class="col-md-12 mt-3 text-center p-2 bg-primary-subtle border border-primary-subtle rounded-3">
+                        <h3>ESTADO: EN RUTINA AHORA</h3>
+                    </div>
+                </div>
+            </Contenido>
+        </GroupBox>
+    </div>
+</div>
+
+<Loading isLoading="isLoading" />
 
 @code {
     [Parameter]
-    public int idCliente { get; set; }
+    public int idSuscripcion { get; set; } = 0;
+
+    public DetalleSuscripcionResponse Response { get; set; } = new();
+    public bool isLoading { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerDetallesById();
+    }
+
+    private async Task ObtenerDetallesById()
+    {
+        isLoading = true;
+        try
+        {
+            var resultado = await Proxy.GetDetalleById(idSuscripcion);
+            if (resultado is not null && resultado.Data is not null)
+            {
+                Response = resultado.Data;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al obtener los detalles de la suscripción:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void OnEditarCliente(int idCliente)
+    {
+        navigator.NavigateTo($"{Routes.ClienteEditar}/{idCliente}");
+    }
+
 }

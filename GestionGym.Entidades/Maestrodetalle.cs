@@ -1,6 +1,7 @@
 ﻿using GestionGym.Entidades;
 using System;
 using System.Collections.Generic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GestionGym.Entidades
 {
@@ -23,6 +24,11 @@ namespace GestionGym.Entidades
         public bool? Esdefault { get; set; }
 
         public bool? Esbool { get; set; }
+
+        public override string ToString()
+        {
+            return Valor;
+        }
 
         public virtual ICollection<Aplicacionejercicio> Aplicacionejercicios { get; set; } = new List<Aplicacionejercicio>();
 

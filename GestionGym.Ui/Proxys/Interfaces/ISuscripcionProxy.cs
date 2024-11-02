@@ -9,6 +9,7 @@ namespace GestionGym.Ui.Proxys.Interfaces
 {
     public interface ISuscripcionProxy
     {
+        Task<BaseResponse<DetalleSuscripcionResponse>> GetDetalleById(int idSuscripcion);
         Task<PaginationResponse<ListaSuscripcionResponse>> GetSuscripciones(BusquedaSuscripcionRequest request);
         Task<BaseResponse<List<ListaPreciosTipoSuscripcionResponse>>> ListarPreciosTipoSuscripcion(int idTipoSuscripcion);
         Task<BaseResponse<int>> GuardarSuscripcion(SuscripcionRequest request);

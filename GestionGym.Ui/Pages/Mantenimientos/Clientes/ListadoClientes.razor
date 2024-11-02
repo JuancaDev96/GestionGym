@@ -21,7 +21,6 @@
                 <div class="btn-group">
                     <Button Class="btn btn-light" @onclick="OnBuscar"><i class="bi bi-search"></i></Button>
                     <Button Class="btn btn-light" @onclick="OnRefrescar"><i class="bi bi-arrow-repeat"></i></Button>
-                    <Button Class="btn btn-success" @onclick="OnNuevoCliente"><i class="bi bi-plus"></i> Nuevo</Button>
                 </div>
             </div>
         </div>
@@ -67,7 +66,7 @@
         }
         catch (Exception ex)
         {
-            ToastService.ShowWarning($"Error al registrar datos personales:{ex.Message}");
+            ToastService.ShowWarning($"Error al listar los clientes:{ex.Message}");
         }
         finally
         {
@@ -86,11 +85,6 @@
     {
         RequestBusqueda = new() { Pagina = 1, Filas = 10 };
         await GrillaClientes.ActualizarGrid();
-    }
-
-    private void OnNuevoCliente()
-    {
-        navigator.NavigateTo(Routes.ClienteRegistrar);
     }
 
     private void OnEditarCliente(ListaClientesResponse item)

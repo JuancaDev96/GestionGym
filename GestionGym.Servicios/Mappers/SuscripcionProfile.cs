@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using GestionGym.Dto.Request.Suscripciones;
+using GestionGym.Dto.Response.Clientes;
 using GestionGym.Dto.Response.Suscripciones;
 using GestionGym.Entidades;
+using GestionGym.Entidades.Response.Clientes;
+using GestionGym.Entidades.Response.Suscripcion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,9 @@ namespace GestionGym.Servicios.Mappers
             CreateMap<Preciossuscripcion, ListaPreciosTipoSuscripcionResponse>();
             CreateMap<SuscripcionRequest, Suscripcion>();
             CreateMap<SuscripcionRequest, Cliente>();
+            CreateMap<DetalleSuscripcionInfo, DetalleSuscripcionResponse>();
+            CreateMap<ClienteInfo, ClienteResponse>();
+            CreateMap<FichaClienteInfo, FichaClienteResponse>();
         }
     }
 }
