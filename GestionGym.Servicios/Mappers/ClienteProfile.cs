@@ -21,6 +21,9 @@ namespace GestionGym.Servicios.Mappers
             CreateMap<Cliente, InformacionClienteResponse>();
             CreateMap<ParametroClienteRequest, ControlfisicoCliente>();
             CreateMap<ControlFisicoClienteRequest, ControlfisicoCliente>();
+            CreateMap<HistorialMedicoClienteInfo, ListaHistorialMedicoClienteResponse>();
+            CreateMap<ParametroClienteRequest, HistorialmedicoCliente>();
+            CreateMap<HistorialMedicoClienteRequest, HistorialmedicoCliente>();
         }
     }
 }

@@ -6,12 +6,8 @@ using GestionGym.Ui.Proxys.Interfaces;
 
 namespace GestionGym.Ui.Proxys.Services
 {
-    public class MaestroProxy : ProxyBase, IMaestroProxy
+    public class MaestroProxy(HttpClient httpClient) : ProxyBase("api/Maestros", httpClient), IMaestroProxy
     {
-        public MaestroProxy(HttpClient httpClient) :
-            base("api/Maestros", httpClient)
-        { }
-
         public async Task<BaseResponse<List<DetalleMaestroResponse>>> ListarDetalleMaestroByCodigo(ListaDetalleMaestroRequest request)
         {
             return await SendAsync<BaseResponse<List<DetalleMaestroResponse>>>($"Lista/ByCodigo?{QueryStringDto(request)}");

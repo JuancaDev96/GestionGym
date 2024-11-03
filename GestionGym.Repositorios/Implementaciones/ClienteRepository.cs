@@ -109,6 +109,47 @@ namespace GestionGym.Repositorios.Implementaciones
 
         #endregion
 
+        #region Historial Medico
+        public async Task<List<HistorialMedicoClienteInfo>> ListarHistorialMedicoByIdCliente(int IdCliente)
+        {
+            return await _contexto.HistorialmedicoClientes
+                                .Where(p => p.Idcliente == IdCliente && p.Estado)
+                                .Select(p => new HistorialMedicoClienteInfo
+                                {
+                                    IdCliente = IdCliente,
+                                    Comentario = p.Comentario,
+                                    Consideracion = p.Consideracion,
+                                    Id = p.Id,
+                                    IdHistorial = p.Idparametro,
+                                    NombreHistorial = p.IdparametroNavigation.Valor,
+                                    Valor = p.Valor,
+                                    Recomendacion = p.Recomendacion
+                                }).ToListAsync();
+        }
+
+        public async Task<HistorialmedicoCliente?> VerificarExistenciaHistorialMedico(int IdCliente, int IdParametro)
+        {
+            return await _contexto.HistorialmedicoClientes.Where(p => p.Idcliente == IdCliente && p.Idparametro == IdParametro && !p.Estado).FirstOrDefaultAsync();
+        }
+
+        public async Task ActualizarHistorialMedicoValor(List<HistorialmedicoCliente> request)
+        {
+            foreach (var item in request)
+            {
+                await _contexto.HistorialmedicoClientes
+                       .Where(c => c.Id == item.Id)
+                       .ExecuteUpdateAsync(c => c.SetProperty(x => x.Valor, item.Valor));
+            }
+
+        }
+
+        public async Task RegistrarParametroHistorialMedico(HistorialmedicoCliente request)
+        {
+            await _contexto.HistorialmedicoClientes.AddAsync(request);
+            await _contexto.SaveChangesAsync();
+        }
+        #endregion
+
         #region Listado Clientes
         public async Task<(List<ClientePaginadoInfo> coleccion, int totalRegistros, int totalPaginas)> ListarClientes(BusquedaClientesRequest request)
         {

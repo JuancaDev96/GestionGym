@@ -1,0 +1,102 @@
+﻿@using GestionGym.Dto.Request.Ejercicios
+@using GestionGym.Dto.Response.Ejercicios
+@attribute [Route(Routes.EjerciciosListado)]
+@inject IEjercicioProxy Proxy;
+@inject NavigationManager navigator;
+@inject IToastService ToastService;
+
+<h4>Listado de ejercicios</h4>
+
+<GroupBox Titulo="Buscar ejercicio" Class="mt-5">
+    <Contenido>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Nombre o Descripción</label>
+                <input class="form-control" @bind="RequestBusqueda.Nombre" />
+            </div>
+            <div class="col-md-2">
+                <label>Grupo Muscular</label>
+                <select class="form-select">
+                    <option>-Seleccionar Grupo-</option>
+                </select>
+            </div>
+            <div class="col-md-4 mt-4 mb-3">
+                <div class="btn-group">
+                    <Button Class="btn btn-light" @onclick="OnBuscar"><i class="bi bi-search"></i></Button>
+                    <Button Class="btn btn-light" @onclick="OnRefrescar"><i class="bi bi-arrow-repeat"></i></Button>
+                    <Button Class="btn btn-success" @onclick="OnNueva"><i class="bi bi-plus"></i> Nuevo</Button>
+                </div>
+            </div>
+        </div>
+    </Contenido>
+</GroupBox>
+<div class="row mt-3 mt-5 mb-5">
+    <Grilla TItem="ListaEjerciciosResponse" ProveedorData="DataProvider" Titulo="" @ref="GrillaEjercicios" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+        <ColumnasAdicionales>
+            <GridColumn TItem="ListaEjerciciosResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                <button class="btn btn-sm btn-primary" @onclick="() => OnVerDetalle(context)"><i class="bi bi-eye"></i></button>
+            </GridColumn>
+        </ColumnasAdicionales>
+    </Grilla>
+</div>
+
+<Loading isLoading="isLoading" />
+
+@code {
+    public ICollection<ListaEjerciciosResponse> ListaSuscripciones { get; set; } = new List<ListaEjerciciosResponse>();
+    Grilla<ListaEjerciciosResponse> GrillaEjercicios { get; set; } = default!;
+    public BusquedaEjerciciosRequest RequestBusqueda { get; set; } = new() { Pagina = 1, Filas = 10 };
+
+    public bool isLoading { get; set; } = false;
+
+    private async Task<GridDataProviderResult<ListaEjerciciosResponse>> DataProvider(GridDataProviderRequest<ListaEjerciciosResponse> request)
+    {
+        isLoading = true;
+        try
+        {
+            RequestBusqueda.Pagina = request.PageNumber;
+            RequestBusqueda.Filas = request.PageSize;
+            var response = await Proxy.GetEjercicios(RequestBusqueda);
+            if (response is { Success: true })
+            {
+                return await Task.FromResult(new GridDataProviderResult<ListaEjerciciosResponse>()
+                    {
+                        Data = response.Collection,
+                        TotalCount = response.TotalRegistros
+                    });
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al Listas los ejercicios:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+        return await Task.FromResult(new GridDataProviderResult<ListaEjerciciosResponse>());
+    }
+
+    private async Task OnBuscar()
+    {
+        await GrillaEjercicios.ActualizarGrid();
+    }
+
+    private async Task OnRefrescar()
+    {
+        RequestBusqueda = new() { Pagina = 1, Filas = 10 };
+        await GrillaEjercicios.ActualizarGrid();
+    }
+
+    private void OnNueva()
+    {
+        navigator.NavigateTo(Routes.EjerciciosRegistrar);
+    }
+
+    private void OnVerDetalle(ListaEjerciciosResponse item)
+    {
+       
+    }
+
+}

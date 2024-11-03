@@ -14,5 +14,6 @@ namespace GestionGym.Comun
         public const string GENERO = "GENERO";
         public const string OBJETIVO = "OBJETIVO";
         public const string NIVEL = "NIVEL";
+        public const string HIST_MEDICO = "HIST_MEDICO";
     }
 }

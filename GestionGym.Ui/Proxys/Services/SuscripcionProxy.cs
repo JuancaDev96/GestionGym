@@ -9,12 +9,8 @@ using GestionGym.Dto.Request.Suscripciones;
 
 namespace GestionGym.Ui.Proxys.Services
 {
-    public class SuscripcionProxy : ProxyBase, ISuscripcionProxy
+    public class SuscripcionProxy(HttpClient httpClient) : ProxyBase("api/Suscripciones", httpClient), ISuscripcionProxy
     {
-        public SuscripcionProxy(HttpClient httpClient) :
-            base("api/Suscripciones", httpClient)
-        { }
-
         public async Task<BaseResponse<DetalleSuscripcionResponse>> GetDetalleById(int idSuscripcion)
         {
             return await SendAsync<BaseResponse<DetalleSuscripcionResponse>>($"ObtenerDetalle/{idSuscripcion}");

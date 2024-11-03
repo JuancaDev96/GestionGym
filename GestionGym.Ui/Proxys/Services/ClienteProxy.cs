@@ -7,12 +7,8 @@ using GestionGym.Dto.Request.Clientes;
 
 namespace GestionGym.Ui.Proxys.Services
 {
-    public class ClienteProxy : ProxyBase, IClienteProxy
+    public class ClienteProxy(HttpClient httpClient) : ProxyBase("api/Clientes", httpClient), IClienteProxy
     {
-        public ClienteProxy(HttpClient httpClient) :
-            base("api/Clientes", httpClient)
-        { }
-
         public async Task<BaseResponse<InformacionClienteResponse>> GetDatosPersonalesById(int id)
         {
             return await SendAsync<BaseResponse<InformacionClienteResponse>>($"{id}");
@@ -22,6 +18,8 @@ namespace GestionGym.Ui.Proxys.Services
         {
             return await SendAsync<PaginationResponse<ListaClientesResponse>>($"Paginacion?{QueryStringDto(request)}");
         }
+
+        #region Control Fisico
 
         public async Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> GetControlFisicoParametros(int idCliente)
         {
@@ -39,6 +37,27 @@ namespace GestionGym.Ui.Proxys.Services
             var resultado = await SendAsync<List<ControlFisicoClienteRequest>, BaseResponse>(request, HttpMethod.Put, "ControlFisico/actualizar");
             return resultado is not null ? resultado : new BaseResponse();
         }
+
+        #endregion
+
+        #region Historial Medico
+        public async Task<BaseResponse<List<ListaHistorialMedicoClienteResponse>>> GetHistorialMedicoParametros(int idCliente)
+        {
+            return await SendAsync<BaseResponse<List<ListaHistorialMedicoClienteResponse>>>($"HistorialMedico/{idCliente}");
+        }
+
+        public async Task<BaseResponse> GuardarParametroHistorialMedico(ParametroClienteRequest request)
+        {
+            var resultado = await SendAsync<ParametroClienteRequest, BaseResponse>(request, HttpMethod.Post, "HistorialMedico/Parametro/Registrar");
+            return resultado is not null ? resultado : new BaseResponse();
+        }
+
+        public async Task<BaseResponse> ActualizarHistorialMedico(List<HistorialMedicoClienteRequest> request)
+        {
+            var resultado = await SendAsync<List<HistorialMedicoClienteRequest>, BaseResponse>(request, HttpMethod.Put, "HistorialMedico/actualizar");
+            return resultado is not null ? resultado : new BaseResponse();
+        }
+        #endregion
 
         public async Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request)
         {

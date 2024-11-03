@@ -51,6 +51,27 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpGet("HistorialMedico/{id:int}")]
+        public async Task<IActionResult> GetHistorialMedico(int id)
+        {
+            var resultado = await _service.ListarHistorialMedicoByIdCliente(id);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPost("HistorialMedico/Parametro/Registrar")]
+        public async Task<IActionResult> PostHistorialMedico(ParametroClienteRequest request)
+        {
+            var resultado = await _service.RegistrarParametroHistorialMedico(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut("HistorialMedico/actualizar")]
+        public async Task<IActionResult> PutHistorialMedico(List<HistorialMedicoClienteRequest> request)
+        {
+            var resultado = await _service.ActualizarHistorialMedicoCliente(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(DatosPersonalesRequest request)
         {

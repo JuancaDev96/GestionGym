@@ -9,9 +9,15 @@ namespace GestionGym.Ui.Proxys.Interfaces
     {
         Task<BaseResponse<InformacionClienteResponse>> GetDatosPersonalesById(int id);
         Task<PaginationResponse<ListaClientesResponse>> GetClientes(BusquedaClientesRequest request);
+
         Task<BaseResponse<List<ListaControlFisicoClienteResponse>>> GetControlFisicoParametros(int idCliente);
         Task<BaseResponse> GuardarParametroControlFisico(ParametroClienteRequest request);
         Task<BaseResponse> ActualizarControlFisico(List<ControlFisicoClienteRequest> request);
+
+        Task<BaseResponse<List<ListaHistorialMedicoClienteResponse>>> GetHistorialMedicoParametros(int idCliente);
+        Task<BaseResponse> GuardarParametroHistorialMedico(ParametroClienteRequest request);
+        Task<BaseResponse> ActualizarHistorialMedico(List<HistorialMedicoClienteRequest> request);
+
         Task<BaseResponse<int>> GuardarDatosPersonales(DatosPersonalesRequest request);
         Task<BaseResponse> ActualizarDatosPersonales(DatosPersonalesRequest request);
     }

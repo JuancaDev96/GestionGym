@@ -5,7 +5,7 @@
     <div class="row mt-3 mb-3">
         <div class="col-md-4">
             <div class="btn-group">
-                <Button Class="btn btn-sm btn-primary" @onclick="OnSeleccionarParametros">Agregar nuevo control</Button>
+                <Button Class="btn btn-sm btn-primary" @onclick="OnSeleccionarParametros">Agregar nuevo historico</Button>
             </div>
         </div>
     </div>
@@ -13,11 +13,11 @@
 
 
 <div class="row mt-2">
-    @foreach (var item in ControlFisicoClienteResponse)
+    @foreach (var item in HistorialMedicoClienteResponse)
     {
         <div class="col-md-3">
-            <label>@item.NombreControl</label>
-            <input class="form-control" @bind="item.ValorControl" />
+            <label>@item.NombreHistorial</label>
+            <input class="form-control" @bind="item.Valor" />
         </div>
     }
 </div>
@@ -28,7 +28,7 @@
     </div>
 </div>
 
-<Modal @ref="ModalParametrosControl" Title="Parametros de control" Size="ModalSize.Large">
+<Modal @ref="ModalParametrosControl" Title="Parametros de historial medico" Size="ModalSize.Large">
     <BodyTemplate>
         <div class="row">
             <div class="col-md-12">
@@ -57,7 +57,7 @@
     public bool NuevoCliente { get; set; }
 
     [Parameter]
-    public List<ListaControlFisicoClienteResponse> ControlFisicoClienteResponse { get; set; } = default!;
+    public List<ListaHistorialMedicoClienteResponse> HistorialMedicoClienteResponse { get; set; } = default!;
 
     [Parameter]
     public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
@@ -66,7 +66,7 @@
     public EventCallback<DetalleMaestroResponse> OnAgregarParametro { get; set; } = default!;
 
     [Parameter]
-    public EventCallback<List<ListaControlFisicoClienteResponse>> OnGuardarControlFisico { get; set; } = default!;
+    public EventCallback<List<ListaHistorialMedicoClienteResponse>> OnGuardarHistorialMedico { get; set; } = default!;
 
     public Grilla<DetalleMaestroResponse> GrillaMaestroDetalle { get; set; } = default!;
 
@@ -89,6 +89,6 @@
 
     private async Task OnGuardar()
     {
-        await OnGuardarControlFisico.InvokeAsync(ControlFisicoClienteResponse);
+        await OnGuardarHistorialMedico.InvokeAsync(HistorialMedicoClienteResponse);
     }
 }

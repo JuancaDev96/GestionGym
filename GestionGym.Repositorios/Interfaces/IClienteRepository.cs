@@ -18,5 +18,9 @@ namespace GestionGym.Repositorios.Interfaces
         Task RegistrarParametroControlFisico(ControlfisicoCliente request);
         Task<ControlfisicoCliente?> VerificarExistenciaControlFisico(int IdCliente, int IdParametro);
         Task ActualizarControlFisicoValor(List<ControlfisicoCliente> request);
+        Task<List<HistorialMedicoClienteInfo>> ListarHistorialMedicoByIdCliente(int IdCliente);
+        Task<HistorialmedicoCliente?> VerificarExistenciaHistorialMedico(int IdCliente, int IdParametro);
+        Task ActualizarHistorialMedicoValor(List<HistorialmedicoCliente> request);
+        Task RegistrarParametroHistorialMedico(HistorialmedicoCliente request);
     }
 }

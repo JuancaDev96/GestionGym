@@ -180,6 +180,67 @@ namespace GestionGym.Servicios.Implementaciones
 
         #endregion
 
+        #region HistorialMedico
+        public async Task<BaseResponse<List<ListaHistorialMedicoClienteResponse>>> ListarHistorialMedicoByIdCliente(int idCliente)
+        {
+            var respuesta = new BaseResponse<List<ListaHistorialMedicoClienteResponse>>();
+            try
+            {
+                var resultado = await _repository.ListarHistorialMedicoByIdCliente(idCliente);
+                respuesta.Data = _mapper.Map<List<ListaHistorialMedicoClienteResponse>>(resultado);
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
 
+        public async Task<BaseResponse> RegistrarParametroHistorialMedico(ParametroClienteRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var parametro = _mapper.Map<HistorialmedicoCliente>(request);
+                var existencia = await _repository.VerificarExistenciaHistorialMedico(request.Idcliente, request.Idparametro);
+                if (existencia is null)
+                {
+                    await _repository.RegistrarParametroHistorialMedico(parametro);
+                    respuesta.Message = "Nuevo historial medico agregado";
+                }
+                else
+                {
+                    existencia.Estado = true;
+                    await _repository.UpdateAsync();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> ActualizarHistorialMedicoCliente(List<HistorialMedicoClienteRequest> request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var parametros = _mapper.Map<List<HistorialmedicoCliente>>(request);
+                await _repository.ActualizarHistorialMedicoValor(parametros);
+                respuesta.Message = "Historial Medico actualizado";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
+
+        #endregion
     }
 }

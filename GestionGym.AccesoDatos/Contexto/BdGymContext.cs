@@ -481,6 +481,7 @@ public partial class BdGymContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
             entity.Property(e => e.IdgrupomuscularParametro).HasColumnName("idgrupomuscular_parametro");
+            entity.Property(e => e.IdEstablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
@@ -491,6 +492,10 @@ public partial class BdGymContext : DbContext
                 .HasMaxLength(50)
                 .HasDefaultValueSql("'consola'::character varying")
                 .HasColumnName("usuarioregistro");
+
+            entity.HasOne(d => d.IdEstablecimientoNavigation).WithMany(p => p.Ejercicios)
+                .HasForeignKey(d => d.IdEstablecimiento)
+                .HasConstraintName("fk_ejercicio_establecimiento");
 
             entity.HasOne(d => d.IdgrupomuscularParametroNavigation).WithMany(p => p.Ejercicios)
                 .HasForeignKey(d => d.IdgrupomuscularParametro)

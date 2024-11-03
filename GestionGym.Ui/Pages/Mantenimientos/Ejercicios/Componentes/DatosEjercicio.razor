@@ -1,0 +1,153 @@
+﻿@using GestionGym.Dto.Request.Ejercicios
+@attribute [Route(Routes.EjerciciosRegistrar)]
+
+
+            <h4>Mantenimiento de ejercicios</h4>
+            <GroupBox Titulo="Información del ejercicio" Class="mt-5">
+                <Contenido>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Grupo muscular: </label>
+                                <select class="form-select">
+                                    <option value="0" selected>-Seleccione Grupo muscular-</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nombres: </label>
+                                <input class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Descripción: </label>
+                                <textarea class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </Contenido>
+            </GroupBox>
+
+            <GroupBox Titulo="Control de rutinas" Class="mt-5">
+                <Contenido>
+                    <div class="row gx-4 mt-3">
+                        <div class="col text-end">
+                            <button class="btn btn-success btn-xs" @onclick="OnAgregarRutina"><i class="bi bi-plus"></i> Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Series</th>
+                                        <th scope="col">Repeticiones</th>
+                                        <th scope="col">Comentarios</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in ListaRutinas)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="number" class="form-control" @bind="item.Series" />
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control" @bind="item.Repeticiones" />
+                                            </td>
+                                            <td>
+                                                <input class="form-control" @bind="item.Comentario" />
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-xs btn-warning" @onclick="() => OnRemoverRutina(item)"><i class="bi bi-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </Contenido>
+            </GroupBox>
+
+            <GroupBox Titulo="Control de recursos" Class="mt-5">
+                <Contenido>
+                    <div class="row gx-4 mt-3">
+                        <div class="col text-end">
+                            <button class="btn btn-success btn-xs" @onclick="OnAgregarRutina"><i class="bi bi-plus"></i> Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="container mt-4">
+                            <div class="row g-3">
+                                <!-- Repite este bloque de div para cada imagen -->
+                                <div class="col-6 col-md-3">
+                                    <div class="card text-center p-3 d-flex flex-column justify-content-center align-items-center">
+                                        <button class="btn btn-info mb-2 boton-cuadrado">
+                                            <i class="bi bi-card-image fs-1"></i>
+                                        </button>
+                                      
+                                    </div>
+                                </div>
+
+                                 <div class="col-6 col-md-3">
+                                    <div class="card text-center p-3 d-flex flex-column justify-content-center align-items-center">
+                                        <button class="btn btn-info mb-2 boton-cuadrado">
+                                            <i class="bi bi-card-image fs-1"></i>
+                                        </button>
+                                       
+                                    </div>
+                                </div>
+
+                                 <div class="col-6 col-md-3">
+                                    <div class="card text-center p-3 d-flex flex-column justify-content-center align-items-center">
+                                        <button class="btn btn-info mb-2 boton-cuadrado">
+                                            <i class="bi bi-card-image fs-1"></i>
+                                        </button>
+                                       
+                                    </div>
+                                </div>
+
+                                 <div class="col-6 col-md-3">
+                                    <div class="card text-center p-3 d-flex flex-column justify-content-center align-items-center">
+                                        <button class="btn btn-info mb-2 boton-cuadrado">
+                                            <i class="bi bi-card-image fs-1"></i>
+                                        </button>
+                                       
+                                    </div>
+                                </div>
+
+                    
+                                <!-- Fin del bloque -->
+                            </div>
+                        </div>
+
+                    </div>
+
+                </Contenido>
+            </GroupBox>
+      
+
+@code {
+    public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new List<RutinaEjercicioRequest>();
+    private int ordenRutina { get; set; }
+
+    private void OnAgregarRutina()
+    {
+        RutinaEjercicioRequest nueva = new RutinaEjercicioRequest();
+        ListaRutinas.Add(nueva);
+    }
+
+    private void OnRemoverRutina(RutinaEjercicioRequest item)
+    {
+        ListaRutinas.Remove(item);
+    }
+}

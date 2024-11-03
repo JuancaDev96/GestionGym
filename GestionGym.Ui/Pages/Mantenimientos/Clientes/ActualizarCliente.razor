@@ -6,18 +6,23 @@
 
 <h4>Mantenimiento de Cliente</h4>
 
-<Tabs Class="mt-5">
-    <Tab Title="Datos personales" Active="true" Name="tabPrincipal">
-        <Content>
-            <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="ActualizarDatosPersonales"></DatosPersonales>
-        </Content>
-    </Tab>
-    <Tab Title="Control Fisico" Name="tabControlFisico">
-        <Content>
-            <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" OnAgregarParametro="AgregarControlFisico" OnGuardarControlFisico="OnGuardarControlFisico" @ref="tabControlFisico" />
-        </Content>
-    </Tab>
-</Tabs>
+<GroupBox Titulo="Datos personales" Class="mt-5">
+    <Contenido>
+        <DatosPersonales Request="DatosPersonales" OnGuardarDatosPersonales="ActualizarDatosPersonales"></DatosPersonales>
+    </Contenido>
+</GroupBox>
+
+<GroupBox Titulo="Control Fisico" Class="mt-5">
+    <Contenido>
+        <ControlFisico ProveedorData="GrillaParametros" ControlFisicoClienteResponse="ControlFisicoClienteResponse" OnAgregarParametro="AgregarControlFisico" OnGuardarControlFisico="OnGuardarControlFisico" @ref="tabControlFisico" />
+    </Contenido>
+</GroupBox>
+
+<GroupBox Titulo="Historial Medico" Class="mt-5">
+    <Contenido>
+        <HistorialMedico ProveedorData="GrillaParametrosHistorialMedico" HistorialMedicoClienteResponse="HistorialMedicoClienteResponse" OnAgregarParametro="AgregarHistorialMedico" OnGuardarHistorialMedico="OnGuardarHistorialMedico" @ref="tabHistorialMedico" />
+    </Contenido>
+</GroupBox>
 
 <Loading isLoading="isLoading" />
 
@@ -28,7 +33,8 @@
     public bool isLoading { get; set; } = false;
 
     #region Componentes
-    public ControlFisico tabControlFisico { get; set; } = new ControlFisico();
+    public ControlFisico tabControlFisico { get; set; } = new();
+    public HistorialMedico tabHistorialMedico { get; set; } = new();
     #endregion
 
     protected override async Task OnInitializedAsync()
@@ -37,6 +43,7 @@
         {
             await ObtenerDatosById();
             await ListarParametrosControlFisico();
+            await ListarParametrosHistorialMedico();
         }
     }
 
@@ -224,7 +231,7 @@
                 }
             }
 
-            
+
         }
         catch (Exception ex)
         {
@@ -239,4 +246,153 @@
 
     #endregion
 
+    #region Historial Medico
+    List<ListaHistorialMedicoClienteResponse> HistorialMedicoClienteResponse { get; set; } = new();
+    public ListaDetalleMaestroRequest RequestDetalleMaestroHM { get; set; } = new() { Pagina = 1, Filas = 10 };
+    public ICollection<DetalleMaestroResponse> ListaMaestroDetalleHM { get; set; } = new List<DetalleMaestroResponse>();
+
+    private async Task ListarParametrosHistorialMedico()
+    {
+        try
+        {
+            var resultado = await ProxyCliente.GetHistorialMedicoParametros(idCliente);
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al listar parametros de historial medico:{resultado.Message}");
+            }
+            else
+            {
+                if (resultado.Data != null)
+                    HistorialMedicoClienteResponse = resultado.Data;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al listar historial medico: {ex.Message}");
+        }
+
+    }
+
+
+
+    private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaParametrosHistorialMedico(GridDataProviderRequest<DetalleMaestroResponse> request)
+    {
+        isLoading = true;
+        try
+        {
+            RequestDetalleMaestroHM.codigoMaestro = CodigoMaestro.HIST_MEDICO;
+            var response = await ProxyMaestro.ListaPaginadaDetalleMaestroByCodigo(RequestDetalleMaestroHM);
+            if (response is { Success: true })
+            {
+                if (response.Collection != null)
+                {
+                    ListaMaestroDetalleHM = response.Collection;
+
+                    ListaMaestroDetalleHM
+                        .Where(p => HistorialMedicoClienteResponse.Select(e => e.IdHistorial).Contains(p.IdDetalleMaestro))
+                        .ToList()
+                        .ForEach(p => p.EsExistente = true);
+
+                    request.ApplyTo(ListaMaestroDetalleHM);
+
+                    return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+                        {
+                            Data = response.Collection,
+                            TotalCount = response.TotalRegistros
+                        });
+                }
+                else return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al listar los parametros: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+        return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
+    }
+
+    private async Task AgregarHistorialMedico(DetalleMaestroResponse parametro)
+    {
+        isLoading = true;
+        try
+        {
+            var parametroNuevo = new ParametroClienteRequest() { Idcliente = idCliente, Idparametro = parametro.IdDetalleMaestro };
+
+            var resultado = await ProxyCliente.GuardarParametroHistorialMedico(parametroNuevo);
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al guardar parametro de historial medico:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Nuevo historial medico agregado.");
+                await tabHistorialMedico.ModalParametrosControl.HideAsync();
+                await ListarParametrosHistorialMedico();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al guardar parametro de control fisico: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task OnGuardarHistorialMedico(List<ListaHistorialMedicoClienteResponse> request)
+    {
+        isLoading = true;
+        try
+        {
+            var HistorialMedico = new List<HistorialMedicoClienteRequest>();
+            if (request is not null)
+            {
+                foreach (var item in request)
+                {
+                    HistorialMedico.Add(new()
+                        {
+                            Id = item.Id,
+                            Valor = item.Valor,
+                            Comentario = item.Comentario,
+                            Consideracion = item.Consideracion,
+                            Recomendacion = item.Recomendacion
+                        });
+                }
+
+                var resultado = await ProxyCliente.ActualizarHistorialMedico(HistorialMedico);
+
+                if (resultado is { Success: false })
+                {
+                    ToastService.ShowWarning($"Error al actualizar historial medico:{resultado.Message}");
+                }
+                else
+                {
+                    ToastService.ShowSuccess($"Historial medico actualizado.");
+                    await tabHistorialMedico.ModalParametrosControl.HideAsync();
+                    await ListarParametrosHistorialMedico();
+                }
+            }
+
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al actualizar Historial medico: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    #endregion
 }

@@ -22,7 +22,7 @@ namespace GestionGym.Entidades.Response.Clientes
 
         public DateOnly Fechanacimiento { get; set; }
 
-        public string Genero { get; set; }
+        public string Genero { get; set; } = default!;
         public int? Idgenero { get; set; }
     }
 

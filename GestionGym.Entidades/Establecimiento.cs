@@ -31,6 +31,8 @@ namespace GestionGym.Entidades
 
         public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
 
+        public virtual ICollection<Ejercicio> Ejercicios { get; set; } = new List<Ejercicio>();
+
         public virtual ICollection<Colaborador> Colaboradors { get; set; } = new List<Colaborador>();
 
         public virtual Empresa IdempresaNavigation { get; set; } = null!;

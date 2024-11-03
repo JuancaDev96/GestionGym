@@ -53,13 +53,17 @@
         </div>
     </div>
 
-    <div class="row gx-4 mt-4">
-        <div class="col">
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            <button type="button" class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
-        </div>
-    </div>
+    <button type="submit" id="btnguardar" style="display:none;">Guardar</button>
 </EditForm>
+
+<div class="row gx-4 mt-4">
+    <div class="col text-end">
+        <label for="btnguardar" class="btn btn-primary">
+            <i class="bi bi-floppy"></i>
+            Guardar
+        </label>
+    </div>
+</div>
 @code {
 
     [Parameter]

@@ -24,11 +24,12 @@ namespace GestionGym.Dto.Response.Clientes
         [Display(Name = "Edad")]
         public int Edad => Utils.CalcularEdadExacta(DateOnly.FromDateTime(FechaNacimiento));
         public DateTime FechaRegistro { get; set; } = default!;
-        [Display(Name = "Suscripción")]
+       
         public string? Suscripcion { get; set; }
+
+        [Display(Name = "Suscripción")]
         public string? TipoSuscripcion { get; set; }
         public string? EstadoSuscripcion { get; set; }
-        [Display(Name = "Hoy")]
         public string? EstadoDia { get; set; }
     }
 }

@@ -18,5 +18,8 @@ namespace GestionGym.Servicios.Interfaces
         Task<BaseResponse> ActualizarDatosPersonales(DatosPersonalesRequest request);
         Task<BaseResponse> RegistrarParametroControlFisico(ParametroClienteRequest request);
         Task<BaseResponse> ActualizarControlFisicoCliente(List<ControlFisicoClienteRequest> request);
+        Task<BaseResponse<List<ListaHistorialMedicoClienteResponse>>> ListarHistorialMedicoByIdCliente(int idCliente);
+        Task<BaseResponse> RegistrarParametroHistorialMedico(ParametroClienteRequest request);
+        Task<BaseResponse> ActualizarHistorialMedicoCliente(List<HistorialMedicoClienteRequest> request);
     }
 }
