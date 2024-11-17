@@ -468,7 +468,7 @@ public partial class BdGymContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .HasColumnName("descripcion");
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)
@@ -480,7 +480,7 @@ public partial class BdGymContext : DbContext
                 .HasDefaultValueSql("now()")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("fecharegistro");
-            entity.Property(e => e.IdgrupomuscularParametro).HasColumnName("idgrupomuscular_parametro");
+            entity.Property(e => e.IdGrupoMuscular).HasColumnName("idgrupomuscular_parametro");
             entity.Property(e => e.IdEstablecimiento).HasColumnName("idestablecimiento");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
@@ -498,7 +498,7 @@ public partial class BdGymContext : DbContext
                 .HasConstraintName("fk_ejercicio_establecimiento");
 
             entity.HasOne(d => d.IdgrupomuscularParametroNavigation).WithMany(p => p.Ejercicios)
-                .HasForeignKey(d => d.IdgrupomuscularParametro)
+                .HasForeignKey(d => d.IdGrupoMuscular)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_aplicacionejercicio_grupomuscular");
         });
@@ -1160,10 +1160,16 @@ public partial class BdGymContext : DbContext
                 .HasDefaultValueSql("'consola'::character varying")
                 .HasColumnName("usuarioregistro");
 
+            entity.Property(e => e.IdTipoRecurso).HasColumnName("idtiporecurso_parametro");
+
             entity.HasOne(d => d.IdejercicioNavigation).WithMany(p => p.Recursosejercicios)
                 .HasForeignKey(d => d.Idejercicio)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_recursosejercicio_ejercicio");
+
+            entity.HasOne(d => d.IdTipoRecursoParametroNavigation).WithMany(p => p.RecursosEjercicio)
+               .HasForeignKey(d => d.IdTipoRecurso)
+               .HasConstraintName("fk_recursoejercicio_tiporecurso_parametro");
         });
 
         modelBuilder.Entity<Recursosmaquina>(entity =>
@@ -1293,7 +1299,7 @@ public partial class BdGymContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(150)
+                .HasMaxLength(300)
                 .HasColumnName("descripcion");
             entity.Property(e => e.Estado)
                 .HasDefaultValue(true)

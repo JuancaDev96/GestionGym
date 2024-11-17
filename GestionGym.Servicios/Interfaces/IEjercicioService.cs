@@ -11,6 +11,8 @@ namespace GestionGym.Servicios.Interfaces
 {
     public interface IEjercicioService
     {
+        Task<BaseResponse> Actualizar(EjercicioRequest request);
+        Task<BaseResponse<EjercicioResponse>> Registrar(EjercicioRequest request);
         Task<PaginationResponse<ListaEjerciciosResponse>> ListarEjerciciosByEstablecimiento(BusquedaEjerciciosRequest request);
     }
 }

@@ -1,0 +1,79 @@
+﻿@using GestionGym.Ui.Pages.Mantenimientos.Ejercicios.Componentes
+@using GestionGym.Dto.Request.Ejercicios
+@attribute [Route(Routes.EjerciciosRegistrar)]
+@inject IMaestroProxy ProxyMaestro;
+@inject IEjercicioProxy Proxy;
+@inject IToastService ToastService;
+
+<DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular" ListaRutinas="ListaRutinas" ListaTipoRecurso="ListaTipoRecurso" OnGuardar="OnGuardar" Request="Request" />
+
+<Loading isLoading="isLoading" />
+
+@code {
+
+    public EjercicioRequest Request { get; set; } = new();
+    public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
+    public List<DetalleMaestroResponse> ListaGrupoMuscular { get; set; } = new();
+
+    public bool isLoading { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarTipoRecurso();
+    }
+
+    private async Task ListarTipoRecurso()
+    {
+        try
+        {
+
+            var request = new List<string>()
+            {
+                CodigoMaestro.TIPORECURSO,
+                CodigoMaestro.GM_GRUPOMUSCULAR
+            };
+            var resultado = await ProxyMaestro.ListarDetalleMaestroByListCodigos(request);
+            if (resultado is not null && resultado.Data is not null)
+            {
+                var coleccion = resultado.Data;
+                ListaTipoRecurso = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.TIPORECURSO).ToList();
+                ListaGrupoMuscular = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.GM_GRUPOMUSCULAR).ToList();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    private async Task OnGuardar()
+    {
+        isLoading = true;
+        try
+        {
+            Request.Rutina = ListaRutinas;
+            var resultado = await Proxy.Registrar(Request);
+
+            if (resultado is { Success: false })
+            {
+                ToastService.ShowWarning($"Error al crear ejercicio:{resultado.Message}");
+            }
+            else
+            {
+                ToastService.ShowSuccess($"Ejercicio creado correctamente");
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowWarning($"Error al registrar ejercicio:{ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+}

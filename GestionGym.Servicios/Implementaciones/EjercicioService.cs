@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using GestionGym.Comun;
 using GestionGym.Dto.Request.Ejercicios;
+using GestionGym.Dto.Request.Maestros;
 using GestionGym.Dto.Response;
 using GestionGym.Dto.Response.Ejercicios;
+using GestionGym.Dto.Response.Maestros;
+using GestionGym.Entidades;
 using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
 using System;
@@ -24,6 +27,46 @@ namespace GestionGym.Servicios.Implementaciones
             _mapper = mapper;
         }
 
+        public async Task<BaseResponse> Actualizar(EjercicioRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var entidad = await _repository.FindByIdAsync(request.Id);
+                if (entidad is not null)
+                {
+                    _mapper.Map(request, entidad);
+                    await _repository.UpdateAsync();
+                    respuesta.Message = "Ejercicio actualizado correctamente";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al actualizar catalogo: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> Registrar(EjercicioRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var ejercicio = _mapper.Map<Ejercicio>(request);
+                var rutina = _mapper.Map<List<Rutinaejercicio>>(request.Rutina);
+                ejercicio.IdEstablecimiento = Constantes.IdEstablecimientoDefault;
+                await _repository.Registrar(ejercicio, rutina);
+                respuesta.Message = "Ejercicio registrado correctamente";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al registrar catalogo: {ex.Message}";
+            }
+            return respuesta;
+        }
+
         public async Task<PaginationResponse<ListaEjerciciosResponse>> ListarEjerciciosByEstablecimiento(BusquedaEjerciciosRequest request)
         {
             var respuesta = new PaginationResponse<ListaEjerciciosResponse>();
@@ -34,10 +77,10 @@ namespace GestionGym.Servicios.Implementaciones
                     selector: p => new ListaEjerciciosResponse
                     {
                         Id = p.Id,
-                        Descripcion = p.Descripcion,
+                        Descripcion = p.Descripcion!,
                         GrupoMuscular = p.IdgrupomuscularParametroNavigation.Valor,
-                        IdGrupoMuscular = p.IdgrupomuscularParametro,
-                        Nombre = p.Nombre,
+                        IdGrupoMuscular = p.IdGrupoMuscular,
+                        Nombre = p.Nombre!,
                         FechaRegistro = p.Fecharegistro
                     },
                     pagina: request.Pagina,

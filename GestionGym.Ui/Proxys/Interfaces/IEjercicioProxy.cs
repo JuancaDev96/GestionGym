@@ -6,6 +6,8 @@ namespace GestionGym.Ui.Proxys.Interfaces
 {
     public interface IEjercicioProxy
     {
+        Task<BaseResponse> Registrar(EjercicioRequest request);
+        Task<BaseResponse> Actualizar(EjercicioRequest request);
         Task<PaginationResponse<ListaEjerciciosResponse>> GetEjercicios(BusquedaEjerciciosRequest request);
     }
 }

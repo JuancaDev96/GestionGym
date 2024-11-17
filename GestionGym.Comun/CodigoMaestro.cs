@@ -15,5 +15,12 @@ namespace GestionGym.Comun
         public const string OBJETIVO = "OBJETIVO";
         public const string NIVEL = "NIVEL";
         public const string HIST_MEDICO = "HIST_MEDICO";
+        public const string TIPORECURSO = "TIPORECURSO";
+        public const string GM_GRUPOMUSCULAR = "GM_GRUPOMUSCULAR";
+
+        /// <summary>
+        /// Tipo de recurso video de Youtube
+        /// </summary>
+        public const string TR_YOUTUBE = "TR_YOUTUBE"; 
     }
 }

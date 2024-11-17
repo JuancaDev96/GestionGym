@@ -27,4 +27,12 @@
     <None Include="wwwroot\appsettings.Development.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Mantenimientos\Ejercicios\RegistroEjercicio.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Mantenimientos\Ejercicios\RegistroEjercicio.razor" />
+  </ItemGroup>
+
 </Project>

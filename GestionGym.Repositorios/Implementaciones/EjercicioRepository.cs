@@ -25,6 +25,35 @@ namespace GestionGym.Repositorios.Implementaciones
         {
             _contexto = contexto;
         }
-       
+
+        public async Task Registrar(Ejercicio request, List<Rutinaejercicio> rutina)
+        {
+            await using (var transaccion = await _contexto.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var nuevoEjercicio = await _contexto.Ejercicios.AddAsync(request);
+                    await _contexto.SaveChangesAsync();
+
+                    if (nuevoEjercicio != null)
+                    {
+                        if (rutina.Count > 0)
+                        {
+                            rutina.ForEach(p => p.Idejercicio = nuevoEjercicio.Entity.Id);
+                            await _contexto.Rutinaejercicios.AddRangeAsync(rutina);
+                            await _contexto.SaveChangesAsync();
+                        }
+                        await transaccion.CommitAsync();
+                    }
+                    else
+                        await transaccion.RollbackAsync();
+                }
+                catch (Exception)
+                {
+                    await transaccion.RollbackAsync();
+                    throw;
+                }
+            }
+        }
     }
 }

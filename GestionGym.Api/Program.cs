@@ -1,8 +1,12 @@
+using Amazon.Runtime;
+using Amazon.S3;
 using GestionGym.AccesoDatos.Contexto;
+using GestionGym.Dto.Request.Aws;
 using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
 using GestionGym.Servicios.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Scrutor;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +17,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Vincular la configuración de AWS al modelo AWSOptions
+builder.Services.Configure<AwsOptions>(builder.Configuration.GetSection("AWS"));
+
+// Configurar el cliente Amazon S3
+builder.Services.AddSingleton<IAmazonS3>(sp =>
+{
+    var awsOptions = sp.GetRequiredService<IOptions<AwsOptions>>().Value;
+    var credentials = new BasicAWSCredentials(awsOptions.AccessKeyId, awsOptions.SecretAccessKey);
+    return new AmazonS3Client(credentials, Amazon.RegionEndpoint.GetBySystemName(awsOptions.Region));
+});
 
 //Se agregan las configuraciones del CORS
 builder.Services.AddCors(policy =>

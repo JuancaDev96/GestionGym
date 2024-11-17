@@ -1,4 +1,5 @@
-﻿using GestionGym.Dto.Request.Ejercicios;
+﻿using GestionGym.Dto.Request.Clientes;
+using GestionGym.Dto.Request.Ejercicios;
 using GestionGym.Servicios.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,20 @@ namespace GestionGym.Api.Controllers
         public EjerciciosController(IEjercicioService servicio)
         {
             _servicio = servicio;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(EjercicioRequest request)
+        {
+            var resultado = await _servicio.Registrar(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(EjercicioRequest request)
+        {
+            var resultado = await _servicio.Actualizar(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
         [HttpGet("Paginacion")]

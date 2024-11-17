@@ -9,5 +9,6 @@ namespace GestionGym.Repositorios.Interfaces
 {
     public interface IEjercicioRepository: IBaseRepository<Ejercicio>
     {
+        Task Registrar(Ejercicio request, List<Rutinaejercicio> rutina);
     }
 }
