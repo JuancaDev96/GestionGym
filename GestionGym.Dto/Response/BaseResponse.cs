@@ -14,6 +14,6 @@ namespace GestionGym.Dto.Response
 
     public class BaseResponse<T> : BaseResponse
     {
-        public T? Data { get; set; }
+        public T? Data { get; set; } 
     }
 }

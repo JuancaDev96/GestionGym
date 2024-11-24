@@ -26,5 +26,10 @@ namespace GestionGym.Ui.Proxys.Services
         {
             return await SendAsync<PaginationResponse<ListaEjerciciosResponse>>($"Paginacion?{QueryStringDto(request)}");
         }
+
+        public async Task<BaseResponse<EjercicioResponse>> GetById(int id)
+        {
+            return await SendAsync<BaseResponse<EjercicioResponse>>($"{id}");
+        }
     }
 }

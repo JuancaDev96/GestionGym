@@ -35,6 +35,7 @@
         <ColumnasAdicionales>
             <GridColumn TItem="ListaEjerciciosResponse" HeaderText="Acciones" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
                 <button class="btn btn-sm btn-primary" @onclick="() => OnVerDetalle(context)"><i class="bi bi-eye"></i></button>
+                <a class="btn btn-sm btn-primary" href="@Routes.EjerciciosEditarNav/@context.Id"><i class="bi bi-pencil"></i></a>
             </GridColumn>
         </ColumnasAdicionales>
     </Grilla>

@@ -55,5 +55,10 @@ namespace GestionGym.Repositorios.Implementaciones
                 }
             }
         }
+
+        public async Task<List<Rutinaejercicio>> ObtenerRutinaByIdEjercicio(int idEjercicio)
+        {
+            return await _contexto.Rutinaejercicios.Where(p => p.Idejercicio == idEjercicio).ToListAsync();
+        }
     }
 }

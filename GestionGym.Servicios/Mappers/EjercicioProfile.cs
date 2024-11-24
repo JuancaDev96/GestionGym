@@ -15,7 +15,8 @@ namespace GestionGym.Servicios.Mappers
         public EjercicioProfile()
         {
             CreateMap<EjercicioRequest, Ejercicio>();
-            CreateMap<RutinaEjercicioRequest, Rutinaejercicio>();
+            CreateMap<RutinaEjercicioRequest, Rutinaejercicio>().ReverseMap();
+            CreateMap<Ejercicio, EjercicioResponse>();
         }
     }
 }

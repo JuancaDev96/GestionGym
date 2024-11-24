@@ -9,5 +9,6 @@ namespace GestionGym.Ui.Proxys.Interfaces
         Task<BaseResponse> Registrar(EjercicioRequest request);
         Task<BaseResponse> Actualizar(EjercicioRequest request);
         Task<PaginationResponse<ListaEjerciciosResponse>> GetEjercicios(BusquedaEjerciciosRequest request);
+        Task<BaseResponse<EjercicioResponse>> GetById(int id);
     }
 }

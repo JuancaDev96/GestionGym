@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestionGym.Dto.Request.Ejercicios;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,5 +18,6 @@ namespace GestionGym.Dto.Response.Ejercicios
         public string? Descripcion { get; set; }
 
         public int IdEstablecimiento { get; set; }
+        public List<RutinaEjercicioRequest> Rutina { get; set; } = new();
     }
 }

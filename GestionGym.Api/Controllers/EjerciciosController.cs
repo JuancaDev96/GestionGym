@@ -36,5 +36,12 @@ namespace GestionGym.Api.Controllers
             var resultado = await _servicio.ListarEjerciciosByEstablecimiento(request);
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var resultado = await _servicio.ObtenerPorId(id);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
     }
 }

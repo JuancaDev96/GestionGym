@@ -17,6 +17,9 @@
 
         public const string EjerciciosListado = "/Ejercicios";
         public const string EjerciciosRegistrar = "/Ejercicio/registro";
+
+        public const string EjerciciosEditar = "/Ejercicio/editar/{idEjercicio:int}";
+        public const string EjerciciosEditarNav = "/Ejercicio/editar";
     }
 
 }

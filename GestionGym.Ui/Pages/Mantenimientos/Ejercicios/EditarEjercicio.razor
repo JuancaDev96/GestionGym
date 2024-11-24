@@ -1,11 +1,12 @@
 ﻿@using GestionGym.Ui.Pages.Mantenimientos.Ejercicios.Componentes
 @using GestionGym.Dto.Request.Ejercicios
-@attribute [Route(Routes.EjerciciosRegistrar)]
+@attribute [Route(Routes.EjerciciosEditar)]
 @inject IMaestroProxy ProxyMaestro;
 @inject IEjercicioProxy Proxy;
 @inject IToastService ToastService;
 
-<h4>Registrar Ejercicio</h4>
+
+<h4>Editar Ejercicio</h4>
 
 <DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular" ListaRutinas="ListaRutinas" ListaTipoRecurso="ListaTipoRecurso" OnGuardar="OnGuardar" Request="Request" />
 
@@ -13,6 +14,7 @@
 
 @code {
 
+    [Parameter] public int idEjercicio { get; set; }
     public EjercicioRequest Request { get; set; } = new();
     public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
     public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
@@ -22,6 +24,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await EjercicioById();
         await ListarTipoRecurso();
     }
 
@@ -41,6 +44,34 @@
                 var coleccion = resultado.Data;
                 ListaTipoRecurso = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.TIPORECURSO).ToList();
                 ListaGrupoMuscular = coleccion.Where(p => p.CodigoPadre == CodigoMaestro.GM_GRUPOMUSCULAR).ToList();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    private async Task EjercicioById()
+    {
+        try
+        {
+
+            var resultado = await Proxy.GetById(idEjercicio);
+            if (resultado is not null && resultado.Data is not null)
+            {
+                var datos = resultado.Data;
+
+                Request = new()
+                    {
+                        Descripcion = datos.Descripcion,
+                        Id = datos.Id,
+                        Nombre = datos.Nombre,
+                        IdEstablecimiento = datos.IdEstablecimiento,
+                        IdGrupoMuscular = datos.IdGrupoMuscular
+                    };
+                ListaRutinas = datos.Rutina;
             }
         }
         catch (Exception)

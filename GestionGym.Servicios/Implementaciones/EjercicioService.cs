@@ -98,5 +98,35 @@ namespace GestionGym.Servicios.Implementaciones
             }
             return respuesta;
         }
+
+        public async Task<BaseResponse<EjercicioResponse>> ObtenerPorId(int id)
+        {
+            var respuesta = new BaseResponse<EjercicioResponse>();
+            try
+            {
+                var resultado = await _repository.FindByIdAsync(id);
+                if (resultado != null)
+                {
+                    respuesta.Data = _mapper.Map<EjercicioResponse>(resultado);
+
+                    var rutina = await _repository.ObtenerRutinaByIdEjercicio(id);
+                    if (rutina.Any())
+                    {
+                        respuesta.Data.Rutina.AddRange(_mapper.Map<List<RutinaEjercicioRequest>>(rutina));
+                    }
+                }
+                else
+                {
+                    respuesta.Success = false;
+                    respuesta.Message = "El ejercicio no existe.";
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = ex.Message;
+            }
+            return respuesta;
+        }
     }
 }
