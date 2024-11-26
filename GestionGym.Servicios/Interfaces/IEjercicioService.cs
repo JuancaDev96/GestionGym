@@ -15,5 +15,6 @@ namespace GestionGym.Servicios.Interfaces
         Task<BaseResponse> Registrar(EjercicioRequest request);
         Task<PaginationResponse<ListaEjerciciosResponse>> ListarEjerciciosByEstablecimiento(BusquedaEjerciciosRequest request);
         Task<BaseResponse<EjercicioResponse>> ObtenerPorId(int id);
+        Task<BaseResponse> RegistrarRecurso(RecursoEjercicioRequest request);
     }
 }

@@ -19,12 +19,14 @@ namespace GestionGym.Servicios.Implementaciones
     public class EjercicioService : IEjercicioService
     {
         private readonly IEjercicioRepository _repository;
+        private readonly IAwsService _awsService;
         private readonly IMapper _mapper;
 
-        public EjercicioService(IEjercicioRepository ejercicioRepository, IMapper mapper)
+        public EjercicioService(IEjercicioRepository ejercicioRepository, IMapper mapper, IAwsService awsService)
         {
             _repository = ejercicioRepository;
             _mapper = mapper;
+            _awsService = awsService;
         }
 
         public async Task<BaseResponse> Actualizar(EjercicioRequest request)
@@ -43,7 +45,7 @@ namespace GestionGym.Servicios.Implementaciones
             catch (Exception ex)
             {
                 respuesta.Success = false;
-                respuesta.Message = $"Error al actualizar catalogo: {ex.Message}";
+                respuesta.Message = $"Error al actualizar Ejercicio: {ex.Message}";
             }
             return respuesta;
         }
@@ -62,7 +64,30 @@ namespace GestionGym.Servicios.Implementaciones
             catch (Exception ex)
             {
                 respuesta.Success = false;
-                respuesta.Message = $"Error al registrar catalogo: {ex.Message}";
+                respuesta.Message = $"Error al registrar Ejercicio: {ex.Message}";
+            }
+            return respuesta;
+        }
+
+        public async Task<BaseResponse> RegistrarRecurso(RecursoEjercicioRequest request)
+        {
+            var respuesta = new BaseResponse();
+            try
+            {
+                var nuevorecurso = await _awsService.S3_UploadFile(request.Recurso, "appgymresources", $"imagenes/ejercicios/{request.NombreRecurso}");
+                if (nuevorecurso.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var recurso = _mapper.Map<Recursosejercicio>(request);
+
+                    recurso.Ruta = $"imagenes/ejercicios/{request.NombreRecurso}";
+                    await _repository.RegistrarRecurso(recurso);
+                }
+                respuesta.Message = "Recurso registrado correctamente";
+            }
+            catch (Exception ex)
+            {
+                respuesta.Success = false;
+                respuesta.Message = $"Error al registrar Recurso: {ex.Message}";
             }
             return respuesta;
         }

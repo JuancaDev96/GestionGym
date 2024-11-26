@@ -121,7 +121,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Tipo Recurso: </label>
-                    <select class="form-select" @oninput="OnChangeTipoRecurso">
+                    <select class="form-select" @bind="RequestRecurso.IdTipoRecurso" @oninput="OnChangeTipoRecurso">
                         <option value="0" selected>-Seleccione Tipo Recurso-</option>
                         @foreach (var item in ListaTipoRecurso)
                         {
@@ -129,6 +129,11 @@
                         }
                     </select>
                 </div>
+            </div>
+
+            <div class="col-md-12 mt-3 @cssUrl">
+                <label class="form-label">Nombre recurso:</label>
+                <input class="form-control" />
             </div>
 
             <div class="col-md-12 mt-3 @cssUrl">
@@ -154,9 +159,12 @@
 @code {
     [Parameter] public EjercicioRequest Request { get; set; } = new();
     [Parameter] public EventCallback OnGuardar { get; set; } = default!;
+    [Parameter] public EventCallback<RecursoEjercicioRequest> OnGuardarRecurso { get; set; } = default!;
     [Parameter] public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
     [Parameter] public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
     [Parameter] public List<DetalleMaestroResponse> ListaGrupoMuscular { get; set; } = new();
+
+    private RecursoEjercicioRequest RequestRecurso { get; set; } = new();
 
 
     public Modal ModalAgregarRecurso { get; set; } = default!;
@@ -191,8 +199,9 @@
             var buffer = new byte[file.Size];
             await file.OpenReadStream(Constantes.MaxFileSize).ReadAsync(buffer);
 
-            var arhivo = Convert.ToBase64String(buffer);
-            var nombre = file.Name;
+            RequestRecurso.Recurso = Convert.ToBase64String(buffer);
+            RequestRecurso.NombreRecurso = file.Name;
+            RequestRecurso.IdEjercicio = Request.Id;
         }
         catch (Exception ex)
         {
@@ -207,7 +216,7 @@
 
     private async Task Aceptar()
     {
-        await OnGuardar.InvokeAsync();
+        await OnGuardarRecurso.InvokeAsync(RequestRecurso);
     }
 
     private void OnChangeTipoRecurso(ChangeEventArgs e)

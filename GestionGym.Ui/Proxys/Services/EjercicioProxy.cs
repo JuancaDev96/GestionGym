@@ -16,6 +16,12 @@ namespace GestionGym.Ui.Proxys.Services
             return resultado is not null ? resultado : new BaseResponse();
         }
 
+        public async Task<BaseResponse> RegistrarRecurso(RecursoEjercicioRequest request)
+        {
+            var resultado = await SendAsync<RecursoEjercicioRequest, BaseResponse>(request, HttpMethod.Post, "Registrar/Recurso");
+            return resultado is not null ? resultado : new BaseResponse();
+        }
+
         public async Task<BaseResponse> Actualizar(EjercicioRequest request)
         {
             var resultado = await SendAsync<EjercicioRequest, BaseResponse>(request, HttpMethod.Put, "");

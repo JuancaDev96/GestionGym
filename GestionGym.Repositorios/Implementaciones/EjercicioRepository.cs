@@ -56,6 +56,13 @@ namespace GestionGym.Repositorios.Implementaciones
             }
         }
 
+        public async Task<Recursosejercicio> RegistrarRecurso(Recursosejercicio request)
+        {
+            var respuesta = await _contexto.Recursosejercicios.AddAsync(request);
+            await _contexto.SaveChangesAsync();
+            return respuesta.Entity;
+        }
+
         public async Task<List<Rutinaejercicio>> ObtenerRutinaByIdEjercicio(int idEjercicio)
         {
             return await _contexto.Rutinaejercicios.Where(p => p.Idejercicio == idEjercicio).ToListAsync();

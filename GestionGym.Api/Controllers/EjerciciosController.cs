@@ -23,6 +23,13 @@ namespace GestionGym.Api.Controllers
             return resultado.Success ? Ok(resultado) : BadRequest(resultado);
         }
 
+        [HttpPost("Registrar/Recurso")]
+        public async Task<IActionResult> PostRecurso(RecursoEjercicioRequest request)
+        {
+            var resultado = await _servicio.RegistrarRecurso(request);
+            return resultado.Success ? Ok(resultado) : BadRequest(resultado);
+        }
+
         [HttpPut]
         public async Task<IActionResult> Put(EjercicioRequest request)
         {

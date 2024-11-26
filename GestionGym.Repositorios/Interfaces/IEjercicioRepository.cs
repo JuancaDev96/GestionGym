@@ -11,5 +11,6 @@ namespace GestionGym.Repositorios.Interfaces
     {
         Task Registrar(Ejercicio request, List<Rutinaejercicio> rutina);
         Task<List<Rutinaejercicio>> ObtenerRutinaByIdEjercicio(int idEjercicio);
+        Task<Recursosejercicio> RegistrarRecurso(Recursosejercicio request);
     }
 }

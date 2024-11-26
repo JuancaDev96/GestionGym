@@ -21,7 +21,7 @@ namespace GestionGym.Servicios.Implementaciones
             _s3Client = s3Client;
         }
 
-        public async Task S3_UploadFile(string base64Image, string bucketName, string objectKey)
+        public async Task<PutObjectResponse> S3_UploadFile(string base64Image, string bucketName, string objectKey)
         {
             var imageBytes = Convert.FromBase64String(base64Image);
             using var memoryStream = new MemoryStream(imageBytes);
@@ -34,7 +34,7 @@ namespace GestionGym.Servicios.Implementaciones
                 ContentType = "image/jpeg"
             };
 
-            await _s3Client.PutObjectAsync(putRequest);
+           return await _s3Client.PutObjectAsync(putRequest);
         }
 
     }
