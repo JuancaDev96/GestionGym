@@ -115,3 +115,16 @@ code {
         width: 90%; /* Ancho para pantallas medianas y pequeñas */
     }
 }
+
+
+.c-pointer{
+    cursor:pointer
+}
+
+.bg-active{
+    color: white;
+}
+
+    .bg-active:hover {
+        color: red;
+    }

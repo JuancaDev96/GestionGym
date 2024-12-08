@@ -1,10 +1,7 @@
 ﻿using Dapper;
 using GestionGym.AccesoDatos.Contexto;
-using GestionGym.Comun;
-using GestionGym.Dto.Request.Clientes;
 using GestionGym.Entidades;
-using GestionGym.Entidades.Response.Clientes;
-using GestionGym.Entidades.Response.Suscripcion;
+using GestionGym.Entidades.Response.Ejercicios;
 using GestionGym.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -66,6 +63,21 @@ namespace GestionGym.Repositorios.Implementaciones
         public async Task<List<Rutinaejercicio>> ObtenerRutinaByIdEjercicio(int idEjercicio)
         {
             return await _contexto.Rutinaejercicios.Where(p => p.Idejercicio == idEjercicio).ToListAsync();
+        }
+
+        public async Task<List<RecursosEjercicioInfo>> ObtenerRecursosByIdEjercicio(int idEjercicio)
+        {
+            return await _contexto.Recursosejercicios
+                .Where(p => p.Idejercicio == idEjercicio)
+                .Select(p => new RecursosEjercicioInfo
+                {
+                    Idejercicio = p.Idejercicio,
+                    Id = p.Id,
+                    Ruta = p.Ruta,
+                    IdTipoRecurso = p.IdTipoRecurso,
+                    CodigoTipoRecurso = p.IdtiporecursoParametroNavigation!.Codigo,
+                    TipoRecurso = p.IdtiporecursoParametroNavigation.Valor
+                }).ToListAsync();
         }
     }
 }

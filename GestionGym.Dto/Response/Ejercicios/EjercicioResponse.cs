@@ -19,5 +19,6 @@ namespace GestionGym.Dto.Response.Ejercicios
 
         public int IdEstablecimiento { get; set; }
         public List<RutinaEjercicioRequest> Rutina { get; set; } = new();
+        public List<RecursoEjercicioRequest> Recursos { get; set; } = new();
     }
 }

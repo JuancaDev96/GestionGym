@@ -9,26 +9,24 @@
             <div class="row mt-3">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>Grupo muscular: </label>
-                        <select class="form-select" @bind="Request.IdGrupoMuscular">
-                            <option value="0" selected>-Seleccione Grupo muscular-</option>
-                            @foreach (var item in ListaGrupoMuscular)
-                            {
-                                <option value="@item.IdDetalleMaestro" title="@item.Descripcion">@item.Valor</option>
-                            }
-                        </select>
-                        <ValidationMessage For="() => Request.IdGrupoMuscular" />
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="form-group">
                         <label>Nombres: </label>
                         <input class="form-control" @bind="Request.Nombre" />
                         <ValidationMessage For="() => Request.Nombre" />
                     </div>
                 </div>
+                <div class="col-md-2 mt-4">
+                    <div class="form-group">
+                        <button class="btn btn-success" type="button" @onclick="ShowAgregarGrupoMuscular">Grupo Muscular</button>
+                    </div>
+                </div>
+                <div class="col-12 mt-2 mb-2">
 
+                    @foreach (var item in ListaGrupoMuscularSeleccionada)
+                    {
+                        <span class="badge bg-info">@item.Valor <i @onclick="() => AgregarGrupoMuscular(item)" class="bi bi-x-circle-fill bg-active c-pointer"></i></span>
+
+                    }
+                </div>
                 <div class="col-md-8">
                     <div class="form-group">
                         <label>Descripción: </label>
@@ -99,10 +97,65 @@
                     <button class="btn btn-success btn-xs" @onclick="OnAgregarRecurso"><i class="bi bi-plus"></i> Agregar</button>
                 </div>
             </div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tipo</th>
+                                <th scope="col">Ruta</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
+                            @foreach (var item in ListaRecursos)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.TipoRecurso
+                                    </td>
+                                    <td>
+                                        @item.Ruta
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-sm btn-success" @onclick="() => OnShowRecurso(item)"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-warning" @onclick="() => OnRemoverRecurso(item)"><i class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </Contenido>
     </GroupBox>
 }
+
+<Modal @ref="ModalGrupoMuscular" Title="Grupo Muscular" Size="ModalSize.Large">
+    <BodyTemplate>
+        <div class="row">
+            <div class="col-md-12">
+                <Grilla TItem="DetalleMaestroResponse" ProveedorData="ProveedorData" Titulo="" @ref="GrillaGrupoMuscular" HeaderAlign="Alignment.Center" TextAlign="Alignment.Center">
+                    <ColumnasAdicionales>
+                        <GridColumn TItem="DetalleMaestroResponse" HeaderText="Acción" Filterable="false" HeaderTextAlignment="Alignment.Center" TextAlignment="Alignment.Center">
+                            @if (!context.EsExistente)
+                            {
+                                <button class="btn btn-xs btn-success" title="Agregar" @onclick="() => AgregarGrupoMuscular(context)"><i class="bi bi-plus"></i></button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-xs btn-danger" title="Quitar"><i class="bi bi-dash-circle"></i></button>
+                            }
+                        </GridColumn>
+                    </ColumnasAdicionales>
+                </Grilla>
+            </div>
+        </div>
+    </BodyTemplate>
+</Modal>
 
 <div class="row gx-4 mt-4">
     <div class="col">
@@ -156,22 +209,38 @@
     </FooterTemplate>
 </Modal>
 
+<VisorImagen @ref="visorImagen" />
+
 @code {
     [Parameter] public EjercicioRequest Request { get; set; } = new();
     [Parameter] public EventCallback OnGuardar { get; set; } = default!;
     [Parameter] public EventCallback<RecursoEjercicioRequest> OnGuardarRecurso { get; set; } = default!;
     [Parameter] public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
+    [Parameter] public List<RecursoEjercicioRequest> ListaRecursos { get; set; } = new();
     [Parameter] public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
     [Parameter] public List<DetalleMaestroResponse> ListaGrupoMuscular { get; set; } = new();
+    [Parameter] public GridDataProviderDelegate<DetalleMaestroResponse> ProveedorData { get; set; } = default!;
+    [Parameter] public Grilla<DetalleMaestroResponse> GrillaGrupoMuscular { get; set; } = default!;
+    public Modal ModalGrupoMuscular { get; set; } = default!;
 
     private RecursoEjercicioRequest RequestRecurso { get; set; } = new();
+    private VisorImagen visorImagen { get; set; } = default!;
 
+    public List<DetalleMaestroResponse> ListaGrupoMuscularSeleccionada { get; set; } = new();
 
     public Modal ModalAgregarRecurso { get; set; } = default!;
     private int ordenRutina { get; set; }
     private string cssUrl { get; set; } = "d-none";
     private string cssRecurso { get; set; } = "";
 
+    private void AgregarGrupoMuscular(DetalleMaestroResponse parametro)
+    {
+        var existente = ListaGrupoMuscularSeleccionada.FirstOrDefault(p => p.IdDetalleMaestro == parametro.IdDetalleMaestro);
+        if (existente == null)
+            ListaGrupoMuscularSeleccionada.Add(parametro);
+        else
+            ListaGrupoMuscularSeleccionada.Remove(existente);
+    }
 
     private void OnAgregarRutina()
     {
@@ -184,7 +253,15 @@
         ListaRutinas.Remove(item);
     }
 
+    private async Task OnShowRecurso(RecursoEjercicioRequest item)
+    {
+        await visorImagen.OpenModal(item.Ruta!);
+    }
 
+    private void OnRemoverRecurso(RecursoEjercicioRequest item)
+    {
+        ListaRecursos.Remove(item);
+    }
 
     private async Task OnAgregarRecurso()
     {
@@ -217,6 +294,7 @@
     private async Task Aceptar()
     {
         await OnGuardarRecurso.InvokeAsync(RequestRecurso);
+        await ModalAgregarRecurso.HideAsync();
     }
 
     private void OnChangeTipoRecurso(ChangeEventArgs e)
@@ -262,5 +340,10 @@
     private void OnCancelar()
     {
         Navegador.NavigateTo(Routes.EjerciciosListado);
+    }
+
+    private async Task ShowAgregarGrupoMuscular()
+    {
+        await ModalGrupoMuscular.ShowAsync();
     }
 }

@@ -12,8 +12,11 @@ namespace GestionGym.Entidades
         public int Idejercicio { get; set; }
 
         public string Ruta { get; set; } = null!;
-        public int IdTipoRecurso { get; set; }
+
+        public int? IdTipoRecurso { get; set; }
+
         public virtual Ejercicio IdejercicioNavigation { get; set; } = null!;
-        public virtual Maestrodetalle? IdTipoRecursoParametroNavigation { get; set; }
+
+        public virtual Maestrodetalle? IdtiporecursoParametroNavigation { get; set; }
     }
 }

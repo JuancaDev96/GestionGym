@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GestionGym.Comun;
+using GestionGym.Dto.Request.Aws;
 using GestionGym.Dto.Request.Ejercicios;
 using GestionGym.Dto.Request.Maestros;
 using GestionGym.Dto.Response;
@@ -8,6 +9,7 @@ using GestionGym.Dto.Response.Maestros;
 using GestionGym.Entidades;
 using GestionGym.Repositorios.Interfaces;
 using GestionGym.Servicios.Interfaces;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +23,13 @@ namespace GestionGym.Servicios.Implementaciones
         private readonly IEjercicioRepository _repository;
         private readonly IAwsService _awsService;
         private readonly IMapper _mapper;
-
-        public EjercicioService(IEjercicioRepository ejercicioRepository, IMapper mapper, IAwsService awsService)
+        private readonly AwsOptions _awsOptions;
+        public EjercicioService(IEjercicioRepository ejercicioRepository, IMapper mapper, IAwsService awsService, IOptions<AwsOptions> options)
         {
             _repository = ejercicioRepository;
             _mapper = mapper;
             _awsService = awsService;
+            _awsOptions = options.Value;
         }
 
         public async Task<BaseResponse> Actualizar(EjercicioRequest request)
@@ -79,7 +82,7 @@ namespace GestionGym.Servicios.Implementaciones
                 {
                     var recurso = _mapper.Map<Recursosejercicio>(request);
 
-                    recurso.Ruta = $"imagenes/ejercicios/{request.NombreRecurso}";
+                    recurso.Ruta = $"{_awsOptions.UrlPublicaBucket}/imagenes/ejercicios/{request.NombreRecurso}";
                     await _repository.RegistrarRecurso(recurso);
                 }
                 respuesta.Message = "Recurso registrado correctamente";
@@ -103,8 +106,7 @@ namespace GestionGym.Servicios.Implementaciones
                     {
                         Id = p.Id,
                         Descripcion = p.Descripcion!,
-                        GrupoMuscular = p.IdgrupomuscularParametroNavigation.Valor,
-                        IdGrupoMuscular = p.IdGrupoMuscular,
+                        GrupoMuscular = string.Join(",", p.Ejerciciogrupomusculars.Select(p => p.IdgrupomuscularParametroNavigation.Valor)),
                         Nombre = p.Nombre!,
                         FechaRegistro = p.Fecharegistro
                     },
@@ -138,6 +140,12 @@ namespace GestionGym.Servicios.Implementaciones
                     if (rutina.Any())
                     {
                         respuesta.Data.Rutina.AddRange(_mapper.Map<List<RutinaEjercicioRequest>>(rutina));
+                    }
+
+                    var recursos = await _repository.ObtenerRecursosByIdEjercicio(id);
+                    if (recursos.Any())
+                    {
+                        respuesta.Data.Recursos.AddRange(_mapper.Map<List<RecursoEjercicioRequest>>(recursos));
                     }
                 }
                 else

@@ -25,18 +25,15 @@ namespace GestionGym.Entidades
 
         public bool? Esbool { get; set; }
 
-        public override string ToString()
-        {
-            return Valor;
-        }
-
         public virtual ICollection<Aplicacionejercicio> Aplicacionejercicios { get; set; } = new List<Aplicacionejercicio>();
+
+        public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
 
         public virtual ICollection<ControlavanceCliente> ControlavanceClientes { get; set; } = new List<ControlavanceCliente>();
 
         public virtual ICollection<ControlfisicoCliente> ControlfisicoClientes { get; set; } = new List<ControlfisicoCliente>();
 
-        public virtual ICollection<Ejercicio> Ejercicios { get; set; } = new List<Ejercicio>();
+        public virtual ICollection<Ejerciciogrupomuscular> Ejerciciogrupomusculars { get; set; } = new List<Ejerciciogrupomuscular>();
 
         public virtual ICollection<Fichacliente> FichaclienteIdnivelParametroNavigations { get; set; } = new List<Fichacliente>();
 
@@ -48,9 +45,13 @@ namespace GestionGym.Entidades
 
         public virtual ICollection<Ingresocaja> Ingresocajas { get; set; } = new List<Ingresocaja>();
 
-        public virtual ICollection<Maquina> MaquinaIdestadomaquinaParametroNavigations { get; set; } = new List<Maquina>();
+        public virtual ICollection<Maquinagrupomuscular> Maquinagrupomusculars { get; set; } = new List<Maquinagrupomuscular>();
 
-        public virtual ICollection<Maquina> MaquinaIdgrupomuscularParametroNavigations { get; set; } = new List<Maquina>();
+        public virtual ICollection<Maquina> Maquinas { get; set; } = new List<Maquina>();
+
+        public virtual ICollection<Preciossuscripcion> Preciossuscripcions { get; set; } = new List<Preciossuscripcion>();
+
+        public virtual ICollection<Recursosejercicio> Recursosejercicios { get; set; } = new List<Recursosejercicio>();
 
         public virtual ICollection<RutinaclienteDetalle> RutinaclienteDetalles { get; set; } = new List<RutinaclienteDetalle>();
 
@@ -59,9 +60,5 @@ namespace GestionGym.Entidades
         public virtual ICollection<Suscripcion> SuscripcionIdestadosuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
 
         public virtual ICollection<Suscripcion> SuscripcionIdtiposuscripcionParametroNavigations { get; set; } = new List<Suscripcion>();
-        public virtual ICollection<Preciossuscripcion> Preciossuscripcions { get; set; } = new List<Preciossuscripcion>();
-        public virtual ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
-
-        public virtual ICollection<Recursosejercicio> RecursosEjercicio { get; set; } = new List<Recursosejercicio>();
     }
 }

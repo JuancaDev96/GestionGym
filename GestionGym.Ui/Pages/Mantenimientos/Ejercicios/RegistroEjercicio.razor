@@ -7,7 +7,12 @@
 
 <h4>Registrar Ejercicio</h4>
 
-<DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular" ListaRutinas="ListaRutinas" ListaTipoRecurso="ListaTipoRecurso" OnGuardar="OnGuardar" Request="Request" />
+<DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular"
+                ListaRutinas="ListaRutinas"
+                ListaTipoRecurso="ListaTipoRecurso"
+                ProveedorData="GrillaGrupoMuscular"
+                OnGuardar="OnGuardar"
+                Request="Request" />
 
 <Loading isLoading="isLoading" />
 
@@ -17,7 +22,7 @@
     public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
     public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
     public List<DetalleMaestroResponse> ListaGrupoMuscular { get; set; } = new();
-
+    public ListaDetalleMaestroRequest RequestGrupoMuscular { get; set; } = new() { Pagina = 1, Filas = 10 };
     public bool isLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -76,6 +81,40 @@
             isLoading = false;
             StateHasChanged();
         }
+    }
+
+    private async Task<GridDataProviderResult<DetalleMaestroResponse>> GrillaGrupoMuscular(GridDataProviderRequest<DetalleMaestroResponse> request)
+    {
+        isLoading = true;
+        try
+        {
+            RequestGrupoMuscular.codigoMaestro = CodigoMaestro.GM_GRUPOMUSCULAR;
+            RequestGrupoMuscular.Pagina = request.PageNumber;
+            RequestGrupoMuscular.Filas = request.PageSize;
+
+            var response = await ProxyMaestro.ListaPaginadaDetalleMaestroByCodigo(RequestGrupoMuscular);
+            if (response is { Success: true })
+            {
+                if (response.Collection != null)
+                {
+                    return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>()
+                        {
+                            Data = response.Collection,
+                            TotalCount = response.TotalRegistros
+                        });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError($"Error al listar los parametros: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+        return await Task.FromResult(new GridDataProviderResult<DetalleMaestroResponse>());
     }
 
 }

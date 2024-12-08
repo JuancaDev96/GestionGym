@@ -13,8 +13,6 @@ namespace GestionGym.Entidades
 
         public string Descripcion { get; set; } = null!;
 
-        public int IdgrupomuscularParametro { get; set; }
-
         public string? Ubicacion { get; set; }
 
         public int IdestadomaquinaParametro { get; set; }
@@ -23,10 +21,12 @@ namespace GestionGym.Entidades
 
         public virtual Maestrodetalle IdestadomaquinaParametroNavigation { get; set; } = null!;
 
-        public virtual Maestrodetalle IdgrupomuscularParametroNavigation { get; set; } = null!;
-
         public virtual ICollection<Maquinaejercicio> Maquinaejercicios { get; set; } = new List<Maquinaejercicio>();
+
         public virtual ICollection<Maquinaestablecimiento> Maquinaestablecimientos { get; set; } = new List<Maquinaestablecimiento>();
+
+        public virtual ICollection<Maquinagrupomuscular> Maquinagrupomusculars { get; set; } = new List<Maquinagrupomuscular>();
+
         public virtual ICollection<Recursosmaquina> Recursosmaquinas { get; set; } = new List<Recursosmaquina>();
     }
 }

@@ -2,6 +2,7 @@
 using GestionGym.Dto.Request.Ejercicios;
 using GestionGym.Dto.Response.Ejercicios;
 using GestionGym.Entidades;
+using GestionGym.Entidades.Response.Ejercicios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace GestionGym.Servicios.Mappers
             CreateMap<RutinaEjercicioRequest, Rutinaejercicio>().ReverseMap();
             CreateMap<Ejercicio, EjercicioResponse>();
             CreateMap<RecursoEjercicioRequest, Recursosejercicio>();
+            CreateMap<RecursosEjercicioInfo, RecursoEjercicioRequest>();
         }
     }
 }

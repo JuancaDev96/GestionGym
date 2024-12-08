@@ -9,19 +9,17 @@ namespace GestionGym.Entidades
     {
         public int Id { get; set; }
 
-        public int IdGrupoMuscular { get; set; }
-
         public string? Nombre { get; set; }
 
         public string? Descripcion { get; set; }
 
-        public int IdEstablecimiento { get; set; }
+        public int? IdEstablecimiento { get; set; }
 
         public virtual ICollection<Aplicacionejercicio> Aplicacionejercicios { get; set; } = new List<Aplicacionejercicio>();
 
-        public virtual Maestrodetalle IdgrupomuscularParametroNavigation { get; set; } = null!;
+        public virtual ICollection<Ejerciciogrupomuscular> Ejerciciogrupomusculars { get; set; } = new List<Ejerciciogrupomuscular>();
 
-        public virtual Establecimiento IdEstablecimientoNavigation { get; set; } = null!;
+        public virtual Establecimiento? IdestablecimientoNavigation { get; set; }
 
         public virtual ICollection<Maquinaejercicio> Maquinaejercicios { get; set; } = new List<Maquinaejercicio>();
 

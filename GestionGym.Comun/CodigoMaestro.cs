@@ -16,6 +16,9 @@ namespace GestionGym.Comun
         public const string NIVEL = "NIVEL";
         public const string HIST_MEDICO = "HIST_MEDICO";
         public const string TIPORECURSO = "TIPORECURSO";
+        /// <summary>
+        /// Maestro de Grupos musculares
+        /// </summary>
         public const string GM_GRUPOMUSCULAR = "GM_GRUPOMUSCULAR";
 
         /// <summary>

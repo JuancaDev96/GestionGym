@@ -5,10 +5,9 @@
 @inject IEjercicioProxy Proxy;
 @inject IToastService ToastService;
 
-
 <h4>Editar Ejercicio</h4>
 
-<DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular" ListaRutinas="ListaRutinas" ListaTipoRecurso="ListaTipoRecurso" OnGuardar="OnGuardar" Request="Request" OnGuardarRecurso="OnGuardarRecurso" />
+<DatosEjercicio ListaGrupoMuscular="ListaGrupoMuscular" ListaRutinas="ListaRutinas" ListaRecursos="ListaRecursos" ListaTipoRecurso="ListaTipoRecurso" OnGuardar="OnGuardar" Request="Request" OnGuardarRecurso="OnGuardarRecurso" />
 
 <Loading isLoading="isLoading" />
 
@@ -17,6 +16,7 @@
     [Parameter] public int idEjercicio { get; set; }
     public EjercicioRequest Request { get; set; } = new();
     public List<RutinaEjercicioRequest> ListaRutinas { get; set; } = new();
+    public List<RecursoEjercicioRequest> ListaRecursos { get; set; } = new();
     public List<DetalleMaestroResponse> ListaTipoRecurso { get; set; } = new();
     public List<DetalleMaestroResponse> ListaGrupoMuscular { get; set; } = new();
 
@@ -72,6 +72,7 @@
                         IdGrupoMuscular = datos.IdGrupoMuscular
                     };
                 ListaRutinas = datos.Rutina;
+                ListaRecursos = datos.Recursos;
             }
         }
         catch (Exception)
@@ -123,6 +124,7 @@
             else
             {
                 ToastService.ShowSuccess($"Ejercicio creado correctamente");
+                await EjercicioById();
             }
         }
         catch (Exception ex)

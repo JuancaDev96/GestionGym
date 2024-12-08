@@ -8,7 +8,7 @@ namespace GestionGym.Dto.Response
 {
     public class PaginationResponse<T> : BaseResponse
     {
-        public ICollection<T>? Collection { get; set; }
+        public ICollection<T>? Collection { get; set; } = new List<T>();
         public int TotalPaginas { get; set; }
         public int TotalRegistros { get; set; }
     }

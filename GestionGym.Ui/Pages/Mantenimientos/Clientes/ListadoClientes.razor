@@ -54,17 +54,17 @@
         isLoading = true;
         try
         {
-        RequestBusqueda.Pagina = request.PageNumber;
-        RequestBusqueda.Filas = request.PageSize;
-        var response = await Proxy.GetClientes(RequestBusqueda);
-        if (response is { Success: true })
-        {
-            return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>()
+            RequestBusqueda.Pagina = request.PageNumber;
+            RequestBusqueda.Filas = request.PageSize;
+            var response = await Proxy.GetClientes(RequestBusqueda);
+            if (response is { Success: true })
             {
-                Data = response.Collection,
-                TotalCount = response.TotalRegistros
-            });
-        }
+                return await Task.FromResult(new GridDataProviderResult<ListaClientesResponse>()
+                    {
+                        Data = response.Collection,
+                        TotalCount = response.TotalRegistros
+                    });
+            }
         }
         catch (Exception ex)
         {

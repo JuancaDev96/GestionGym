@@ -11,5 +11,6 @@ namespace GestionGym.Dto.Request.Aws
         public string AccessKeyId { get; set; } = string.Empty;
         public string SecretAccessKey { get; set; } = string.Empty;
         public string Region { get; set; } = string.Empty;
+        public string UrlPublicaBucket { get; set; } = string.Empty;
     }
 }

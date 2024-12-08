@@ -10,7 +10,6 @@ namespace GestionGym.Dto.Response.Ejercicios
     public class ListaEjerciciosResponse
     {
         public int Id { get; set; }
-        public int IdGrupoMuscular { get; set; }
 
         [Display]
         public string Nombre { get; set; } = default!;
